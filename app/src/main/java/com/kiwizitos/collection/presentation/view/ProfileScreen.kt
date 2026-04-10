@@ -11,9 +11,9 @@ import com.kiwizitos.siege.components.foundation.SiegeTextStyle
 import com.kiwizitos.siege.theme.SiegeTheme
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(modifier: Modifier = Modifier) {
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         SiegeText(text = "Perfil", style = SiegeTextStyle.Headline)

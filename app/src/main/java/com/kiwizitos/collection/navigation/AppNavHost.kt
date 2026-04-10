@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
+import com.kiwizitos.collection.presentation.view.CoversScreen
 import com.kiwizitos.collection.presentation.view.DetailsScreen
 import com.kiwizitos.collection.presentation.view.HomeScreen
 import com.kiwizitos.collection.presentation.view.LibraryScreen
@@ -45,57 +46,67 @@ fun AppNavHost(
         }
     ) { innerPadding ->
         NavHost(
-            navController = navController,
+            navController    = navController,
             startDestination = AppRoute.Home.route,
-            modifier = Modifier.padding(innerPadding)
+            // Sem padding aqui — cada tela gerencia seus próprios insets
+            modifier = Modifier.fillMaxSize()
         ) {
+            // ── Rotas de nível raiz: recebem o padding da bottom bar ──────────
             composable(AppRoute.Home.route) {
-                HomeScreen(navController = navController)
+                HomeScreen(navController = navController, modifier = Modifier.padding(innerPadding))
             }
             composable(AppRoute.Search.route) {
-                SearchScreen()
+                SearchScreen(navController = navController, modifier = Modifier.padding(innerPadding))
             }
             composable(AppRoute.Profile.route) {
-                ProfileScreen()
+                ProfileScreen(modifier = Modifier.padding(innerPadding))
             }
             composable(AppRoute.Library.route) {
-                LibraryScreen()
+                LibraryScreen(modifier = Modifier.padding(innerPadding))
             }
 
-            // ── Detail screens (sem bottom bar) ───────────────────────────────
+            // ── Telas de detalhe: têm Scaffold próprio, ignoram innerPadding ──
+            composable(
+                route = AppRoute.SeriesCovers.route,
+                arguments = listOf(
+                    navArgument("seriesUrl")   { type = NavType.StringType },
+                    navArgument("seriesTitle") { type = NavType.StringType }
+                )
+            ) { backStackEntry ->
+                val encodedUrl   = backStackEntry.arguments?.getString("seriesUrl")   ?: return@composable
+                val encodedTitle = backStackEntry.arguments?.getString("seriesTitle") ?: return@composable
+                CoversScreen(
+                    navController      = navController,
+                    encodedSeriesUrl   = encodedUrl,
+                    encodedSeriesTitle = encodedTitle
+                )
+            }
+
             composable(
                 route = AppRoute.CollectionDetail.route,
                 arguments = listOf(navArgument("id") { type = NavType.StringType })
             ) { backStackEntry ->
                 val id = backStackEntry.arguments?.getString("id") ?: return@composable
-                // TODO: buscar dados reais via ViewModel usando [id]
                 DetailsScreen(
-                    title = id,
-                    coverUrl = "",
-                    technicalInfo = emptyList(),
-                    onGuideButtonClick = {},
-                    onBackClick = { navController.popBackStack() },
-                    isCollection = true
+                    encodedEditionUrl   = id,
+                    encodedEditionTitle = id,
+                    onBackClick         = { navController.popBackStack() }
                 )
             }
 
             composable(
                 route = AppRoute.EditionDetail.route,
                 arguments = listOf(
-                    navArgument("collectionId") { type = NavType.StringType },
-                    navArgument("editionId")    { type = NavType.StringType }
+                    navArgument("editionUrl")   { type = NavType.StringType },
+                    navArgument("editionTitle") { type = NavType.StringType }
                 )
             ) { backStackEntry ->
-                val collectionId = backStackEntry.arguments?.getString("collectionId") ?: return@composable
-                val editionId    = backStackEntry.arguments?.getString("editionId")    ?: return@composable
-                // TODO: buscar dados reais via ViewModel usando [collectionId] e [editionId]
+                val editionUrl   = backStackEntry.arguments?.getString("editionUrl")   ?: return@composable
+                val editionTitle = backStackEntry.arguments?.getString("editionTitle") ?: return@composable
                 DetailsScreen(
-                    title = "$collectionId #$editionId",
-                    coverUrl = "",
-                    technicalInfo = emptyList(),
-                    onGuideButtonClick = {},
-                    onBackClick = { navController.popBackStack() },
-                    isCollection = false
+                    encodedEditionUrl   = editionUrl,
+                    encodedEditionTitle = editionTitle,
+                    onBackClick         = { navController.popBackStack() }
                 )
             }
         }

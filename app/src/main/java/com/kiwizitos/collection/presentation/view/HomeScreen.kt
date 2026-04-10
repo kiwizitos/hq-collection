@@ -46,9 +46,9 @@ private val mockSeries = listOf(
 )
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
     LazyColumn(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(SiegeSpacing.Regular)
     ) {

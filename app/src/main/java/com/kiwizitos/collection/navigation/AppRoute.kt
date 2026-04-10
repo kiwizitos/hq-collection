@@ -21,10 +21,29 @@ sealed class AppRoute(val route: String) {
         fun createRoute(id: String) = "collection/$id"
     }
 
-    /** Detalhe de edição individual. Rota: "collection/{collectionId}/edition/{editionId}" */
-    data object EditionDetail : AppRoute("collection/{collectionId}/edition/{editionId}") {
-        fun createRoute(collectionId: String, editionId: String) =
-            "collection/$collectionId/edition/$editionId"
+    /** Detalhe de edição individual. Rota: "edition/{editionUrl}/{editionTitle}" */
+    data object EditionDetail : AppRoute("edition/{editionUrl}/{editionTitle}") {
+        /**
+         * @param editionUrl   URL da edição já codificada com [URLEncoder].
+         * @param editionTitle Título da edição já codificado com [URLEncoder].
+         */
+        fun createRoute(editionUrl: String, editionTitle: String) =
+            "edition/$editionUrl/$editionTitle"
+    }
+
+    /**
+     * Lista de capas de uma série. Rota: "covers/{seriesUrl}/{seriesTitle}"
+     *
+     * Os parâmetros devem ser codificados com [URLEncoder] antes de criar a rota,
+     * pois URLs de série contêm `/` e `?` que quebrariam o parsing do Navigation.
+     */
+    data object SeriesCovers : AppRoute("covers/{seriesUrl}/{seriesTitle}") {
+        /**
+         * @param encodedSeriesUrl   URL da série codificada com [URLEncoder].
+         * @param encodedSeriesTitle Título da série codificado com [URLEncoder].
+         */
+        fun createRoute(encodedSeriesUrl: String, encodedSeriesTitle: String) =
+            "covers/$encodedSeriesUrl/$encodedSeriesTitle"
     }
 }
 

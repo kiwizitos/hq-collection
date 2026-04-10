@@ -1,0 +1,875 @@
+
+
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head><title>
+	Títulos | Guia dos Quadrinhos
+</title>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-507H5QZQGN"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-507H5QZQGN');
+</script>
+<meta name="description" content="Guia dos Quadrinhos - Banco de dados sobre quadrinhos publicados no Brasil. Lista de títulos gibis" /><meta name="keywords" content="quadrinhos, hq, gibi, histórias em quadrinhos, gibi raro, arcervo de gibis, hqs, banco de dados sobre quadrinhos, artistas, personagens, editoras" /><meta name="author" content="Edson Diogo" /><meta name="copyright" content="© 2007-2018 Guia dos Quadrinhos" /><meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" /><link rel="shortcut icon" href="../favicon.ico" /><link rel="stylesheet" type="text/css" href="/css/combined_5AC69AFDCF6BA5323C7C403EF8D93049.css" />
+    <link href="../Styles/tabela.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+<!--
+
+ul li a#nav_titulos
+{display: inline-block;
+height: 20px;
+padding-top: 8px;
+margin-top: -1px;
+color:#444;
+background-color: #FFC233;
+}
+
+@media screen and (max-width: 767px)
+{
+ ul li a#nav_titulos {
+clear: both; display: block;
+/*height: 19px;
+padding-top: 9px;
+margin-top: -1px;*/
+color:#444;
+background-color: #FFC233;
+  height: 39px;
+	padding:10px 10px;
+
+
+}
+}
+-->
+</style>
+</head>
+<body>
+  <form method="post" action="./x-men" onsubmit="javascript:return WebForm_OnSubmit();" id="form1" enctype="multipart/form-data">
+<div class="aspNetHidden">
+<input type="hidden" name="ScriptManager1_HiddenField" id="ScriptManager1_HiddenField" value="" />
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
+<input type="hidden" name="__LASTFOCUS" id="__LASTFOCUS" value="" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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" />
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['form1'];
+if (!theForm) {
+    theForm = document.form1;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+
+<script type="text/javascript">
+//<![CDATA[
+var __cultureInfo = {"name":"pt-BR","numberFormat":{"CurrencyDecimalDigits":2,"CurrencyDecimalSeparator":",","IsReadOnly":true,"CurrencyGroupSizes":[3],"NumberGroupSizes":[3],"PercentGroupSizes":[3],"CurrencyGroupSeparator":".","CurrencySymbol":"R$","NaNSymbol":"NaN","CurrencyNegativePattern":9,"NumberNegativePattern":1,"PercentPositivePattern":1,"PercentNegativePattern":1,"NegativeInfinitySymbol":"-∞","NegativeSign":"-","NumberDecimalDigits":2,"NumberDecimalSeparator":",","NumberGroupSeparator":".","CurrencyPositivePattern":2,"PositiveInfinitySymbol":"∞","PositiveSign":"+","PercentDecimalDigits":2,"PercentDecimalSeparator":",","PercentGroupSeparator":".","PercentSymbol":"%","PerMilleSymbol":"‰","NativeDigits":["0","1","2","3","4","5","6","7","8","9"],"DigitSubstitution":1},"dateTimeFormat":{"AMDesignator":"","Calendar":{"MinSupportedDateTime":"\/Date(-62135568000000)\/","MaxSupportedDateTime":"\/Date(253402300799999)\/","AlgorithmType":1,"CalendarType":1,"Eras":[1],"TwoDigitYearMax":2049,"IsReadOnly":true},"DateSeparator":"/","FirstDayOfWeek":0,"CalendarWeekRule":0,"FullDateTimePattern":"dddd, d\u0027 de \u0027MMMM\u0027 de \u0027yyyy HH:mm:ss","LongDatePattern":"dddd, d\u0027 de \u0027MMMM\u0027 de \u0027yyyy","LongTimePattern":"HH:mm:ss","MonthDayPattern":"d \u0027de\u0027 MMMM","PMDesignator":"","RFC1123Pattern":"ddd, dd MMM yyyy HH\u0027:\u0027mm\u0027:\u0027ss \u0027GMT\u0027","ShortDatePattern":"dd/MM/yyyy","ShortTimePattern":"HH:mm","SortableDateTimePattern":"yyyy\u0027-\u0027MM\u0027-\u0027dd\u0027T\u0027HH\u0027:\u0027mm\u0027:\u0027ss","TimeSeparator":":","UniversalSortableDateTimePattern":"yyyy\u0027-\u0027MM\u0027-\u0027dd HH\u0027:\u0027mm\u0027:\u0027ss\u0027Z\u0027","YearMonthPattern":"MMMM\u0027 de \u0027yyyy","AbbreviatedDayNames":["dom","seg","ter","qua","qui","sex","sáb"],"ShortestDayNames":["D","S","T","Q","Q","S","S"],"DayNames":["domingo","segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado"],"AbbreviatedMonthNames":["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez",""],"MonthNames":["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro",""],"IsReadOnly":true,"NativeCalendarName":"Calendário gregoriano","AbbreviatedMonthGenitiveNames":["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez",""],"MonthGenitiveNames":["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro",""]},"eras":[1,"d.C.",null,0]};//]]>
+</script>
+
+<script src="/ScriptResource.axd?d=6CDylG_Ab0Wta8VHUg44c4q5rDq7ILIqb_Mu4Ibzn84N_AouUtL0LamgQ4tRe-2e_i03vuWVHZ_l1JuQZ173iOPcmzsRfZVbqwoOEsVB31RlcX47BE-TXVG-yoE_wi-v0&amp;t=3a1336b1" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+(window.Sys && Sys._Application && Sys.Observer)||document.write('<script type="text/javascript" src="/ScriptResource.axd?d=6CDylG_Ab0Wta8VHUg44c4q5rDq7ILIqb_Mu4Ibzn84N_AouUtL0LamgQ4tRe-2e_i03vuWVHZ_l1JuQZ173iOPcmzsRfZVbqwoOEsVB31RlcX47BE-TXVG-yoE_wi-v0&t=3a1336b1"><\/script>');//]]>
+</script>
+
+<script src="/ScriptResource.axd?d=34ue1mX_mqOTCXh4-c-Gj02Faa9QcUjNXXlWT4xGHb0r6_MdgJnqBh-BckIwJTh3KxzrJ_Y6F9Qife0iOhWfJAPMWJ-zXpg253Z11eWvnJjFybXw1-Y9VnEc07EX0ZERAQ50DitjiRLctv2jotM7KA2&amp;t=3a1336b1" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+(window.Sys && Sys.WebForms)||document.write('<script type="text/javascript" src="/ScriptResource.axd?d=34ue1mX_mqOTCXh4-c-Gj02Faa9QcUjNXXlWT4xGHb0r6_MdgJnqBh-BckIwJTh3KxzrJ_Y6F9Qife0iOhWfJAPMWJ-zXpg253Z11eWvnJjFybXw1-Y9VnEc07EX0ZERAQ50DitjiRLctv2jotM7KA2&t=3a1336b1"><\/script>');//]]>
+</script>
+
+<script src="/ScriptResource.axd?d=DRmNSHGzu8nsM2WxkTcCrQmdEs6cbgHr3v2kri3GwEb0duiAXPZrNMLKDiB6BLMSbFwSu7NuGu-bEBgmabAjfNDTZk5NHHXlBZZ2ACq03brGYII6b0z-TjnVURcXEOWj9nTIYf6moB6bql9iU2x9RQdERWhszxJjAfwyTZGAQKsBIkA_suKA4dCbwIFDOpiyX-jelf28te0UXJpzd7H4tO_I6MunnePuJuAEdQnaFfTuhXOtLspBqR-fRW6y1phQNUkjkqogqx4MPnqXTSDJelrMoS-6L27u5jUdj5PptFv2lzX09GSPGhHfZdnad6LfASTyq54BHo2tbKHw745oqbZvTzXpVgcqk1H1-88V85liikxjMJZQ3TChaHO4o-gIqH_way0JhWsYz7InTrJZ-5PiJ_ROnH9TkHeWa700xzFYs4rLSP0jgoeFl2S9yhD5V2dieaVL4TboQtXSGOxgdrAjxMr4XpJmT6tNZXFsHhKP4bhEQiropilg4qufixtISKb3rcVLj5Vcmypr7rTl3A2" type="text/javascript"></script>
+<script src="/titulos/x-men?_TSM_HiddenField_=ScriptManager1_HiddenField&amp;_TSM_CombinedScripts_=%3b%3bAjaxControlToolkit%2c+Version%3d4.1.51116.0%2c+Culture%3dneutral%2c+PublicKeyToken%3d28f01b0e84b6d53e%3apt-BR%3afd384f95-1b49-47cf-9b47-2fa2a921a36a%3ade1feab2%3af9cec9bc%3a35576c48" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+function WebForm_OnSubmit() {
+null;if (typeof(ValidatorOnSubmit) == "function" && ValidatorOnSubmit() == false) return false;
+return true;
+}
+//]]>
+</script>
+
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="EEB05935" />
+	<input type="hidden" name="__VIEWSTATEENCRYPTED" id="__VIEWSTATEENCRYPTED" value="" />
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="gnTztfshaFrkRND6T4XpYGeqWoUJLcuU87wdi6asRPWXyTGp71bnJUiYAkAO9NcWeYcquyxV2kOpxgbmx8C7xmrcft2aIBv+tC9lyY8P244VKOops2Z88Psh3sa36IR6wDNwFOdjferD63YwVu0R1mDchSuqZe1DjIdF/+5eGENo/UDXQfdE64nxcsgg9ioumgmRW8Lj0iWcOPMkKaNLzs1qlppc/9UfWPNbiavaw9nBbnUtSCrk/o+YqhugjI5YvLtazzxnBHQxU2hGKkYU+JWGA08oREzjSmoQQMjYBmJoBf9RtLwlM2Bzu9GBUPYLvghPbydi6b7XbIHYyla5qZgpSbeow8eX3oK4m5VjPxKXnwtnAM+z4gyJ5r26h7qDKxttc77JmQ9eKZ7ZuYB6geQOO5I1h0cP4GhKaafILbnKdwaz3E8PC8xstLJLIzXWrxE2OagZzDiMt90zWU3k9qsuFMVYq+78wwYXnihOZdlg1xZri6xxeP0S69wFCzyPYY6QDiONGGQA6p9/Rp2jRU8xQQKf375uMkJYVGCbMi4UYjcvLdUiXsOeACELXJJAFGlwEP+jgFI7h4vETe7PBRB4EHvaCztmttQzKLz++M/CRj9J60jd6aT8GGhNwcqH2QnhaFvC3lkWQZ14Cp9wZBG9KWixiRwwV2cDf+IPQYKcJlYYNPcnUh9fYXQ2OnnEKjvgc0iOtNDiZZtCMBJp87mSBMvErGt4nBSJTb6gbWYGL/mWUHKShNoh81K5vyNcvg/HN1eIhKRDdztwxbcTXcTJrfAXlDEobxts4kZ2aSELgL2Qp87PIdZapoptT2v8BxK4D4B80atOmZcPTK/Hj6DG5DK+2kKESqNWeHiJo6rqd1iyPgUXpBN3rj7QQ6trCY7sl1ugb1RupTmQ5W5bcwvj7JecgX+lvyocoRLPpKEiVSCnSrdSOej9+Qm6nnrQ" />
+</div>
+  <script type="text/javascript">
+//<![CDATA[
+Sys.WebForms.PageRequestManager._initialize('ctl00$ScriptManager1', 'form1', ['tctl00$MainContent$UpdatePanel1','UpdatePanel1'], [], [], 90, 'ctl00');
+//]]>
+</script>
+
+
+
+
+  <script type="text/javascript">
+      window.addEventListener('orientationchange', handleOrientation, false);
+      var ww = document.body.clientWidth;
+      var mqOrientation = window.matchMedia("(orientation: portrait)");
+      mqOrientation.addListener(function () {
+          var ww = document.body.clientWidth;
+          if (ww < 400) {
+              $("#cssmenu").hide();
+              $("#cssmenu2").hide();
+          }
+          else {
+              $("#cssmenu").show();
+              $("#cssmenu2").show();
+              $(".boxpesquisa2").show();
+              $("#menu_scroll").animate({ height: 0 }, 600);
+              $(".boxpesquisa2").addClass("hide_menu");
+              $("#cssmenu2").addClass("hide_menu");
+              $("#cssmenu").addClass("hide_menu");
+          }
+      });
+  function handleOrientation() {
+      var ww = document.body.clientWidth;
+      if (ww < 400) {
+          $("#cssmenu").hide();
+          $("#cssmenu2").hide();
+      }
+      else {
+          $("#cssmenu").show();
+          $("#cssmenu2").show();
+          $(".boxpesquisa2").show();
+          $("#menu_scroll").animate({ height: 0 }, 600);
+          $(".boxpesquisa2").addClass("hide_menu");
+          $("#cssmenu2").addClass("hide_menu");
+          $("#cssmenu").addClass("hide_menu");
+      }
+}
+
+$(document).ready(function() {
+if (!0==0){
+document.getElementById('messages').setAttribute("class", "messages_count2");
+document.getElementById('messages2').setAttribute("class", "messages_count3");
+}
+	/* This is basic - uses default settings */
+$("a#entrarLink").fancybox({
+				'width'				: 350,
+				'height'			: 430,
+				'type'				: 'iframe',
+				'scrolling':  'no',
+				'hideOnOverlayClick': false,
+				'hideOnContentClick': false,
+		padding :	0,
+helpers : {
+        overlay : {
+            opacity: 0.7,
+            css : {
+                'background-color' : '#000'
+            }
+        }
+    },
+		centerOnScroll	: true,
+		enableEscapeButton: true
+});
+
+$("a.Configuracoes").fancybox({
+              'width': 850,
+              'height': 550,
+              'type': 'iframe',
+              'scrolling': 'no',
+              'hideOnOverlayClick': false,
+              'hideOnContentClick': false,
+		padding :	0,
+helpers : {title:  null,
+        overlay : {
+            opacity: 0.7,
+            css : {
+                'background-color' : '#000'
+            }
+        }
+    },
+		centerOnScroll	: true,
+		enableEscapeButton: true
+});
+});
+
+$(document).ready(function() {
+$(window).scroll(function () {
+                if ($(this).scrollTop() > 250) {
+                    $('#top_link').addClass('active');
+                    //  $('#logo_top_menu').addClass('active');
+                } else {
+                    $('#top_link').removeClass('active');
+                    // $('#logo_top_menu').removeClass('active');
+                }
+            });
+
+            $('.scrollup').click(function () {
+                $("html, body").animate({ scrollTop: 0 }, 600);
+                return false;
+            });
+
+
+        if ($.browser.webkit) {
+            $("dropdown_pesquisaID").removeClass("dropdown_pesquisa");
+            document.getElementById('dropdown_pesquisaID').setAttribute("class", "dropdown_styled dropdown_pesquisaKIT");
+        }
+    });
+    function toggleMenuDiv() {
+        if ($("#cssmenu2").hasClass("hide_menu")) {
+            $("#cssmenu2").removeClass("hide_menu");
+            $("#cssmenu2").fadeIn();
+            $("#cssmenu2").fadeIn("fast");
+            $("#cssmenu2").fadeIn(500);
+            $("#menu_scroll").animate({ height: 550 }, 600);
+            $("#cssmenu2").addClass("show_menu");
+        }
+        else {
+            $("#cssmenu2").removeClass("show_menu");
+            $("#cssmenu2").fadeOut();
+            $("#cssmenu2").fadeOut("fast");
+            $("#cssmenu2").fadeOut(500);
+            $("#menu_scroll").animate({ height: 0 }, 600);
+            $("#cssmenu2").addClass("hide_menu");
+        }
+    }
+    function toggleMenu_topDiv() {
+        if ($("#cssmenu").hasClass("hide_menu")) {
+            $("#cssmenu").removeClass("hide_menu");
+            $("#cssmenu").fadeIn();
+            $("#cssmenu").fadeIn("fast");
+            $("#cssmenu").fadeIn(500);
+           // $("#menu_scroll").animate({ height: 425 }, 600);
+            $("#cssmenu").addClass("show_menu");
+            $("#cssmenu2").removeClass("show_menu");
+            $("#cssmenu2").fadeOut();
+            $("#cssmenu2").fadeOut("fast");
+            $("#cssmenu2").fadeOut(500);
+            $("#menu_scroll").animate({ height: 0 }, 600);
+            $("#cssmenu2").addClass("hide_menu");
+        }
+        else {
+            $("#cssmenu").removeClass("show_menu");
+            $("#cssmenu").fadeOut();
+            $("#cssmenu").fadeOut("fast");
+            $("#cssmenu").fadeOut(500);
+            $("#menu_scroll").animate({ height: 0 }, 600);
+            $("#cssmenu").addClass("hide_menu");
+        }
+    }
+
+    function toggleBusca_Div() {
+        if ($(".boxpesquisa2").css('display')=='none') {
+            $(".boxpesquisa2").removeClass("hide_menu");
+            $(".boxpesquisa2").fadeIn();
+            $(".boxpesquisa2").fadeIn("fast");
+            $(".boxpesquisa2").fadeIn(500);
+            $(".boxpesquisa2").addClass("show_menu");
+            $("#cssmenu2").removeClass("show_menu");
+            $("#menu_scroll").animate({ height: 0 }, 600);
+            $("#cssmenu2").addClass("hide_menu");
+            $("#cssmenu").removeClass("show_menu");
+            $("#cssmenu").addClass("hide_menu");
+        }
+        else {
+            $(".boxpesquisa2").removeClass("show_menu");
+            $(".boxpesquisa2").fadeOut();
+            $(".boxpesquisa2").fadeOut("fast");
+            $(".boxpesquisa2").fadeOut(500);
+            $(".boxpesquisa2").addClass("hide_menu");
+        }
+    }
+</script>
+<div id="dhtmltooltip"></div>
+<script type="text/javascript" src="/js/combined_E1D3C6BBCF8F8BC37D2962D8649E103A.js"></script>
+
+
+  <div id="top_menu">
+  <div class="container">
+
+      <div id="logo_top_mobile" >
+      <a id="HyperLink1" href="../"><img src="../images/logo_mobile.png" id="logo_mobile" class="centrar" /></a>
+</div>
+
+      <div id="top_menu_mobile">
+      <img src="../images/nav_icon.png" id="icon_menu_mobile" onclick="toggleMenu_topDiv();" />
+
+<img src="../images/Search-icon.png" id="busca_mobile" CssClass="search-submit-mobile" onclick="toggleBusca_Div();" /></div>
+</div>
+  <div id='cssmenu'  class='hide_menu'>
+
+
+
+<ul class="cssmenu_left">
+<li><a href="../entrar" id="entrarLink">Entrar</a></li>
+<li><a href="../cadastro" id="CadastroLink">Cadastre-se</a></li>
+</ul>
+
+            </div>
+
+            </div>
+<div class="wrapper">
+
+
+
+
+
+
+                    <div class="header">
+            <a id="logo_header" href="../"><div class="title">
+<img src="../images/logo_final_site.png" id="logo1" />
+</div></a>
+
+<div class="boxpesquisa2">
+<div id="search-form">
+ <span id="search-page-border">
+  <input name="ctl00$TextBusca" type="text" id="TextBusca" class="search-terms" /> <input type="hidden" title=" " /><input type="hidden" name="ctl00$TextBoxWatermarkExtender2_ClientState" id="TextBoxWatermarkExtender2_ClientState" /> 
+  <div id="dropdown_pesquisaID" class="dropdown_styled dropdown_pesquisa"><select name="ctl00$stateList" id="stateList">
+	<option selected="selected" value="tudo">Tudo</option>
+	<option value="tit">T&#237;tulo</option>
+	<option value="titor">T&#237;tulo estrangeiro</option>
+	<option value="edi">Editora</option>
+	<option value="ediest">Editora estrangeira</option>
+	<option value="arte">Artista</option>
+	<option value="pers">Personagem</option>
+	<option value="his">Hist&#243;ria</option>
+	<option value="arco">Arco de hist&#243;ria</option>
+	<option value="edo">Licenciador</option>
+	<option value="usu">Usu&#225;rio</option>
+	<option value="col">Cole&#231;&#227;o</option>
+
+</select><input type="hidden" title=" " /></div></span>
+  <input type="image" name="ctl00$busca" id="busca" class="search-submit" Text="Procurar" src="../images/Search-icon.png" align="middle" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$busca&quot;, &quot;&quot;, true, &quot;GroupBusca&quot;, &quot;&quot;, false, false))" /></div>
+    <a href="../busca-avancada" id="busca_adv" class="busca_adv"><strong>Busca avançada</strong></a></div>
+
+<div id="toggleMenu"  onclick="toggleMenuDiv();"><div class="container">Menu</div></div>
+ <div class="box_menu">
+<div id='cssmenu2' class='hide_menu'>
+<ul>
+<li><a href="./" id="nav_titulos" class="mais_menu" title="Títulos">Títulos <span>▼</span></a>
+<ul>
+<li><a href="../titulos-estrangeiros/" id="nav_titulos_est" title="Títulos estrangeiros">Títulos estrangeiros</a></li>
+<li><a href="../adicionar-titulo/" id="nav_adicionar_titulo" title="Adicionar título">Adicionar título</a></li>
+<a href="../adicionar-titulo-estrangeiro/" id="nav_adicionar_titulo3" title="Adicionar título estrangeiro">Adicionar título estrangeiro</a></li></ul></li>
+<li class="sub_menu"><a href="../titulos-estrangeiros/" id="nav_titulos_est2" title="Títulos estrangeiros">Títulos estrangeiros</a></li>
+<li class="sub_menu"><a href="../adicionar-titulo/" id="nav_adicionar_titulo2" title="Adicionar título">Adicionar título</a></li>
+<li class="sub_menu"><a href="../adicionar-titulo-estrangeiro/" id="nav_adicionar_titulo4" title="Adicionar título estrangeiro">Adicionar título estrangeiro</a></li>
+
+<li><a id="lancanav" title="Lançamentos de 4/2026" href="../lancamentos-do-mes/4/2026">Lançamentos</a></li>
+<li><a href="../editoras/" id="nav_editoras" title="Editoras">Editoras <span>▼</span></a>
+<ul  class="nav_sub">
+<li><a href="../editoras-estrangeiras/" id="nav_editoras_est" title="Editoras estrangeiras">Editoras estrangeiras</a></li>
+		</ul></li>
+        <li class="sub_menu"><a href="../colecoes/" id="nav_editoras_est2" title="Editoras estrangeiras">Editoras estrangeiras</a></li>
+
+<li><a href="../artistas/" id="nav_artistas" title="Artistas">Artistas</a></li>
+<li><a href="../personagens/" id="nav_personagens" title="Personagens">Personagens</a></li>
+<li><a href="../usuarios/" id="nav_usuarios" title="Usuários">Usuários <span>▼</span></a>
+<ul  class="nav_sub">
+<li><a href="../colecoes/" id="nav_colecoes" title="Coleções">Coleções</a></li>
+		</ul></li>
+        <li class="sub_menu"><a href="../colecoes/" id="colecoes2" title="Coleções">Coleções</a></li>
+<li><a href="../monografias/" id="nav_monografias" title="Monografias">Monografias</a></li>
+<li><a href="../blog/" id="nav_blog" title="Guia dos Quadrinhos Blog">Blog</a></li>
+<li><a href="../contato/" id="nav_contato" title="Contato">Contato</a></li>
+</ul>
+</div>
+
+            </div>
+            	</div>
+                <div id="menu_scroll"></div>
+
+        <div class="main">
+        <div class="container">
+           <div id="box_banner">
+               <a id="AdGuia" href="https://amzn.to/2vx6soC" target="_blank"><img src="/images/associates728x90._CB513031506.jpg" alt="Ofertas na Amazon!" style="width:100%;" /></a><br/><br/>
+
+
+               </div>
+
+<div id="UpdatePanel1">
+
+
+
+ <ul id="letters" class="navtablist" >
+    <li class="roundtop shadow"><a title="$ - 244" href="../titulos/$">$<br /><span>(244)</span></a></li><li class="roundtop shadow"><a title="A - 1989" href="../titulos/a">A<br /><span>(1989)</span></a></li><li class="roundtop shadow"><a title="B - 1356" href="../titulos/b">B<br /><span>(1356)</span></a></li><li class="roundtop shadow"><a title="C - 2138" href="../titulos/c">C<br /><span>(2138)</span></a></li><li class="roundtop shadow"><a title="D - 1158" href="../titulos/d">D<br /><span>(1158)</span></a></li><li class="roundtop shadow"><a title="e - 819" href="../titulos/e">e<br /><span>(819)</span></a></li><li class="roundtop shadow"><a title="F - 788" href="../titulos/f">F<br /><span>(788)</span></a></li><li class="roundtop shadow"><a title="G - 1029" href="../titulos/g">G<br /><span>(1029)</span></a></li><li class="roundtop shadow"><a title="H - 917" href="../titulos/h">H<br /><span>(917)</span></a></li><li class="roundtop shadow"><a title="I - 363" href="../titulos/i">I<br /><span>(363)</span></a></li><li class="roundtop shadow"><a title="J - 463" href="../titulos/j">J<br /><span>(463)</span></a></li><li class="roundtop shadow"><a title="K - 227" href="../titulos/k">K<br /><span>(227)</span></a></li><li class="roundtop shadow"><a title="L - 750" href="../titulos/l">L<br /><span>(750)</span></a></li><li class="roundtop shadow"><a title="M - 1968" href="../titulos/m">M<br /><span>(1968)</span></a></li><li class="roundtop shadow"><a title="N - 520" href="../titulos/n">N<br /><span>(520)</span></a></li><li class="roundtop shadow"><a title="O - 302" href="../titulos/o">O<br /><span>(302)</span></a></li><li class="roundtop shadow"><a title="P - 1230" href="../titulos/p">P<br /><span>(1230)</span></a></li><li class="roundtop shadow"><a title="Q - 258" href="../titulos/q">Q<br /><span>(258)</span></a></li><li class="roundtop shadow"><a title="R - 730" href="../titulos/r">R<br /><span>(730)</span></a></li><li class="roundtop shadow"><a title="S - 1969" href="../titulos/s">S<br /><span>(1969)</span></a></li><li class="roundtop shadow"><a title="T - 1382" href="../titulos/t">T<br /><span>(1382)</span></a></li><li class="roundtop shadow"><a title="U - 387" href="../titulos/u">U<br /><span>(387)</span></a></li><li class="roundtop shadow"><a title="V - 640" href="../titulos/v">V<br /><span>(640)</span></a></li><li class="roundtop shadow"><a title="W - 198" href="../titulos/w">W<br /><span>(198)</span></a></li><li class="roundtop shadow"><a title="X - 170" href="../titulos/x">X<br /><span>(170)</span></a></li><li class="roundtop shadow"><a title="Y - 38" href="../titulos/y">Y<br /><span>(38)</span></a></li><li class="roundtop shadow"><a title="Z - 209" href="../titulos/z">Z<br /><span>(209)</span></a></li></ul>
+
+    <br />Resultado da busca por <strong>x-men</strong><br />
+
+            <br />
+
+
+
+    <div id="box_itens_paginas">Itens por páginas: <div class="dropdown_styled drop_paging"><select name="ctl00$MainContent$itenspagDll" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$MainContent$itenspagDll\&#39;,\&#39;\&#39;)&#39;, 0)" id="itenspagDll">
+		<option selected="selected" value="30">30</option>
+		<option value="50">50</option>
+		<option value="75">75</option>
+		<option value="100">100</option>
+
+	</select></div><br /></div> <br />
+
+
+ <div class="page_info">
+                                <span id="dataPagerNumeric2"><a class="aspNetDisabled next_last"><<</a>&nbsp;<a class="aspNetDisabled next_last"><</a>&nbsp;<span class="current_page">1</span>&nbsp;<a class="numeric_button" href="javascript:__doPostBack(&#39;ctl00$MainContent$lstProfileView$dataPagerNumeric2$ctl01$ctl01&#39;,&#39;&#39;)">2</a>&nbsp;<a class="numeric_button" href="javascript:__doPostBack(&#39;ctl00$MainContent$lstProfileView$dataPagerNumeric2$ctl01$ctl02&#39;,&#39;&#39;)">3</a>&nbsp;<a class="numeric_button" href="javascript:__doPostBack(&#39;ctl00$MainContent$lstProfileView$dataPagerNumeric2$ctl01$ctl03&#39;,&#39;&#39;)">4</a>&nbsp;<a class="numeric_button" href="javascript:__doPostBack(&#39;ctl00$MainContent$lstProfileView$dataPagerNumeric2$ctl01$ctl04&#39;,&#39;&#39;)">5</a>&nbsp;&nbsp;<a class="next_button" href="javascript:__doPostBack(&#39;ctl00$MainContent$lstProfileView$dataPagerNumeric2$ctl01$ctl05&#39;,&#39;&#39;)">...</a>&nbsp;<a class="next_last" href="javascript:__doPostBack(&#39;ctl00$MainContent$lstProfileView$dataPagerNumeric2$ctl02$ctl00&#39;,&#39;&#39;)">></a>&nbsp;<a class="next_last" href="javascript:__doPostBack(&#39;ctl00$MainContent$lstProfileView$dataPagerNumeric2$ctl02$ctl01&#39;,&#39;&#39;)">>></a>&nbsp;</span>
+
+                                    <span id="dataPageDisplayNumberOfPages2">
+                                                Itens: 1 - 30 de 208
+                                                </span>
+                                    </div>
+
+<div id="table_scroll">
+                                <table id="tlbProfile" cellspacing="0" cellpadding="0" border="0" class="datatable">
+		<tr>
+			<th class="column_head td_titulo">
+                                         <a id="titulo_link" href="javascript:__doPostBack(&#39;ctl00$MainContent$lstProfileView$titulo_link&#39;,&#39;&#39;)">Título</a> </th>
+			<th class="column_head td_editora">
+                                            <a id="editora_link" href="javascript:__doPostBack(&#39;ctl00$MainContent$lstProfileView$editora_link&#39;,&#39;&#39;)">Editora</a> </th>
+			<th class="column_head td_licenciador"><a id="licenciador_link" href="javascript:__doPostBack(&#39;ctl00$MainContent$lstProfileView$licenciador_link&#39;,&#39;&#39;)">Licenciador</a> </th>
+			<th class="column_head td_periodo"><a id="periodo_link" href="javascript:__doPostBack(&#39;ctl00$MainContent$lstProfileView$periodo_link&#39;,&#39;&#39;)">Período</a> </th>
+			<th class="column_head td_edicoes"><a id="edições_link" href="javascript:__doPostBack(&#39;ctl00$MainContent$lstProfileView$edições_link&#39;,&#39;&#39;)">N° de edições</a> </th>
+		</tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('Coleção com distribuição inicial nas lojas Carrefour<br/>Foi relançado em duas caixas:<br/>Caixa 1: Volumes 1-5 - Junho/2024 - R$ 199,50<br/>Caixa 2: Volumes 6-10 - Junho/2024 - R$ 199,50')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/anos-2000-os-o-renascimento-da-marvel/an011113'">
+             <td >
+
+            <a href='../capas/anos-2000-os-o-renascimento-da-marvel/an011113' class="suppress" title='Coleção com distribuição inicial nas lojas Carrefour<br/>Foi relançado em duas caixas:<br/>Caixa 1: Volumes 1-5 - Junho/2024 - R$ 199,50<br/>Caixa 2: Volumes 6-10 - Junho/2024 - R$ 199,50' > Anos 2000, Os: O Renascimento da Marvel  </a></td><td >Panini</td><td > Marvel Comics</td><td >2022 </td><td > 10
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('Edição com todas as 10 histórias não-oficiais dos X-Men produzidas no Brasil por Gedeone Malagola e Walter Gomes, publicadas pela GEP no final dos anos 60.')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/arquivos-de-gedeone-malagola-os-x-men-em-acao/ar007104'">
+             <td >
+
+            <a href='../capas/arquivos-de-gedeone-malagola-os-x-men-em-acao/ar007104' class="suppress" title='Edição com todas as 10 histórias não-oficiais dos X-Men produzidas no Brasil por Gedeone Malagola e Walter Gomes, publicadas pela GEP no final dos anos 60.' > Arquivos de Gedeone Malagola: Os X-Men em Ação!  </a></td><td >Edições Waz</td><td > Atitude Independente</td><td >2014 </td><td > 1
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/arquivos-x-men-capitao-bretanha/ar076100'">
+             <td >
+
+            <a href='../capas/arquivos-x-men-capitao-bretanha/ar076100' class="suppress" title='' > Arquivos X-Men: Capitão Bretanha &#8212; Edição Encadernada  </a></td><td >Pandora Books</td><td > Marvel Comics</td><td >2003 </td><td > 1
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/arquivos-x-men-capitao-bretanha/ca00703 '">
+             <td >
+
+            <a href='../capas/arquivos-x-men-capitao-bretanha/ca00703 ' class="suppress" title='' > Arquivos X-Men: Capitão Bretanha &#8212; Minissérie  </a></td><td >Pandora Books</td><td > Marvel Comics</td><td >2001-2003 </td><td > 4
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/biblioteca-historica-marvel-os-x-men/bi011103'">
+             <td >
+
+            <a href='../capas/biblioteca-historica-marvel-os-x-men/bi011103' class="suppress" title='' > Biblioteca Histórica Marvel - Os X-Men  </a></td><td >Panini</td><td > Marvel Comics</td><td >2007-2011 </td><td > 3
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/bishop-dos-x-men/bxm0301 '">
+             <td >
+
+            <a href='../capas/bishop-dos-x-men/bxm0301 ' class="suppress" title='' > Bishop dos X-Men  </a></td><td >Abril</td><td > Marvel Comics</td><td >1999 </td><td > 1
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/brazucas-especial-herois-brazucas-versus-x-men/br184114'">
+             <td >
+
+            <a href='../capas/brazucas-especial-herois-brazucas-versus-x-men/br184114' class="suppress" title='' > Brazucas Especial: Heróis Brazucas Versus X-Men  </a></td><td >Independente</td><td > Francinildo Sena</td><td > </td><td > 1
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/cacada-sangrenta-x-men/ca011177'">
+             <td >
+
+            <a href='../capas/cacada-sangrenta-x-men/ca011177' class="suppress" title='' > Caçada Sangrenta: X-Men  </a></td><td >Panini</td><td > Marvel Comics</td><td >2025 </td><td > 1
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('Versão encadernada da minissérie X-Men & ClanDestino.')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/clan-destino-versus-x-men/cl076101'">
+             <td >
+
+            <a href='../capas/clan-destino-versus-x-men/cl076101' class="suppress" title='Versão encadernada da minissérie X-Men & ClanDestino.' > Clan Destino Versus X-Men &#8212; Edição Encadernada  </a></td><td >Pandora Books</td><td > Marvel Comics</td><td >2003 </td><td > 1
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('Marvel Omnibus')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/classicos-x-men/cl011101'">
+             <td >
+
+            <a href='../capas/classicos-x-men/cl011101' class="suppress" title='Marvel Omnibus' > Clássicos X-Men  </a></td><td >Panini</td><td > Marvel Comics</td><td >2024 </td><td > 1
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('Baseada na coleção &#34;Super Eroi Classic&#34;, da Panini Itália. Coleção de histórias clássicas da Marvel dos anos 1960-1970. Publicado em ordem cronológica, mas cada volume tem um super-herói diferente. Programada inicialmente para 60 volumes, foi estendida até o volume 64.<br/>Continua em Coleção Clássica Marvel: Nova Fase.')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/colecao-classica-marvel/co011170'">
+             <td >
+
+            <a href='../capas/colecao-classica-marvel/co011170' class="suppress" title='Baseada na coleção "Super Eroi Classic", da Panini Itália. Coleção de histórias clássicas da Marvel dos anos 1960-1970. Publicado em ordem cronológica, mas cada volume tem um super-herói diferente. Programada inicialmente para 60 volumes, foi estendida até o volume 64.<br/>Continua em Coleção Clássica Marvel: Nova Fase.' > Coleção Clássica Marvel  </a></td><td >Panini</td><td > Marvel Comics</td><td >2021-2023 </td><td > 64
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/colecao-classica-marvel-nova-fase/co011202'">
+             <td >
+
+            <a href='../capas/colecao-classica-marvel-nova-fase/co011202' class="suppress" title='' > Coleção Clássica Marvel: Nova Fase  </a></td><td >Panini</td><td > Marvel Comics</td><td >2025- </td><td > 17
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/colecao-historica-marvel-os-x-men/co011115'">
+             <td >
+
+            <a href='../capas/colecao-historica-marvel-os-x-men/co011115' class="suppress" title='' > Coleção Histórica Marvel: Os X-Men  </a></td><td >Panini</td><td > Marvel Comics</td><td >2014-2016 </td><td > 8
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/colecao-marvel-terror-zumbis-marvel/co011112'">
+             <td >
+
+            <a href='../capas/colecao-marvel-terror-zumbis-marvel/co011112' class="suppress" title='' > Coleção Marvel Terror: Zumbis Marvel  </a></td><td >Panini</td><td > Marvel Comics</td><td >2013-2014 </td><td > 4
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('Publicado em parceria com a Panini.')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/colecao-oficial-de-graphic-novels-marvel-a/gr007106'">
+             <td >
+
+            <a href='../capas/colecao-oficial-de-graphic-novels-marvel-a/gr007106' class="suppress" title='Publicado em parceria com a Panini.' > Coleção Oficial de Graphic Novels Marvel, A  </a></td><td >Salvat</td><td > Marvel Comics</td><td >2013-2019 </td><td > 95
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('Publicado em parceria com a Panini.')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/colecao-oficial-de-graphic-novels-marvel-a-classicos/co105410'">
+             <td >
+
+            <a href='../capas/colecao-oficial-de-graphic-novels-marvel-a-classicos/co105410' class="suppress" title='Publicado em parceria com a Panini.' > Coleção Oficial de Graphic Novels Marvel, A - Clássicos  </a></td><td >Salvat</td><td > Marvel Comics</td><td >2015-2018 </td><td > 40
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/de-volta-a-era-do-apocalipse/dea0301 '">
+             <td >
+
+            <a href='../capas/de-volta-a-era-do-apocalipse/dea0301 ' class="suppress" title='' > de Volta À Era do Apocalipse  </a></td><td >Abril</td><td > Marvel Comics</td><td >1998 </td><td > 1
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/deadpool-1-serie/de011109'">
+             <td >
+
+            <a href='../capas/deadpool-1-serie/de011109' class="suppress" title='' > Deadpool - 1&ordf; Série </a></td><td >Panini</td><td > Marvel Comics</td><td >2011-2012 </td><td > 19
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/edicoes-gep/ed043100'">
+             <td >
+
+            <a href='../capas/edicoes-gep/ed043100' class="suppress" title='' > Edições Gep  </a></td><td >Gep</td><td > Marvel Comics</td><td >1969-1970 </td><td > 23
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/epicos-marvel/em00301 '">
+             <td >
+
+            <a href='../capas/epicos-marvel/em00301 ' class="suppress" title='' > Épicos Marvel  </a></td><td >Abril</td><td > Marvel Comics</td><td >1991-1995 </td><td > 7
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/era-do-x-man-a/er011103'">
+             <td >
+
+            <a href='../capas/era-do-x-man-a/er011103' class="suppress" title='' > Era do X-Man, A  </a></td><td >Panini</td><td > Marvel Comics</td><td >2020 </td><td > 6
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/espetacular-homem-aranha-o-5-serie/es011500'">
+             <td >
+
+            <a href='../capas/espetacular-homem-aranha-o-5-serie/es011500' class="suppress" title='' > Espetacular Homem-Aranha, O - 5&ordf; Série </a></td><td >Panini</td><td > Marvel Comics</td><td >2022-2025 </td><td > 49
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/excalibur-especial/exe0301 '">
+             <td >
+
+            <a href='../capas/excalibur-especial/exe0301 ' class="suppress" title='' > Excalibur Especial  </a></td><td >Abril</td><td > Marvel Comics</td><td >1996-1997 </td><td > 2
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('Nos anos 70-80, os super-heróis  tinham valores e linhas de estilo – em texto e desenhos –  diferenciadas entre si, com tramas e  subtramas. Um bom exemplo era a revista Superaventuras Marvel, que  tinha o Demolidor (herói urbano), Novos X-Men (que era FC com heróis renegados), Dr Estranho (misticismo) e Conan (aventura de capa e espada/magia). Queremos trazer este tipo de HQ de super-herói  de volta!')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/excelsior-quadrinhos/ex191310'">
+             <td >
+
+            <a href='../capas/excelsior-quadrinhos/ex191310' class="suppress" title='Nos anos 70-80, os super-heróis  tinham valores e linhas de estilo – em texto e desenhos –  diferenciadas entre si, com tramas e  subtramas. Um bom exemplo era a revista Superaventuras Marvel, que  tinha o Demolidor (herói urbano), Novos X-Men (que era FC com heróis renegados), Dr Estranho (misticismo) e Conan (aventura de capa e espada/magia). Queremos trazer este tipo de HQ de super-herói  de volta!' > Excelsior Quadrinhos  </a></td><td >Excelsior Quadrinhos</td><td >  sem licenciador</td><td >2012 </td><td > 1
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/excepcionais-x-men/ex011108'">
+             <td >
+
+            <a href='../capas/excepcionais-x-men/ex011108' class="suppress" title='' > Excepcionais X-Men  </a></td><td >Panini</td><td > Marvel Comics</td><td >2025- </td><td > 5
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/exilados-vs-x-men/x-00703 '">
+             <td >
+
+            <a href='../capas/exilados-vs-x-men/x-00703 ' class="suppress" title='' > Exilados Vs. X-Men  </a></td><td >Mythos</td><td > Malibu Comics/Marvel Comics</td><td >1998 </td><td > 1
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/fabulosos-x-men/fa011127'">
+             <td >
+
+            <a href='../capas/fabulosos-x-men/fa011127' class="suppress" title='' > Fabulosos X-Men  </a></td><td >Panini</td><td > Marvel Comics</td><td >2019-2020 </td><td > 4
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('Nova Marvel')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/fabulosos-x-men-vs-shield/fa011121'">
+             <td >
+
+            <a href='../capas/fabulosos-x-men-vs-shield/fa011121' class="suppress" title='Nova Marvel' > Fabulosos X-Men Vs. Shield  </a></td><td >Panini</td><td > Marvel Comics</td><td >2018 </td><td > 1
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/fabulosos-x-men-os/fxm0301 '">
+             <td >
+
+            <a href='../capas/fabulosos-x-men-os/fxm0301 ' class="suppress" title='' > Fabulosos X-Men, Os  </a></td><td >Abril</td><td > Marvel Comics</td><td >1996-2000 </td><td > 55
+                </td>
+            </tr>
+
+
+<tr style="background-color:#E7E9EA; cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('')" onmouseout="this.style.background='#E7E9EA'; hideddrivetip()"  onclick="location.href='../capas/fabulosos-x-men-os/fa011135'">
+             <td >
+
+            <a href='../capas/fabulosos-x-men-os/fa011135' class="suppress" title='' > Fabulosos X-Men, Os  </a></td><td >Panini</td><td > Marvel Comics</td><td >2025- </td><td > 9
+                </td>
+            </tr>
+        </table>
+
+</div>
+ <div class="page_info">
+                                <span id="dataPagerNumeric"><a class="aspNetDisabled next_last"><<</a>&nbsp;<a class="aspNetDisabled next_last"><</a>&nbsp;<span class="current_page">1</span>&nbsp;<a class="numeric_button" href="javascript:__doPostBack(&#39;ctl00$MainContent$lstProfileView$dataPagerNumeric$ctl01$ctl01&#39;,&#39;&#39;)">2</a>&nbsp;<a class="numeric_button" href="javascript:__doPostBack(&#39;ctl00$MainContent$lstProfileView$dataPagerNumeric$ctl01$ctl02&#39;,&#39;&#39;)">3</a>&nbsp;<a class="numeric_button" href="javascript:__doPostBack(&#39;ctl00$MainContent$lstProfileView$dataPagerNumeric$ctl01$ctl03&#39;,&#39;&#39;)">4</a>&nbsp;<a class="numeric_button" href="javascript:__doPostBack(&#39;ctl00$MainContent$lstProfileView$dataPagerNumeric$ctl01$ctl04&#39;,&#39;&#39;)">5</a>&nbsp;&nbsp;<a class="next_button" href="javascript:__doPostBack(&#39;ctl00$MainContent$lstProfileView$dataPagerNumeric$ctl01$ctl05&#39;,&#39;&#39;)">...</a>&nbsp;<a class="next_last" href="javascript:__doPostBack(&#39;ctl00$MainContent$lstProfileView$dataPagerNumeric$ctl02$ctl00&#39;,&#39;&#39;)">></a>&nbsp;<a class="next_last" href="javascript:__doPostBack(&#39;ctl00$MainContent$lstProfileView$dataPagerNumeric$ctl02$ctl01&#39;,&#39;&#39;)">>></a>&nbsp;</span>
+                                    <span id="dataPageDisplayNumberOfPages">
+                                                Itens: 1 - 30 de 208
+                                                 </span>
+                                    </div>
+
+
+
+
+</div>
+
+    <script type="text/javascript">
+        $('.suppress').hover(
+    function () {
+        $(this).attr('alt', $(this).attr('title'));
+        $(this).attr('title', '');
+    },
+    function () {
+        $(this).attr('title', $(this).attr('alt'));
+        $(this).removeAttr('alt');
+    }
+).click(function () {
+    $(this).attr('title', $(this).attr('alt'));
+    $(this).removeAttr('alt');
+});
+
+
+</script>
+
+        </div>
+    </div>
+</div>
+<div id="footer">
+<div class="main_footer">
+<div class="container">
+		<div class="col_2">
+    <ul>
+    <li class="list_footer"><a href="../" id="homelink" title="Guia dos Quadrinhos">Home</a></li>
+    <li><a href="./" id="titulofooter" title="Títulos">Títulos</a></li>
+    <li><a href="../titulos-estrangeiros/" id="titulos_originaisfooter" title="Títulos originais">Títulos estrangeiros</a></li>
+    <li><a href="../editoras/" id="editorafooter" title="Editoras">Editoras</a></li>
+    <li><a href="../editoras-estrangeiras/" id="editora_originaisfooter" title="Editoras estrangeiras">Editoras estrangeiras</a></li>
+    <li><a href="../artistas/" id="artistafooter" title="Artistas">Artistas</a></li>
+    <li><a href="../personagens/" id="personagemfooter" title="Personagens">Personagens</a></li>
+    <li><a href="../historias/" id="historiasfooter" title="Histórias">Histórias</a></li>
+    <li><a href="../arcos/" id="arcosfooter" title="Arco de histórias">Arco de histórias</a></li>
+</ul>
+    </div>
+    <div class="col_2">
+    <ul>
+    <li class="list_footer"><a href="../contato/" id="contatofooter" title="Contato">Contato</a></li>
+        <li><a href="../blog/" id="blogfooter" title="Blog">Blog</a></li>
+        <li><a href="../sobre-o-guia-dos-quadrinhos" id="sobre" title="Sobre o Guia dos Quadrinhos">Sobre o Guia</a></li></ul><br />
+<span class="list_footer"><a href="../usuarios/" id="usuariofooter" title="Usuários">Usuários</a></span><br />
+    <ul><li><a href="../apoiadores" id="apoiadores" title="Apoiadores do Guia dos Quadrinhos">Apoiadores</a></li>
+<li><a href="../colecoes/" id="colecaofooter" title="Coleções">Coleções</a></li>
+    <li><a href="../fotos-meus-gibis" id="foto_colecao" title="Fotos das coleções">Fotos das coleções</a></li>
+    <li><a href="../monografias/" id="monografiafooter" title="Monografias">Monografias</a></li>
+    </ul>
+        </div>
+
+    <div class="col_3">
+    <ul><li class="list_footer"><a href="../todas-capas-disponiveis" id="capas1" title="Todas as capas disponíveis no Guia dos Quadrinhos">Capas</a></li>
+    <li><a href="../ultimas-capas-adicionadas" id="A2" title="Últimas capas adicionadas">Últimas capas adicionadas</a></li>
+        <li><a href="../ultimas-capas-restauradas" id="A1" title="Últimas capas restauradas">Últimas capas restauradas</a></li>
+        <li><a href="../ultimas-capas-estrangeiras" id="A3" title="Últimas capas estrangeiras">Últimas capas estrangeiras</a></li>
+    <li><a href="../todas-capas-disponiveis" id="capas2" title="Todas as capas disponíveis">Todas as capas disponíveis</a></li>
+    <li><a href="../titulos-com-capas-completas/" id="titulos_capas" title="Títulos com capas completas">Títulos com capas completas</a></li></ul><br/>
+    <ul><li><a id="lancafooter" title="Lançamentos do mês" href="../lancamentos-do-mes/4/2026">Lançamentos do mês</a></li>
+    <li><a href="../busca-avancada" title="Busca avançada">Busca avançada</a></li>
+        <li><a href="../quais-gibis-estavam-nas-bancas-no-mes-e-ano-do-seu-nascimento/" id="nascifooter" title="Gibis nas bancas quando você nasceu">Gibis nas bancas quando você nasceu</a></li>
+        <li><a href="../edicao-aleatoria" id="aleatoriafooter" title="Ver uma edição aleatória">Ver uma edição aleatória</a></li>
+    </ul>
+    </div>
+    <div class="col_2">
+    <ul><li class="list_footer">Mais e maiores</li>
+    <li><a href="../revistas-mais-votadas" id="votadas" title="As mais votadas">As mais votadas</a></li>
+    <li><a href="../revistas-mais-colecionadas" id="colecionadas" title="As mais colecionadas">As mais colecionadas</a></li>
+    <li><a href="../revistas-mais-desejadas" id="desejadas" title="As mais desejadas">As mais desejadas</a></li>
+    <li><a href="../maiores-colecoes" id="topcolecao" title="As maiores coleções">As maiores coleções</a></li>
+    </ul>
+        </div>
+    <div class="col_3 last">
+    O <a href="../sobre-o-guia-dos-quadrinhos" id="sobre_guia" class="list_footer" title="Guia dos Quadrinhos">Guia dos Quadrinhos</a> é um grande banco de dados, cujo objetivo é o resgate, preservação e divulgação da memória de todos os quadrinhos publicados no Brasil.  Explore e conheça mais o universo dos quadrinhos! <br /><br />
+    <span class="list_footer">Nas redes sociais</span><br />
+    <a href="https://www.facebook.com/Guiadosquadrinhos" target="_blank" class="icon_facebook2"  title="Guia dos Quadrinhosno Facebook"><img src="../images/icon_facebook.png" id="icon_facebook" width="36" /></a> <a href="https://twitter.com/GuiaQuadrinhos" target="_blank"  title="Guia dos Quadrinhos no Twitter"><img src="../images/icon_twitter.png" id="icon_twitter" width="36" /></a>
+    </div>
+            <br /><div class="clear"></div>
+				<a href="../termos-de-uso" id="termo_footer" title="Termos de Uso e a Política de Privacidade">Termos de Uso e a Política de Privacidade</a>
+				<span class="copyright">© 2007-2026 Guia dos Quadrinhos - Design e desenvolvimento: <a href="../usuario/edson-diogo/1" id="autor_footer" title="Termos de Uso e a Política de Privacidade">Edson Diogo</a></span><br />
+              </div>
+              </div>
+    </div>
+
+    <a class="scrollup" href="#" id="top_link"  title="Voltar ao topo"><img src="../images/up-arrow-icon.png" id="arrow_top" width="50" /></a>
+<span id="valTextBusca" style="color:Transparent;visibility:hidden;">.</span>
+<span id="RegularExpressionValidator1" style="color:Transparent;visibility:hidden;">*</span>
+<div id="ValidationSummary1" style="display:none;">
+
+</div>
+
+
+<script type="text/javascript">
+//<![CDATA[
+var Page_ValidationSummaries =  new Array(document.getElementById("ValidationSummary1"));
+var Page_Validators =  new Array(document.getElementById("valTextBusca"), document.getElementById("RegularExpressionValidator1"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+var valTextBusca = document.all ? document.all["valTextBusca"] : document.getElementById("valTextBusca");
+valTextBusca.controltovalidate = "TextBusca";
+valTextBusca.errormessage = "É necessário digitar ao menos 2 caracteres";
+valTextBusca.validationGroup = "GroupBusca";
+valTextBusca.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+valTextBusca.initialvalue = "";
+var RegularExpressionValidator1 = document.all ? document.all["RegularExpressionValidator1"] : document.getElementById("RegularExpressionValidator1");
+RegularExpressionValidator1.controltovalidate = "TextBusca";
+RegularExpressionValidator1.errormessage = "É necessário digitar ao menos 2 caracteres";
+RegularExpressionValidator1.validationGroup = "GroupBusca";
+RegularExpressionValidator1.evaluationfunction = "RegularExpressionValidatorEvaluateIsValid";
+RegularExpressionValidator1.validationexpression = "^[a-zA-Z\'\'-\'\\s 0-9çÇáÁàÀãÃâÂâäÄéÉêÊËëÈèíÍïÏÌìóÓôÔõÕöÖòÒúÚÙùúûüÜÛ ()-_@#$%^&!*/]{2,255}$";
+var ValidationSummary1 = document.all ? document.all["ValidationSummary1"] : document.getElementById("ValidationSummary1");
+ValidationSummary1.showmessagebox = "True";
+ValidationSummary1.showsummary = "False";
+ValidationSummary1.validationGroup = "GroupBusca";
+//]]>
+</script>
+
+
+<script type="text/javascript">
+//<![CDATA[
+(function() {var fn = function() {$get("ScriptManager1_HiddenField").value = '';Sys.Application.remove_init(fn);};Sys.Application.add_init(fn);})();
+var Page_ValidationActive = false;
+if (typeof(ValidatorOnLoad) == "function") {
+    ValidatorOnLoad();
+}
+
+function ValidatorOnSubmit() {
+    if (Page_ValidationActive) {
+        return ValidatorCommonOnSubmit();
+    }
+    else {
+        return true;
+    }
+}
+
+(function(id) {
+    var e = document.getElementById(id);
+    if (e) {
+        e.dispose = function() {
+            Array.remove(Page_ValidationSummaries, document.getElementById(id));
+        }
+        e = null;
+    }
+})('ValidationSummary1');
+Sys.Application.add_init(function() {
+    $create(Sys.Extended.UI.TextBoxWatermarkBehavior, {"ClientStateFieldID":"TextBoxWatermarkExtender2_ClientState","WatermarkCssClass":"watermarked","WatermarkText":"Pesquisar por","id":"TextBoxWatermarkExtender2"}, null, null, $get("TextBusca"));
+});
+
+document.getElementById('valTextBusca').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('valTextBusca'));
+}
+
+document.getElementById('RegularExpressionValidator1').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('RegularExpressionValidator1'));
+}
+//]]>
+</script>
+</form>
+
+
+<script type="text/javascript">
+ //   var pageTracker = _gat._getTracker("UA-1871057-1");
+  //  pageTracker._initData();
+  //  pageTracker._trackPageview();
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-1871057-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+var ga = document.createElement('script');
+ga.src = ('https:' == document.location.protocol ?
+    'https://ssl' : 'http://www') +
+    '.google-analytics.com/ga.js';
+ga.setAttribute('async', 'true');
+document.documentElement.firstChild.appendChild(ga);
+})();
+
+</script>
+</body>
+</html>

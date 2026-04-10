@@ -1,0 +1,913 @@
+
+
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head><title>
+	Capas Fabulosos X-Men, Os /Abril | Guia dos Quadrinhos
+</title>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-507H5QZQGN"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-507H5QZQGN');
+</script>
+<meta name="description" content="Capas das edições de Fabulosos X-Men, Os /Abril" /><meta name="keywords" content="quadrinhos, hq, gibi, histórias em quadrinhos, gibi raro, arcervo de gibis, hqs, banco de dados sobre quadrinhos, artistas, personagens, editoras" /><meta name="author" content="Edson Diogo" /><meta name="copyright" content="© 2007-2018 Guia dos Quadrinhos" /><meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" /><link rel="shortcut icon" href="../../favicon.ico" /><link rel="stylesheet" type="text/css" href="/css/combined_5AC69AFDCF6BA5323C7C403EF8D93049.css" />
+    <link href="../../Styles/tabela.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+     .numero_capinha
+        {  display: block;
+            width: 129px;
+          margin-right: 125px;
+            }
+
+         .check_colecao, .check_sonho
+        { display: none;
+            width: 129px;
+          margin-right: 125px;
+            }
+
+        .link_outras_editoras
+        {  display: block;
+            width: 100%;
+            }
+
+
+            .box_descricao
+            { float: right;
+              display: inline-block;
+              width: 650px;
+              margin-right: 20px;
+              border-left: 1px solid #888888;
+
+              padding: 0px 0 6px 6px;
+              height: auto;
+              /*margin-top: 0px;
+               padding-left: 6px;*/
+               }
+
+               .box_dados_tit{display: inline-block;}
+
+          #box_itens _paginas2
+                 { display: block; margin-left: 500px; padding-left: 500px; background-color: Blue; width: 20px;
+                     }
+                     /*.suppress{display: none;}   */
+
+@media screen and (min-width: 850px) and (max-width: 996px)
+{            .box_descricao
+            { float: right;
+              display: inline-block;
+              width: 450px;
+              margin-right: 20px;
+              border-left: 1px solid #888888;
+
+              padding: 0px 0 6px 6px;
+              height: auto;
+              /*margin-top: 0px;
+               padding-left: 6px;*/
+               }
+}
+
+@media screen and (max-width: 849px)
+{ .box_descricao
+            { float:none; clear: both; border-left: 0 solid #888888; padding: 0; width: 100%; height: auto; }
+}
+
+.clearfix{display: inline-block;}
+
+
+/* Hides from IE-mac \*/
+* html .clearfix{height: 1%;}
+.clearfix{display: block;}
+/* End hide from IE-mac */
+</style>
+
+</head>
+<body>
+  <form method="post" action="./fxm0301" onsubmit="javascript:return WebForm_OnSubmit();" id="form1" enctype="multipart/form-data">
+<div class="aspNetHidden">
+<input type="hidden" name="ScriptManager1_HiddenField" id="ScriptManager1_HiddenField" value="" />
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
+<input type="hidden" name="__LASTFOCUS" id="__LASTFOCUS" value="" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="m8QLsK8AiV5KE5GPnRuLmu4u2WmHpMWzHhIXf+Rc9hjMeEBVh+6ugC/1jWaxe8X4migRMSLzuUdqadRNxtmqeLPh8wm+xGGZ8uqU6JlRd67xCmtc0i/Ah38yjzulD9Zd6v6WCJNdhmglH5/fXCY8DvJ4zfQqBcrO4mmPAq2ejq3+yFCehp2+6vT+R5qILCocPZDhH/tksxl7gXv4tknlUjtu46C7QHdpQ112iqOaTX8XSv+8rDmgpQd1X6QnE2hLnWH5D+LYw986I0P4m6M75WqJG7MB3HtHeUu27GO/7onLAp0IFcKvXc5WO/ChPZ3IbFvrp6WBCp/LkpIlmcDWszggFAcY6JdUNapKW+vHJgJDy/ejhMANj6yuSAO4y/aG53eNQ3HZZ6+BRbO8LjhQSvo+hod+Ra0uNUctdWd2q5zdwF3f0APbSYUC9MOHHg1vn20PDvNz7An+XUwfghDW4E1HjOdiYEgtKRq//BX82oIQ3FyRtm4Ua5gcH3wnhBzjDeFkCHaETwKBeKCUSyp6IUx56+SbmU+CXaVDn20/7CimbBMMX47iVM2Rna22U7Q+4cn8UvtIVyJUEaWZ94DRiKrI2vU02NJlOPe2xN5QOPkxKhx68jM0xddSnWZ/L5UzHvQyufBVUbxZpagWI+kMseGdlz0/3e8lzZsYWaXgQJsNjCnS4DJ4AhjA7wlDsGIdiyJRWutdL78DSWEsvMEl3H+5h7vdmpdkAZCINBmJCiF3dt40Ye99S7bSD35LQ/UmsfOSqKfjCf+gi7Cl/pGhwV/NBZV1KsDnzLC59toQrp0QvaJKihUpM68y1BhqofJmeMToDtck83XEziad+14B0rZ1LWYkmiSKvKtk1QS+mt92lVuNAi6+xRbVWGQyZyXqaZes8182I5bzAGJriVJy0g/E28WS3Bt5rjai4bVAxNjH/ksUyfDol3DLy2XlTIDObONxR6+LKOpsowys64WV+ytEsoaegYxHaZ4S8fNd9KV+Yt8VjS1Ypm5HmSj9IMaoNm03KDY0sQWWKCk0MwyZMhMPLRymYNM27f68QO0XYA9ffSQ4/JummvKXP0gdbGiNnfgflGem8G8nZ6YSkOfVxCQ2UYVzn0z+V60h2oEaupu0yr9/RC2qOwPzQhXzh4PAw21+02WBtv2ARlommDsGY1EAFYYkZ1G3Nukvbo5Fu8yVMahSnj7eWZRl3d13bCWiFG1cEpOYOTYeNkcvpX0Hhv0XKcNWRctqWj1YoWiB3oIr7HbDIvgz+CJVuk9KvSLkYGdy/g8o/Xmr4wiQSQCaipMfj0uPPhrfm36hZ3YHoTQyVJlmJ5LcS1evgrxr4dJGUHHw16x3RRKYw4otXzFL2rq+18WBhVb4bytB4Jk/um0AW5pxIfjj3pwNyDkqSLKqC7naj32ph9PseEl/MaWv15zTi8r+xee5AG2UhxlJcsYeG06QcbN5tavSdN6rhcHfUwFwxfXdlZjRdFQl/MDd+0ASfSKhW+lkP7cJmtgkLGI6AsEBWyrwozhf5hwO1gPc4qtMXjzgiBfcuu1GRY8OoTy+3D8SSkIF8cDUTL8bFUiUSjJ5j7JLUVLx98dt4Ypbg7JybeoX7x8fbfNHP/z0TiJUeoHnUzDVDNo+noXEmLGcglLH7UqWmIyOqV41PJyViCBidybNmmG/2/Uj5pOMiNnd4sZ39Ky2s2wmTQ6XSsY=" />
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['form1'];
+if (!theForm) {
+    theForm = document.form1;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+
+<script type="text/javascript">
+//<![CDATA[
+var __cultureInfo = {"name":"pt-BR","numberFormat":{"CurrencyDecimalDigits":2,"CurrencyDecimalSeparator":",","IsReadOnly":true,"CurrencyGroupSizes":[3],"NumberGroupSizes":[3],"PercentGroupSizes":[3],"CurrencyGroupSeparator":".","CurrencySymbol":"R$","NaNSymbol":"NaN","CurrencyNegativePattern":9,"NumberNegativePattern":1,"PercentPositivePattern":1,"PercentNegativePattern":1,"NegativeInfinitySymbol":"-∞","NegativeSign":"-","NumberDecimalDigits":2,"NumberDecimalSeparator":",","NumberGroupSeparator":".","CurrencyPositivePattern":2,"PositiveInfinitySymbol":"∞","PositiveSign":"+","PercentDecimalDigits":2,"PercentDecimalSeparator":",","PercentGroupSeparator":".","PercentSymbol":"%","PerMilleSymbol":"‰","NativeDigits":["0","1","2","3","4","5","6","7","8","9"],"DigitSubstitution":1},"dateTimeFormat":{"AMDesignator":"","Calendar":{"MinSupportedDateTime":"\/Date(-62135568000000)\/","MaxSupportedDateTime":"\/Date(253402300799999)\/","AlgorithmType":1,"CalendarType":1,"Eras":[1],"TwoDigitYearMax":2049,"IsReadOnly":true},"DateSeparator":"/","FirstDayOfWeek":0,"CalendarWeekRule":0,"FullDateTimePattern":"dddd, d\u0027 de \u0027MMMM\u0027 de \u0027yyyy HH:mm:ss","LongDatePattern":"dddd, d\u0027 de \u0027MMMM\u0027 de \u0027yyyy","LongTimePattern":"HH:mm:ss","MonthDayPattern":"d \u0027de\u0027 MMMM","PMDesignator":"","RFC1123Pattern":"ddd, dd MMM yyyy HH\u0027:\u0027mm\u0027:\u0027ss \u0027GMT\u0027","ShortDatePattern":"dd/MM/yyyy","ShortTimePattern":"HH:mm","SortableDateTimePattern":"yyyy\u0027-\u0027MM\u0027-\u0027dd\u0027T\u0027HH\u0027:\u0027mm\u0027:\u0027ss","TimeSeparator":":","UniversalSortableDateTimePattern":"yyyy\u0027-\u0027MM\u0027-\u0027dd HH\u0027:\u0027mm\u0027:\u0027ss\u0027Z\u0027","YearMonthPattern":"MMMM\u0027 de \u0027yyyy","AbbreviatedDayNames":["dom","seg","ter","qua","qui","sex","sáb"],"ShortestDayNames":["D","S","T","Q","Q","S","S"],"DayNames":["domingo","segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado"],"AbbreviatedMonthNames":["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez",""],"MonthNames":["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro",""],"IsReadOnly":true,"NativeCalendarName":"Calendário gregoriano","AbbreviatedMonthGenitiveNames":["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez",""],"MonthGenitiveNames":["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro",""]},"eras":[1,"d.C.",null,0]};//]]>
+</script>
+
+<script src="/ScriptResource.axd?d=6CDylG_Ab0Wta8VHUg44c4q5rDq7ILIqb_Mu4Ibzn84N_AouUtL0LamgQ4tRe-2e_i03vuWVHZ_l1JuQZ173iOPcmzsRfZVbqwoOEsVB31RlcX47BE-TXVG-yoE_wi-v0&amp;t=3a1336b1" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+(window.Sys && Sys._Application && Sys.Observer)||document.write('<script type="text/javascript" src="/ScriptResource.axd?d=6CDylG_Ab0Wta8VHUg44c4q5rDq7ILIqb_Mu4Ibzn84N_AouUtL0LamgQ4tRe-2e_i03vuWVHZ_l1JuQZ173iOPcmzsRfZVbqwoOEsVB31RlcX47BE-TXVG-yoE_wi-v0&t=3a1336b1"><\/script>');//]]>
+</script>
+
+<script src="/ScriptResource.axd?d=34ue1mX_mqOTCXh4-c-Gj02Faa9QcUjNXXlWT4xGHb0r6_MdgJnqBh-BckIwJTh3KxzrJ_Y6F9Qife0iOhWfJAPMWJ-zXpg253Z11eWvnJjFybXw1-Y9VnEc07EX0ZERAQ50DitjiRLctv2jotM7KA2&amp;t=3a1336b1" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+(window.Sys && Sys.WebForms)||document.write('<script type="text/javascript" src="/ScriptResource.axd?d=34ue1mX_mqOTCXh4-c-Gj02Faa9QcUjNXXlWT4xGHb0r6_MdgJnqBh-BckIwJTh3KxzrJ_Y6F9Qife0iOhWfJAPMWJ-zXpg253Z11eWvnJjFybXw1-Y9VnEc07EX0ZERAQ50DitjiRLctv2jotM7KA2&t=3a1336b1"><\/script>');//]]>
+</script>
+
+<script src="/ScriptResource.axd?d=DRmNSHGzu8nsM2WxkTcCrQmdEs6cbgHr3v2kri3GwEb0duiAXPZrNMLKDiB6BLMSbFwSu7NuGu-bEBgmabAjfNDTZk5NHHXlBZZ2ACq03brGYII6b0z-TjnVURcXEOWj9nTIYf6moB6bql9iU2x9RQdERWhszxJjAfwyTZGAQKsBIkA_suKA4dCbwIFDOpiyX-jelf28te0UXJpzd7H4tO_I6MunnePuJuAEdQnaFfTuhXOtLspBqR-fRW6y1phQNUkjkqogqx4MPnqXTSDJelrMoS-6L27u5jUdj5PptFv2lzX09GSPGhHfZdnad6LfASTyq54BHo2tbKHw745oqbZvTzXpVgcqk1H1-88V85liikxjMJZQ3TChaHO4o-gIqH_way0JhWsYz7InTrJZ-5PiJ_ROnH9TkHeWa700xzFYs4rLSP0jgoeFl2S9yhD5V2dieaVL4TboQtXSGOxgdrAjxMr4XpJmT6tNZXFsHhKP4bhEQiropilg4qufixtISKb3rcVLj5Vcmypr7rTl3A2" type="text/javascript"></script>
+<script src="/capas/fabulosos-x-men-os/fxm0301?_TSM_HiddenField_=ScriptManager1_HiddenField&amp;_TSM_CombinedScripts_=%3b%3bAjaxControlToolkit%2c+Version%3d4.1.51116.0%2c+Culture%3dneutral%2c+PublicKeyToken%3d28f01b0e84b6d53e%3apt-BR%3afd384f95-1b49-47cf-9b47-2fa2a921a36a%3ade1feab2%3af9cec9bc%3a35576c48" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+function WebForm_OnSubmit() {
+null;if (typeof(ValidatorOnSubmit) == "function" && ValidatorOnSubmit() == false) return false;
+return true;
+}
+//]]>
+</script>
+
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="BDEF46B4" />
+	<input type="hidden" name="__VIEWSTATEENCRYPTED" id="__VIEWSTATEENCRYPTED" value="" />
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="wC6U0kPwxsuLtM1PIrzmXLqyRB+KbDebFLl5Skq7hKL9WAxS0uUMH+x9eKCw+J8PfBZuxKyYnruWmQzOYQmnmrMai6wZae57EG7GxKscZfTFcG3vnecURGXzsd9pox9ONEr6wVMkLxAsVZPq4Un/Y+QaI62p8LocBXhQMbmVCzANnPfZXo13hkBobyx5YSWa5aFnivfgBwJpuRnUXu7IOiu1Tu4lbBKeWzUPwKWouadypCH81FEQQXcjJ1kc0GyK5y7eVPfhzyCvwVGWKWJO38b3FqwO6pbn6ezR0hdPFkv2zTWAIOA1d88rt5q7HjUUhfmJS0AHNNs8Q24OuglN5Vm+uNUZwjL7lsv5s7rB8Xj5cb8zQNWxsmu44QgZj0lAxIMdkHeuRgIklh2wr2unzwojDymJ52oRvfHKDrll282ayhOkD2nCUSydeFOtjeJ33z1VjvHF6Fce/P2eDodJHCADU2z+Fs2DNjq0wMUnxopUwgCiRMJJ9vXH/chhHobWseZvhFYjV92CpJolU4cx5dr8MonUzLeVCz7lNbXBWvYXeeOBC0kB5G4PnIAbsXjgZSBVHrziC22QPKtSRRykwKAbFtH5dvH3rRQVvXnVlC0Q7wRA0iaO6yc2ZXOaalvFJ0BMDz5hrp74X7kwQRRzr00wPJotyp9y8qZivGkmvoXEGnyf1aarv47N7Tggl8LL" />
+</div>
+  <script type="text/javascript">
+//<![CDATA[
+Sys.WebForms.PageRequestManager._initialize('ctl00$ScriptManager1', 'form1', ['tctl00$MainContent$infoUpdatePanel','infoUpdatePanel'], [], [], 90, 'ctl00');
+//]]>
+</script>
+
+
+
+
+  <script type="text/javascript">
+      window.addEventListener('orientationchange', handleOrientation, false);
+      var ww = document.body.clientWidth;
+      var mqOrientation = window.matchMedia("(orientation: portrait)");
+      mqOrientation.addListener(function () {
+          var ww = document.body.clientWidth;
+          if (ww < 400) {
+              $("#cssmenu").hide();
+              $("#cssmenu2").hide();
+          }
+          else {
+              $("#cssmenu").show();
+              $("#cssmenu2").show();
+              $(".boxpesquisa2").show();
+              $("#menu_scroll").animate({ height: 0 }, 600);
+              $(".boxpesquisa2").addClass("hide_menu");
+              $("#cssmenu2").addClass("hide_menu");
+              $("#cssmenu").addClass("hide_menu");
+          }
+      });
+  function handleOrientation() {
+      var ww = document.body.clientWidth;
+      if (ww < 400) {
+          $("#cssmenu").hide();
+          $("#cssmenu2").hide();
+      }
+      else {
+          $("#cssmenu").show();
+          $("#cssmenu2").show();
+          $(".boxpesquisa2").show();
+          $("#menu_scroll").animate({ height: 0 }, 600);
+          $(".boxpesquisa2").addClass("hide_menu");
+          $("#cssmenu2").addClass("hide_menu");
+          $("#cssmenu").addClass("hide_menu");
+      }
+}
+
+$(document).ready(function() {
+if (!0==0){
+document.getElementById('messages').setAttribute("class", "messages_count2");
+document.getElementById('messages2').setAttribute("class", "messages_count3");
+}
+	/* This is basic - uses default settings */
+$("a#entrarLink").fancybox({
+				'width'				: 350,
+				'height'			: 430,
+				'type'				: 'iframe',
+				'scrolling':  'no',
+				'hideOnOverlayClick': false,
+				'hideOnContentClick': false,
+		padding :	0,
+helpers : {
+        overlay : {
+            opacity: 0.7,
+            css : {
+                'background-color' : '#000'
+            }
+        }
+    },
+		centerOnScroll	: true,
+		enableEscapeButton: true
+});
+
+$("a.Configuracoes").fancybox({
+              'width': 850,
+              'height': 550,
+              'type': 'iframe',
+              'scrolling': 'no',
+              'hideOnOverlayClick': false,
+              'hideOnContentClick': false,
+		padding :	0,
+helpers : {title:  null,
+        overlay : {
+            opacity: 0.7,
+            css : {
+                'background-color' : '#000'
+            }
+        }
+    },
+		centerOnScroll	: true,
+		enableEscapeButton: true
+});
+});
+
+$(document).ready(function() {
+$(window).scroll(function () {
+                if ($(this).scrollTop() > 250) {
+                    $('#top_link').addClass('active');
+                    //  $('#logo_top_menu').addClass('active');
+                } else {
+                    $('#top_link').removeClass('active');
+                    // $('#logo_top_menu').removeClass('active');
+                }
+            });
+
+            $('.scrollup').click(function () {
+                $("html, body").animate({ scrollTop: 0 }, 600);
+                return false;
+            });
+
+
+        if ($.browser.webkit) {
+            $("dropdown_pesquisaID").removeClass("dropdown_pesquisa");
+            document.getElementById('dropdown_pesquisaID').setAttribute("class", "dropdown_styled dropdown_pesquisaKIT");
+        }
+    });
+    function toggleMenuDiv() {
+        if ($("#cssmenu2").hasClass("hide_menu")) {
+            $("#cssmenu2").removeClass("hide_menu");
+            $("#cssmenu2").fadeIn();
+            $("#cssmenu2").fadeIn("fast");
+            $("#cssmenu2").fadeIn(500);
+            $("#menu_scroll").animate({ height: 550 }, 600);
+            $("#cssmenu2").addClass("show_menu");
+        }
+        else {
+            $("#cssmenu2").removeClass("show_menu");
+            $("#cssmenu2").fadeOut();
+            $("#cssmenu2").fadeOut("fast");
+            $("#cssmenu2").fadeOut(500);
+            $("#menu_scroll").animate({ height: 0 }, 600);
+            $("#cssmenu2").addClass("hide_menu");
+        }
+    }
+    function toggleMenu_topDiv() {
+        if ($("#cssmenu").hasClass("hide_menu")) {
+            $("#cssmenu").removeClass("hide_menu");
+            $("#cssmenu").fadeIn();
+            $("#cssmenu").fadeIn("fast");
+            $("#cssmenu").fadeIn(500);
+           // $("#menu_scroll").animate({ height: 425 }, 600);
+            $("#cssmenu").addClass("show_menu");
+            $("#cssmenu2").removeClass("show_menu");
+            $("#cssmenu2").fadeOut();
+            $("#cssmenu2").fadeOut("fast");
+            $("#cssmenu2").fadeOut(500);
+            $("#menu_scroll").animate({ height: 0 }, 600);
+            $("#cssmenu2").addClass("hide_menu");
+        }
+        else {
+            $("#cssmenu").removeClass("show_menu");
+            $("#cssmenu").fadeOut();
+            $("#cssmenu").fadeOut("fast");
+            $("#cssmenu").fadeOut(500);
+            $("#menu_scroll").animate({ height: 0 }, 600);
+            $("#cssmenu").addClass("hide_menu");
+        }
+    }
+
+    function toggleBusca_Div() {
+        if ($(".boxpesquisa2").css('display')=='none') {
+            $(".boxpesquisa2").removeClass("hide_menu");
+            $(".boxpesquisa2").fadeIn();
+            $(".boxpesquisa2").fadeIn("fast");
+            $(".boxpesquisa2").fadeIn(500);
+            $(".boxpesquisa2").addClass("show_menu");
+            $("#cssmenu2").removeClass("show_menu");
+            $("#menu_scroll").animate({ height: 0 }, 600);
+            $("#cssmenu2").addClass("hide_menu");
+            $("#cssmenu").removeClass("show_menu");
+            $("#cssmenu").addClass("hide_menu");
+        }
+        else {
+            $(".boxpesquisa2").removeClass("show_menu");
+            $(".boxpesquisa2").fadeOut();
+            $(".boxpesquisa2").fadeOut("fast");
+            $(".boxpesquisa2").fadeOut(500);
+            $(".boxpesquisa2").addClass("hide_menu");
+        }
+    }
+</script>
+<div id="dhtmltooltip"></div>
+<script type="text/javascript" src="/js/combined_E1D3C6BBCF8F8BC37D2962D8649E103A.js"></script>
+
+
+  <div id="top_menu">
+  <div class="container">
+
+      <div id="logo_top_mobile" >
+      <a id="HyperLink1" href="../../"><img src="../../images/logo_mobile.png" id="logo_mobile" class="centrar" /></a>
+</div>
+
+      <div id="top_menu_mobile">
+      <img src="../../images/nav_icon.png" id="icon_menu_mobile" onclick="toggleMenu_topDiv();" />
+
+<img src="../../images/Search-icon.png" id="busca_mobile" CssClass="search-submit-mobile" onclick="toggleBusca_Div();" /></div>
+</div>
+  <div id='cssmenu'  class='hide_menu'>
+
+
+
+<ul class="cssmenu_left">
+<li><a href="../../entrar" id="entrarLink">Entrar</a></li>
+<li><a href="../../cadastro" id="CadastroLink">Cadastre-se</a></li>
+</ul>
+
+            </div>
+
+            </div>
+<div class="wrapper">
+
+
+
+
+
+
+                    <div class="header">
+            <a id="logo_header" href="../../"><div class="title">
+<img src="../../images/logo_final_site.png" id="logo1" />
+</div></a>
+
+<div class="boxpesquisa2">
+<div id="search-form">
+ <span id="search-page-border">
+  <input name="ctl00$TextBusca" type="text" id="TextBusca" class="search-terms" /> <input type="hidden" title=" " /><input type="hidden" name="ctl00$TextBoxWatermarkExtender2_ClientState" id="TextBoxWatermarkExtender2_ClientState" /> 
+  <div id="dropdown_pesquisaID" class="dropdown_styled dropdown_pesquisa"><select name="ctl00$stateList" id="stateList">
+	<option selected="selected" value="tudo">Tudo</option>
+	<option value="tit">T&#237;tulo</option>
+	<option value="titor">T&#237;tulo estrangeiro</option>
+	<option value="edi">Editora</option>
+	<option value="ediest">Editora estrangeira</option>
+	<option value="arte">Artista</option>
+	<option value="pers">Personagem</option>
+	<option value="his">Hist&#243;ria</option>
+	<option value="arco">Arco de hist&#243;ria</option>
+	<option value="edo">Licenciador</option>
+	<option value="usu">Usu&#225;rio</option>
+	<option value="col">Cole&#231;&#227;o</option>
+
+</select><input type="hidden" title=" " /></div></span>
+  <input type="image" name="ctl00$busca" id="busca" class="search-submit" Text="Procurar" src="../../images/Search-icon.png" align="middle" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$busca&quot;, &quot;&quot;, true, &quot;GroupBusca&quot;, &quot;&quot;, false, false))" /></div>
+    <a href="../../busca-avancada" id="busca_adv" class="busca_adv"><strong>Busca avançada</strong></a></div>
+
+<div id="toggleMenu"  onclick="toggleMenuDiv();"><div class="container">Menu</div></div>
+ <div class="box_menu">
+<div id='cssmenu2' class='hide_menu'>
+<ul>
+<li><a href="../../titulos/" id="nav_titulos" class="mais_menu" title="Títulos">Títulos <span>▼</span></a>
+<ul>
+<li><a href="../../titulos-estrangeiros/" id="nav_titulos_est" title="Títulos estrangeiros">Títulos estrangeiros</a></li>
+<li><a href="../../adicionar-titulo/" id="nav_adicionar_titulo" title="Adicionar título">Adicionar título</a></li>
+<a href="../../adicionar-titulo-estrangeiro/" id="nav_adicionar_titulo3" title="Adicionar título estrangeiro">Adicionar título estrangeiro</a></li></ul></li>
+<li class="sub_menu"><a href="../../titulos-estrangeiros/" id="nav_titulos_est2" title="Títulos estrangeiros">Títulos estrangeiros</a></li>
+<li class="sub_menu"><a href="../../adicionar-titulo/" id="nav_adicionar_titulo2" title="Adicionar título">Adicionar título</a></li>
+<li class="sub_menu"><a href="../../adicionar-titulo-estrangeiro/" id="nav_adicionar_titulo4" title="Adicionar título estrangeiro">Adicionar título estrangeiro</a></li>
+
+<li><a id="lancanav" title="Lançamentos de 4/2026" href="../../lancamentos-do-mes/4/2026">Lançamentos</a></li>
+<li><a href="../../editoras/" id="nav_editoras" title="Editoras">Editoras <span>▼</span></a>
+<ul  class="nav_sub">
+<li><a href="../../editoras-estrangeiras/" id="nav_editoras_est" title="Editoras estrangeiras">Editoras estrangeiras</a></li>
+		</ul></li>
+        <li class="sub_menu"><a href="../../colecoes/" id="nav_editoras_est2" title="Editoras estrangeiras">Editoras estrangeiras</a></li>
+
+<li><a href="../../artistas/" id="nav_artistas" title="Artistas">Artistas</a></li>
+<li><a href="../../personagens/" id="nav_personagens" title="Personagens">Personagens</a></li>
+<li><a href="../../usuarios/" id="nav_usuarios" title="Usuários">Usuários <span>▼</span></a>
+<ul  class="nav_sub">
+<li><a href="../../colecoes/" id="nav_colecoes" title="Coleções">Coleções</a></li>
+		</ul></li>
+        <li class="sub_menu"><a href="../../colecoes/" id="colecoes2" title="Coleções">Coleções</a></li>
+<li><a href="../../monografias/" id="nav_monografias" title="Monografias">Monografias</a></li>
+<li><a href="../../blog/" id="nav_blog" title="Guia dos Quadrinhos Blog">Blog</a></li>
+<li><a href="../../contato/" id="nav_contato" title="Contato">Contato</a></li>
+</ul>
+</div>
+
+            </div>
+            	</div>
+                <div id="menu_scroll"></div>
+
+        <div class="main">
+        <div class="container">
+           <div id="box_banner">
+               <a id="AdGuia" href="https://amzn.to/2vx6soC" target="_blank"><img src="/images/associates728x90._CB513031506.jpg" alt="Ofertas na Amazon!" style="width:100%;" /></a><br/><br/>
+
+
+               </div>
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $("a.edicao").fancybox({
+            modal: true,
+            'width': 630,
+            'height': 690,
+            'type': 'iframe',
+            'scrolling': 'no',
+            'hideOnOverlayClick': false,
+            'hideOnContentClick': false,
+            padding: 0,
+            centerOnScroll: true,
+            enableEscapeButton: false,
+            closeBtn: false,
+            helpers: {
+                overlay: {
+                    opacity: 0.7,
+                    css: {
+                        'background-color': '#000'
+                    }
+                }
+            }
+              ,
+            beforeShow: function () {
+                check_update = $('.fancybox-iframe').contents().find('#check_update').val();
+            },
+            afterClose: function () {
+                if (check_update == 1) {
+                    if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)) {
+                        $.ajaxSetup({
+                            // Disable caching of AJAX responses
+                            cache: false
+                        });
+                        //window.location.reload();
+                        $('#infoUpdatePanel').load(window.href = ' #infoUpdatePanel', '');
+                    }
+                    else {
+                        $.ajaxSetup({
+                            // Disable caching of AJAX responses
+                            cache: false
+                        });
+                        //window.location.reload();
+                        $('#infoUpdatePanel').load(window.href = ' #infoUpdatePanel', '');
+                    }
+                }
+            }
+        });
+
+        $("a.backup").fancybox({
+            modal: true,
+            'width': '100%',
+            'height': 690,
+            'type': 'iframe',
+            'scrolling': 'no',
+            'hideOnOverlayClick': false,
+            'hideOnContentClick': false,
+            padding: 0,
+            centerOnScroll: true,
+            enableEscapeButton: false,
+            closeBtn: false,
+            helpers: {
+                overlay: {
+                    opacity: 0.7,
+                    css: {
+                        'background-color': '#000'
+                    }
+                }
+            }
+            ,
+            beforeShow: function () {
+                check_update = $('.fancybox-iframe').contents().find('#check_update').val();
+            },
+            afterClose: function () {
+                if (check_update == 1) {
+                    if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)) {
+                        $.ajaxSetup({
+                            // Disable caching of AJAX responses
+                            cache: false
+                        });
+                        window.location.reload();
+                        // $('#UpdatePanel2').load(window.href = ' #UpdatePanel2', '');
+
+
+                          //                     $('#UpdatePanel2').load(window.location + ' #UpdatePanel2', '');
+                          //                        document.getElementById('UpdatePanel2').style.display = 'inline';
+                          //                      $('#UpdatePanel3').load(window.href = ' #UpdatePanel3', '');
+                      }
+                      else {
+                          $.ajaxSetup({
+                              // Disable caching of AJAX responses
+                              cache: false
+                          });
+                          //window.location.reload();
+                          $('#infoUpdatePanel').load(window.href = ' #infoUpdatePanel', '');
+                      }
+                  }
+              }
+          });
+
+        $("a.ModalDelTitulo").fancybox({
+            modal: true,
+            'width': 360,
+            'height': 170,
+            'type': 'iframe',
+            'scrolling': 'no',
+            'hideOnOverlayClick': false,
+            'hideOnContentClick': false,
+            padding: 0,
+            centerOnScroll: true,
+            enableEscapeButton: true,
+            helpers: {
+                overlay: {
+                    opacity: 0.7,
+                    css: {
+                        'background-color': '#000'
+                    }
+                }
+            }
+              ,
+            beforeShow: function () {
+                check_update = $('.fancybox-iframe').contents().find('#check_update').val();
+            },
+            afterClose: function () {
+                if (check_update == 1) {
+                    if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)) {
+                        $.ajaxSetup({
+                            // Disable caching of AJAX responses
+                            cache: false
+                        });
+                        window.location.reload();
+                    }
+                    else {
+                        $.ajaxSetup({
+                            // Disable caching of AJAX responses
+                            cache: false
+                        });
+                        window.location.reload();
+                        //                       $('#UpdatePanel2').load(window.href= ' #UpdatePanel2', '');
+                        //                       $('#UpdatePanel3').load(window.href = ' #UpdatePanel3', '');
+                    }
+                }
+            }
+        });
+    });
+    </script>
+<div id="infoUpdatePanel">
+
+ <ul id="letters" class="navtablist" >
+    <li class="roundtop shadow"><a title="$ - 244" href="../../titulos/$">$<br /><span>(244)</span></a></li><li class="roundtop shadow"><a title="A - 1988" href="../../titulos/a">A<br /><span>(1988)</span></a></li><li class="roundtop shadow"><a title="B - 1356" href="../../titulos/b">B<br /><span>(1356)</span></a></li><li class="roundtop shadow"><a title="C - 2138" href="../../titulos/c">C<br /><span>(2138)</span></a></li><li class="roundtop shadow"><a title="D - 1158" href="../../titulos/d">D<br /><span>(1158)</span></a></li><li class="roundtop shadow"><a title="e - 819" href="../../titulos/e">e<br /><span>(819)</span></a></li><li class="roundtop shadow"><a title="F - 788" href="../../titulos/f">F<br /><span>(788)</span></a></li><li class="roundtop shadow"><a title="G - 1029" href="../../titulos/g">G<br /><span>(1029)</span></a></li><li class="roundtop shadow"><a title="H - 917" href="../../titulos/h">H<br /><span>(917)</span></a></li><li class="roundtop shadow"><a title="I - 362" href="../../titulos/i">I<br /><span>(362)</span></a></li><li class="roundtop shadow"><a title="J - 463" href="../../titulos/j">J<br /><span>(463)</span></a></li><li class="roundtop shadow"><a title="K - 227" href="../../titulos/k">K<br /><span>(227)</span></a></li><li class="roundtop shadow"><a title="L - 750" href="../../titulos/l">L<br /><span>(750)</span></a></li><li class="roundtop shadow"><a title="M - 1968" href="../../titulos/m">M<br /><span>(1968)</span></a></li><li class="roundtop shadow"><a title="N - 520" href="../../titulos/n">N<br /><span>(520)</span></a></li><li class="roundtop shadow"><a title="O - 302" href="../../titulos/o">O<br /><span>(302)</span></a></li><li class="roundtop shadow"><a title="P - 1230" href="../../titulos/p">P<br /><span>(1230)</span></a></li><li class="roundtop shadow"><a title="Q - 258" href="../../titulos/q">Q<br /><span>(258)</span></a></li><li class="roundtop shadow"><a title="R - 731" href="../../titulos/r">R<br /><span>(731)</span></a></li><li class="roundtop shadow"><a title="S - 1969" href="../../titulos/s">S<br /><span>(1969)</span></a></li><li class="roundtop shadow"><a title="T - 1382" href="../../titulos/t">T<br /><span>(1382)</span></a></li><li class="roundtop shadow"><a title="U - 387" href="../../titulos/u">U<br /><span>(387)</span></a></li><li class="roundtop shadow"><a title="V - 640" href="../../titulos/v">V<br /><span>(640)</span></a></li><li class="roundtop shadow"><a title="W - 198" href="../../titulos/w">W<br /><span>(198)</span></a></li><li class="roundtop shadow"><a title="X - 170" href="../../titulos/x">X<br /><span>(170)</span></a></li><li class="roundtop shadow"><a title="Y - 38" href="../../titulos/y">Y<br /><span>(38)</span></a></li><li class="roundtop shadow"><a title="Z - 209" href="../../titulos/z">Z<br /><span>(209)</span></a></li></ul><br />
+
+            <h1><span id="nome_titulo_lb">Fabulosos X-Men, Os /Abril</span></h1>
+            <br />
+
+            <div class="box_dados_tit"><strong>Licenciador: </strong> <span id="licenciador">Marvel Comics</span><br />
+            <strong>Categoria: </strong> <span id="categoria">Revista Periódica</span><br />
+    <strong>Gênero:</strong> <span id="genero">Super-heróis</span><br />
+    <strong>Status:</strong> <span id="status">Título encerrado</span></div>
+
+    <div class="link_outras_editoras"><a id="editora_antes_HyperLink" class="aspNetDisabled"></a> <a id="editora_depois_HyperLink" class="aspNetDisabled"></a></div>
+
+ <br />
+
+
+    <div id="box_itens_paginas">Itens por páginas: <div class="dropdown_styled drop_paging"><select name="ctl00$MainContent$itenspagDll" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl00$MainContent$itenspagDll\&#39;,\&#39;\&#39;)&#39;, 0)" id="itenspagDll">
+		<option value="30">30</option>
+		<option value="60">60</option>
+		<option value="90">90</option>
+		<option value="120">120</option>
+
+	</select></div><br /><br /></div>
+
+
+</div>
+
+<ul id="products" class="list clearfix">
+
+<div class="page_info">
+                                <span id="MainContent_lstProfileView_dataPagerNumeric2"><a class="aspNetDisabled next_last"><<</a>&nbsp;<a class="aspNetDisabled next_last"><</a>&nbsp;<span class="current_page">1</span>&nbsp;<a class="numeric_button" href="javascript:__doPostBack(&#39;ctl00$MainContent$lstProfileView$dataPagerNumeric2$ctl01$ctl01&#39;,&#39;&#39;)">2</a>&nbsp;<a class="next_last" href="javascript:__doPostBack(&#39;ctl00$MainContent$lstProfileView$dataPagerNumeric2$ctl02$ctl00&#39;,&#39;&#39;)">></a>&nbsp;<a class="next_last" href="javascript:__doPostBack(&#39;ctl00$MainContent$lstProfileView$dataPagerNumeric2$ctl02$ctl01&#39;,&#39;&#39;)">>></a>&nbsp;</span>
+
+                                    <span id="MainContent_lstProfileView_dataPageDisplayNumberOfPages2">
+                                                Itens: 1 - 30 de 55
+                                                </span>
+                                    </div>
+
+                                        <span class="thumb_head">
+                                            Ordem: <a id="MainContent_lstProfileView_lnknome" href="javascript:__doPostBack(&#39;ctl00$MainContent$lstProfileView$lnknome&#39;,&#39;&#39;)"><span id="MainContent_lstProfileView_ordem">Crescente</span></a>
+                                        </span>
+                        <div class="Lista_album_imagem_colecao">
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>Unhas e dentes')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_0"><a  href="../../edicao/fabulosos-x-men-os-n-1/fxm0301/5968" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;1 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm030101t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;1 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-1/fxm0301/5968"><span class="numero_capinha"> n&deg;&nbsp;1</span>  janeiro de   1996</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>Guerra em Nova Orleans')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_1"><a  href="../../edicao/fabulosos-x-men-os-n-2/fxm0301/5969" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;2 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm030102t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;2 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-2/fxm0301/5969"><span class="numero_capinha"> n&deg;&nbsp;2</span>  fevereiro de   1996</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>Espelhos quebrados')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_2"><a  href="../../edicao/fabulosos-x-men-os-n-3/fxm0301/5970" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;3 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm030103t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;3 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-3/fxm0301/5970"><span class="numero_capinha"> n&deg;&nbsp;3</span>  março de   1996</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>Esperando a colheita')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_3"><a  href="../../edicao/fabulosos-x-men-os-n-4/fxm0301/5971" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;4 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm030104t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;4 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-4/fxm0301/5971"><span class="numero_capinha"> n&deg;&nbsp;4</span>  abril de   1996</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>Colheita dos inocentes')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_4"><a  href="../../edicao/fabulosos-x-men-os-n-5/fxm0301/5972" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;5 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm030105t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;5 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-5/fxm0301/5972"><span class="numero_capinha"> n&deg;&nbsp;5</span>  maio de   1996</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>A caixa de pandora')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_5"><a  href="../../edicao/fabulosos-x-men-os-n-6/fxm0301/5973" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;6 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm030106t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;6 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-6/fxm0301/5973"><span class="numero_capinha"> n&deg;&nbsp;6</span>  junho de   1996</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>Debruçando-se sobre si mesmo')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_6"><a  href="../../edicao/fabulosos-x-men-os-n-7/fxm0301/5974" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;7 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm030107t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;7 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-7/fxm0301/5974"><span class="numero_capinha"> n&deg;&nbsp;7</span>  julho de   1996</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>Um pedaço do céu')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_7"><a  href="../../edicao/fabulosos-x-men-os-n-8/fxm0301/5975" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;8 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm030108t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;8 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-8/fxm0301/5975"><span class="numero_capinha"> n&deg;&nbsp;8</span>  agosto de   1996</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>Um canto fúnebre')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_8"><a  href="../../edicao/fabulosos-x-men-os-n-9/fxm0301/5976" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;9 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm030109t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;9 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-9/fxm0301/5976"><span class="numero_capinha"> n&deg;&nbsp;9</span>  setembro de   1996</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>De volta para o inferno!')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_9"><a  href="../../edicao/fabulosos-x-men-os-n-10/fxm0301/5977" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;10 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm0301010t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;10 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-10/fxm0301/5977"><span class="numero_capinha"> n&deg;&nbsp;10</span>  outubro de   1996</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>A borboleta e o falcão')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_10"><a  href="../../edicao/fabulosos-x-men-os-n-11/fxm0301/5978" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;11 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm0301011t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;11 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-11/fxm0301/5978"><span class="numero_capinha"> n&deg;&nbsp;11</span>  novembro de   1996</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>Coração de ladrão')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_11"><a  href="../../edicao/fabulosos-x-men-os-n-12/fxm0301/5979" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;12 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm0301012t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;12 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-12/fxm0301/5979"><span class="numero_capinha"> n&deg;&nbsp;12</span>  dezembro de   1996</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>Memórias')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_12"><a  href="../../edicao/fabulosos-x-men-os-n-13/fxm0301/5980" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;13 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm0301013t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;13 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-13/fxm0301/5980"><span class="numero_capinha"> n&deg;&nbsp;13</span>  janeiro de   1997</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>A chegada')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_13"><a  href="../../edicao/fabulosos-x-men-os-n-14/fxm0301/5981" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;14 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm0301014t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;14 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-14/fxm0301/5981"><span class="numero_capinha"> n&deg;&nbsp;14</span>  fevereiro de   1997</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>Dia de mudança')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_14"><a  href="../../edicao/fabulosos-x-men-os-n-15/fxm0301/5982" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;15 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm0301015t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;15 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-15/fxm0301/5982"><span class="numero_capinha"> n&deg;&nbsp;15</span>  março de   1997</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>Potencial desperdiçado')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_15"><a  href="../../edicao/fabulosos-x-men-os-n-16/fxm0301/5983" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;16 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm0301016t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;16 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-16/fxm0301/5983"><span class="numero_capinha"> n&deg;&nbsp;16</span>  abril de   1997</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>Os bons e velhos tempos')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_16"><a  href="../../edicao/fabulosos-x-men-os-n-17/fxm0301/5984" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;17 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm0301017t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;17 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-17/fxm0301/5984"><span class="numero_capinha"> n&deg;&nbsp;17</span>  maio de   1997</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>Começos...')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_17"><a  href="../../edicao/fabulosos-x-men-os-n-18/fxm0301/5985" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;18 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm0301018t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;18 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-18/fxm0301/5985"><span class="numero_capinha"> n&deg;&nbsp;18</span>  junho de   1997</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>Sem saída')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_18"><a  href="../../edicao/fabulosos-x-men-os-n-19/fxm0301/5986" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;19 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm0301019t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;19 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-19/fxm0301/5986"><span class="numero_capinha"> n&deg;&nbsp;19</span>  julho de   1997</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>Os pais do átomo')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_19"><a  href="../../edicao/fabulosos-x-men-os-n-20/fxm0301/5987" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;20 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm0301020t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;20 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-20/fxm0301/5987"><span class="numero_capinha"> n&deg;&nbsp;20</span>  agosto de   1997</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('Capa: ilustração da história<br/>1ª  história<br/>Rogai por nós')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_20"><a  href="../../edicao/fabulosos-x-men-os-n-21/fxm0301/5988" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;21 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm0301021t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;21 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-21/fxm0301/5988"><span class="numero_capinha"> n&deg;&nbsp;21</span>  setembro de   1997</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>Fins')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_21"><a  href="../../edicao/fabulosos-x-men-os-n-22/fxm0301/5989" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;22 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm0301022t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;22 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-22/fxm0301/5989"><span class="numero_capinha"> n&deg;&nbsp;22</span>  outubro de   1997</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>Tempo de violência')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_22"><a  href="../../edicao/fabulosos-x-men-os-n-23/fxm0301/5990" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;23 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm0301023t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;23 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-23/fxm0301/5990"><span class="numero_capinha"> n&deg;&nbsp;23</span>  novembro de   1997</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>Paraíso perdido')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_23"><a  href="../../edicao/fabulosos-x-men-os-n-24/fxm0301/5991" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;24 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm0301024t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;24 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-24/fxm0301/5991"><span class="numero_capinha"> n&deg;&nbsp;24</span>  dezembro de   1997</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>Geração do mal')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_24"><a  href="../../edicao/fabulosos-x-men-os-n-25/fxm0301/5992" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;25 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm0301025t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;25 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-25/fxm0301/5992"><span class="numero_capinha"> n&deg;&nbsp;25</span>  janeiro de   1998</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>Natureza do mal')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_25"><a  href="../../edicao/fabulosos-x-men-os-n-26/fxm0301/5993" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;26 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm0301026t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;26 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-26/fxm0301/5993"><span class="numero_capinha"> n&deg;&nbsp;26</span>  fevereiro de   1998</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>Um dia de fúria - Parte um')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_26"><a  href="../../edicao/fabulosos-x-men-os-n-27/fxm0301/5994" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;27 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm0301027t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;27 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-27/fxm0301/5994"><span class="numero_capinha"> n&deg;&nbsp;27</span>  março de   1998</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>Um dia de fúria - Parte dois')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_27"><a  href="../../edicao/fabulosos-x-men-os-n-28/fxm0301/5995" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;28 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm0301028t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;28 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-28/fxm0301/5995"><span class="numero_capinha"> n&deg;&nbsp;28</span>  abril de   1998</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>Dentes-de-Sabre: Desejo de morrer')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_28"><a  href="../../edicao/fabulosos-x-men-os-n-29/fxm0301/5996" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;29 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm0301029t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;29 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-29/fxm0301/5996"><span class="numero_capinha"> n&deg;&nbsp;29</span>  maio de   1998</a>
+                  </div></li>
+
+                  <li style="cursor: pointer;" onmouseover="this.style.background='#ffffde'; ddrivetip('1ª  história<br/>Guerreiros místicos')" onmouseout="this.style.background='#ffffff'; hideddrivetip()"><div id="MainContent_lstProfileView_div_box_msg_29"><a  href="../../edicao/fabulosos-x-men-os-n-30/fxm0301/5997" class="suppress" title="Fabulosos X-Men, Os  n&deg;&nbsp;30 - Abril"><img src='http://www.guiadosquadrinhos.com//capasthumbs/antigas/abril/f/fxm0301030t.jpg' alt="Fabulosos X-Men, Os  n&deg;&nbsp;30 - Abril"  width="100"/></a><br/><a href="../../edicao/fabulosos-x-men-os-n-30/fxm0301/5997"><span class="numero_capinha"> n&deg;&nbsp;30</span>  junho de   1998</a>
+                  </div></li>
+
+                            </div><div class="clear"></div>
+<div class="page_info"><br />
+                                <span id="MainContent_lstProfileView_dataPagerNumeric"><a class="aspNetDisabled next_last"><<</a>&nbsp;<a class="aspNetDisabled next_last"><</a>&nbsp;<span class="current_page">1</span>&nbsp;<a class="numeric_button" href="javascript:__doPostBack(&#39;ctl00$MainContent$lstProfileView$dataPagerNumeric$ctl01$ctl01&#39;,&#39;&#39;)">2</a>&nbsp;<a class="next_last" href="javascript:__doPostBack(&#39;ctl00$MainContent$lstProfileView$dataPagerNumeric$ctl02$ctl00&#39;,&#39;&#39;)">></a>&nbsp;<a class="next_last" href="javascript:__doPostBack(&#39;ctl00$MainContent$lstProfileView$dataPagerNumeric$ctl02$ctl01&#39;,&#39;&#39;)">>></a>&nbsp;</span>
+                                    <span id="MainContent_lstProfileView_dataPageDisplayNumberOfPages">
+                                                Itens: 1 - 30 de 55
+                                                 </span>
+                                    </div>
+
+            </ul>
+
+
+
+
+
+
+    <script src="../../Scripts/tooltiptabs.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $('.suppress').hover(
+    function () {
+        $(this).attr('alt', $(this).attr('title'));
+        $(this).attr('title', '');
+    },
+    function () {
+        $(this).attr('title', $(this).attr('alt'));
+        $(this).removeAttr('alt');
+    }
+).click(function () {
+    $(this).attr('title', $(this).attr('alt'));
+    $(this).removeAttr('alt');
+});
+
+
+</script>
+
+        </div>
+    </div>
+</div>
+<div id="footer">
+<div class="main_footer">
+<div class="container">
+		<div class="col_2">
+    <ul>
+    <li class="list_footer"><a href="../../" id="homelink" title="Guia dos Quadrinhos">Home</a></li>
+    <li><a href="../../titulos/" id="titulofooter" title="Títulos">Títulos</a></li>
+    <li><a href="../../titulos-estrangeiros/" id="titulos_originaisfooter" title="Títulos originais">Títulos estrangeiros</a></li>
+    <li><a href="../../editoras/" id="editorafooter" title="Editoras">Editoras</a></li>
+    <li><a href="../../editoras-estrangeiras/" id="editora_originaisfooter" title="Editoras estrangeiras">Editoras estrangeiras</a></li>
+    <li><a href="../../artistas/" id="artistafooter" title="Artistas">Artistas</a></li>
+    <li><a href="../../personagens/" id="personagemfooter" title="Personagens">Personagens</a></li>
+    <li><a href="../../historias/" id="historiasfooter" title="Histórias">Histórias</a></li>
+    <li><a href="../../arcos/" id="arcosfooter" title="Arco de histórias">Arco de histórias</a></li>
+</ul>
+    </div>
+    <div class="col_2">
+    <ul>
+    <li class="list_footer"><a href="../../contato/" id="contatofooter" title="Contato">Contato</a></li>
+        <li><a href="../../blog/" id="blogfooter" title="Blog">Blog</a></li>
+        <li><a href="../../sobre-o-guia-dos-quadrinhos" id="sobre" title="Sobre o Guia dos Quadrinhos">Sobre o Guia</a></li></ul><br />
+<span class="list_footer"><a href="../../usuarios/" id="usuariofooter" title="Usuários">Usuários</a></span><br />
+    <ul><li><a href="../../apoiadores" id="apoiadores" title="Apoiadores do Guia dos Quadrinhos">Apoiadores</a></li>
+<li><a href="../../colecoes/" id="colecaofooter" title="Coleções">Coleções</a></li>
+    <li><a href="../../fotos-meus-gibis" id="foto_colecao" title="Fotos das coleções">Fotos das coleções</a></li>
+    <li><a href="../../monografias/" id="monografiafooter" title="Monografias">Monografias</a></li>
+    </ul>
+        </div>
+
+    <div class="col_3">
+    <ul><li class="list_footer"><a href="../../todas-capas-disponiveis" id="capas1" title="Todas as capas disponíveis no Guia dos Quadrinhos">Capas</a></li>
+    <li><a href="../../ultimas-capas-adicionadas" id="A2" title="Últimas capas adicionadas">Últimas capas adicionadas</a></li>
+        <li><a href="../../ultimas-capas-restauradas" id="A1" title="Últimas capas restauradas">Últimas capas restauradas</a></li>
+        <li><a href="../../ultimas-capas-estrangeiras" id="A3" title="Últimas capas estrangeiras">Últimas capas estrangeiras</a></li>
+    <li><a href="../../todas-capas-disponiveis" id="capas2" title="Todas as capas disponíveis">Todas as capas disponíveis</a></li>
+    <li><a href="../../titulos-com-capas-completas/" id="titulos_capas" title="Títulos com capas completas">Títulos com capas completas</a></li></ul><br/>
+    <ul><li><a id="lancafooter" title="Lançamentos do mês" href="../../lancamentos-do-mes/4/2026">Lançamentos do mês</a></li>
+    <li><a href="../../busca-avancada" title="Busca avançada">Busca avançada</a></li>
+        <li><a href="../../quais-gibis-estavam-nas-bancas-no-mes-e-ano-do-seu-nascimento/" id="nascifooter" title="Gibis nas bancas quando você nasceu">Gibis nas bancas quando você nasceu</a></li>
+        <li><a href="../../edicao-aleatoria" id="aleatoriafooter" title="Ver uma edição aleatória">Ver uma edição aleatória</a></li>
+    </ul>
+    </div>
+    <div class="col_2">
+    <ul><li class="list_footer">Mais e maiores</li>
+    <li><a href="../../revistas-mais-votadas" id="votadas" title="As mais votadas">As mais votadas</a></li>
+    <li><a href="../../revistas-mais-colecionadas" id="colecionadas" title="As mais colecionadas">As mais colecionadas</a></li>
+    <li><a href="../../revistas-mais-desejadas" id="desejadas" title="As mais desejadas">As mais desejadas</a></li>
+    <li><a href="../../maiores-colecoes" id="topcolecao" title="As maiores coleções">As maiores coleções</a></li>
+    </ul>
+        </div>
+    <div class="col_3 last">
+    O <a href="../../sobre-o-guia-dos-quadrinhos" id="sobre_guia" class="list_footer" title="Guia dos Quadrinhos">Guia dos Quadrinhos</a> é um grande banco de dados, cujo objetivo é o resgate, preservação e divulgação da memória de todos os quadrinhos publicados no Brasil.  Explore e conheça mais o universo dos quadrinhos! <br /><br />
+    <span class="list_footer">Nas redes sociais</span><br />
+    <a href="https://www.facebook.com/Guiadosquadrinhos" target="_blank" class="icon_facebook2"  title="Guia dos Quadrinhosno Facebook"><img src="../../images/icon_facebook.png" id="icon_facebook" width="36" /></a> <a href="https://twitter.com/GuiaQuadrinhos" target="_blank"  title="Guia dos Quadrinhos no Twitter"><img src="../../images/icon_twitter.png" id="icon_twitter" width="36" /></a>
+    </div>
+            <br /><div class="clear"></div>
+				<a href="../../termos-de-uso" id="termo_footer" title="Termos de Uso e a Política de Privacidade">Termos de Uso e a Política de Privacidade</a>
+				<span class="copyright">© 2007-2026 Guia dos Quadrinhos - Design e desenvolvimento: <a href="../../usuario/edson-diogo/1" id="autor_footer" title="Termos de Uso e a Política de Privacidade">Edson Diogo</a></span><br />
+              </div>
+              </div>
+    </div>
+
+    <a class="scrollup" href="#" id="top_link"  title="Voltar ao topo"><img src="../../images/up-arrow-icon.png" id="arrow_top" width="50" /></a>
+<span id="valTextBusca" style="color:Transparent;visibility:hidden;">.</span>
+<span id="RegularExpressionValidator1" style="color:Transparent;visibility:hidden;">*</span>
+<div id="ValidationSummary1" style="display:none;">
+
+</div>
+
+
+<script type="text/javascript">
+//<![CDATA[
+var Page_ValidationSummaries =  new Array(document.getElementById("ValidationSummary1"));
+var Page_Validators =  new Array(document.getElementById("valTextBusca"), document.getElementById("RegularExpressionValidator1"));
+//]]>
+</script>
+
+<script type="text/javascript">
+//<![CDATA[
+var valTextBusca = document.all ? document.all["valTextBusca"] : document.getElementById("valTextBusca");
+valTextBusca.controltovalidate = "TextBusca";
+valTextBusca.errormessage = "É necessário digitar ao menos 2 caracteres";
+valTextBusca.validationGroup = "GroupBusca";
+valTextBusca.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+valTextBusca.initialvalue = "";
+var RegularExpressionValidator1 = document.all ? document.all["RegularExpressionValidator1"] : document.getElementById("RegularExpressionValidator1");
+RegularExpressionValidator1.controltovalidate = "TextBusca";
+RegularExpressionValidator1.errormessage = "É necessário digitar ao menos 2 caracteres";
+RegularExpressionValidator1.validationGroup = "GroupBusca";
+RegularExpressionValidator1.evaluationfunction = "RegularExpressionValidatorEvaluateIsValid";
+RegularExpressionValidator1.validationexpression = "^[a-zA-Z\'\'-\'\\s 0-9çÇáÁàÀãÃâÂâäÄéÉêÊËëÈèíÍïÏÌìóÓôÔõÕöÖòÒúÚÙùúûüÜÛ ()-_@#$%^&!*/]{2,255}$";
+var ValidationSummary1 = document.all ? document.all["ValidationSummary1"] : document.getElementById("ValidationSummary1");
+ValidationSummary1.showmessagebox = "True";
+ValidationSummary1.showsummary = "False";
+ValidationSummary1.validationGroup = "GroupBusca";
+//]]>
+</script>
+
+
+<script type="text/javascript">
+//<![CDATA[
+(function() {var fn = function() {$get("ScriptManager1_HiddenField").value = '';Sys.Application.remove_init(fn);};Sys.Application.add_init(fn);})();
+var Page_ValidationActive = false;
+if (typeof(ValidatorOnLoad) == "function") {
+    ValidatorOnLoad();
+}
+
+function ValidatorOnSubmit() {
+    if (Page_ValidationActive) {
+        return ValidatorCommonOnSubmit();
+    }
+    else {
+        return true;
+    }
+}
+
+(function(id) {
+    var e = document.getElementById(id);
+    if (e) {
+        e.dispose = function() {
+            Array.remove(Page_ValidationSummaries, document.getElementById(id));
+        }
+        e = null;
+    }
+})('ValidationSummary1');
+Sys.Application.add_init(function() {
+    $create(Sys.Extended.UI.TextBoxWatermarkBehavior, {"ClientStateFieldID":"TextBoxWatermarkExtender2_ClientState","WatermarkCssClass":"watermarked","WatermarkText":"Pesquisar por","id":"TextBoxWatermarkExtender2"}, null, null, $get("TextBusca"));
+});
+
+document.getElementById('valTextBusca').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('valTextBusca'));
+}
+
+document.getElementById('RegularExpressionValidator1').dispose = function() {
+    Array.remove(Page_Validators, document.getElementById('RegularExpressionValidator1'));
+}
+//]]>
+</script>
+</form>
+
+
+<script type="text/javascript">
+ //   var pageTracker = _gat._getTracker("UA-1871057-1");
+  //  pageTracker._initData();
+  //  pageTracker._trackPageview();
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-1871057-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+var ga = document.createElement('script');
+ga.src = ('https:' == document.location.protocol ?
+    'https://ssl' : 'http://www') +
+    '.google-analytics.com/ga.js';
+ga.setAttribute('async', 'true');
+document.documentElement.firstChild.appendChild(ga);
+})();
+
+</script>
+</body>
+</html>
