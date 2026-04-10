@@ -21,6 +21,9 @@ fun navEncode(value: String): String = Uri.encode(value)
 fun navDecode(value: String): String = Uri.decode(value)
 
 sealed class AppRoute(val route: String) {
+    // ── Auth ──────────────────────────────────────────────────────────────────
+    data object Auth : AppRoute("auth")
+
     // ── Bottom Bar ────────────────────────────────────────────────────────────
     data object Home : AppRoute("home")
     data object Search : AppRoute("search")

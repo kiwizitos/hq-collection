@@ -42,9 +42,12 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.kiwizitos.collection.data.model.CoverItem
+import com.kiwizitos.collection.data.model.ItemStatus
 import com.kiwizitos.collection.navigation.AppRoute
 import com.kiwizitos.collection.navigation.navDecode
 import com.kiwizitos.collection.navigation.navEncode
+import com.kiwizitos.collection.presentation.viewmodel.GalleryViewModel
+import com.kiwizitos.collection.presentation.viewmodel.GalleryViewModelFactory
 import com.kiwizitos.collection.presentation.viewmodel.PaginatedCoversResult
 import com.kiwizitos.collection.presentation.viewmodel.SearchViewModel
 import com.kiwizitos.collection.presentation.viewmodel.SearchViewModelFactory
@@ -66,16 +69,14 @@ fun CoversScreen(
     navController: NavController,
     encodedSeriesUrl: String,
     encodedSeriesTitle: String,
+    galleryViewModel: GalleryViewModel = viewModel(factory = GalleryViewModelFactory()),
     viewModel: SearchViewModel = viewModel(factory = SearchViewModelFactory())
 ) {
-    val seriesUrl = navDecode(encodedSeriesUrl)
+    val seriesUrl   = navDecode(encodedSeriesUrl)
     val seriesTitle = navDecode(encodedSeriesTitle)
     val coversState by viewModel.coversState.collectAsState()
-
-    // ── LazyGridState içado aqui ─────────────────────────────────────────────
-    // Mesmo padrão do SearchScreen: criado neste nível para sobreviver às
-    // transições Success ↔ LoadingMore sem resetar o scroll.
-    val gridState = rememberLazyGridState()
+    val galleryMap  by galleryViewModel.galleryMap.collectAsState()
+    val gridState   = rememberLazyGridState()
 
     LaunchedEffect(seriesUrl) {
         viewModel.getSeriesCovers(seriesUrl = seriesUrl, seriesTitle = seriesTitle)
@@ -86,8 +87,8 @@ fun CoversScreen(
             TopAppBar(
                 title = {
                     SiegeText(
-                        text = seriesTitle,
-                        style = SiegeTextStyle.Body,
+                        text     = seriesTitle,
+                        style    = SiegeTextStyle.Body,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -98,14 +99,14 @@ fun CoversScreen(
                         navController.popBackStack()
                     }) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            imageVector        = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Voltar",
-                            tint = SiegeTheme.colors.textPrimary
+                            tint               = SiegeTheme.colors.textPrimary
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = SiegeTheme.colors.surface,
+                    containerColor    = SiegeTheme.colors.surface,
                     titleContentColor = SiegeTheme.colors.textPrimary
                 )
             )
@@ -116,90 +117,74 @@ fun CoversScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            // ── Contador fixo — fora da grade, sempre visível ────────────────
-            when (val state = coversState) {
-                is UiState.Success ->
-                    CoversCounter(state.data.covers.size, state.data.paginationInfo.totalResults)
-
-                is UiState.LoadingMore ->
-                    CoversCounter(
-                        state.currentData.covers.size,
-                        state.currentData.paginationInfo.totalResults
-                    )
-
-                else -> Unit
+            // ── Contador fixo ─────────────────────────────────────────────────
+            when (val s = coversState) {
+                is UiState.Success     -> CoversCounter(s.data.covers.size, s.data.paginationInfo.totalResults)
+                is UiState.LoadingMore -> CoversCounter(s.currentData.covers.size, s.currentData.paginationInfo.totalResults)
+                else                   -> Unit
             }
 
-            // ── Conteúdo principal ───────────────────────────────────────────
-            when (val state = coversState) {
+            // ── Conteúdo principal ────────────────────────────────────────────
+            when (val s = coversState) {
 
                 is UiState.Idle, is UiState.Loading -> Box(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier         = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) { CircularProgressIndicator(color = SiegeColors.AccentPink) }
 
                 is UiState.Empty -> Box(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier         = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
                     SiegeText(
-                        text = "Nenhuma capa encontrada para esta série",
+                        text  = "Nenhuma capa encontrada para esta série",
                         style = SiegeTextStyle.Body,
                         color = SiegeTheme.colors.textTertiary
                     )
                 }
 
                 is UiState.Error -> Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(SiegeSpacing.Regular),
+                    modifier            = Modifier.fillMaxSize().padding(SiegeSpacing.Regular),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    SiegeText(
-                        text = state.message,
-                        style = SiegeTextStyle.Body,
-                        color = SiegeColors.Error,
-                        textAlign = TextAlign.Center
-                    )
+                    SiegeText(text = s.message, style = SiegeTextStyle.Body, color = SiegeColors.Error, textAlign = TextAlign.Center)
                     Box(modifier = Modifier.padding(top = SiegeSpacing.Medium)) {
                         SiegeButton(
-                            text = "Tentar novamente",
-                            style = SiegeButtonStyle.Primary,
+                            text    = "Tentar novamente",
+                            style   = SiegeButtonStyle.Primary,
                             onClick = { viewModel.getSeriesCovers(seriesUrl, seriesTitle) }
                         )
                     }
                 }
 
                 is UiState.Success -> CoversGrid(
-                    data = state.data,
+                    data          = s.data,
                     isLoadingMore = false,
-                    gridState = gridState,
-                    onLoadMore = { viewModel.loadNextCoversPage() },
-                    onCoverClick = { cover ->
-                        val encUrl = navEncode(cover.relativeLink)
-                        val encTitle = navEncode(cover.title)
+                    galleryMap    = galleryMap,
+                    gridState     = gridState,
+                    onLoadMore    = { viewModel.loadNextCoversPage() },
+                    onCoverClick  = { cover ->
                         navController.navigate(
                             AppRoute.EditionDetail.createRoute(
-                                editionUrl = encUrl,
-                                editionTitle = encTitle
+                                editionUrl   = navEncode(cover.relativeLink),
+                                editionTitle = navEncode(cover.title)
                             )
                         )
                     }
                 )
 
                 is UiState.LoadingMore -> CoversGrid(
-                    data = state.currentData,
+                    data          = s.currentData,
                     isLoadingMore = true,
-                    gridState = gridState,
-                    onLoadMore = {},
-                    onCoverClick = { cover ->
-                        val encUrl = navEncode(cover.relativeLink)
-                        val encTitle = navEncode(cover.title)
+                    galleryMap    = galleryMap,
+                    gridState     = gridState,
+                    onLoadMore    = {},
+                    onCoverClick  = { cover ->
                         navController.navigate(
                             AppRoute.EditionDetail.createRoute(
-                                editionUrl = encUrl,
-                                editionTitle = encTitle
+                                editionUrl   = navEncode(cover.relativeLink),
+                                editionTitle = navEncode(cover.title)
                             )
                         )
                     }
@@ -209,101 +194,89 @@ fun CoversScreen(
     }
 }
 
-// ── Contador fixo ─────────────────────────────────────────────────────────────
+// ── Contador ─────────────────────────────────────────────────────────────────
 
 @Composable
 private fun CoversCounter(loaded: Int, total: Int) {
-    val text = when {
-        total > 0 -> "Exibindo $loaded de $total capas"
-        else -> "$loaded capa(s) encontrada(s)"
-    }
+    val text = if (total > 0) "Exibindo $loaded de $total capas" else "$loaded capa(s)"
     Column {
         SiegeText(
-            text = text,
-            style = SiegeTextStyle.Label,
-            color = SiegeTheme.colors.textTertiary,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = SiegeSpacing.XSmall),
+            text      = text,
+            style     = SiegeTextStyle.Label,
+            color     = SiegeTheme.colors.textTertiary,
+            modifier  = Modifier.fillMaxWidth().padding(vertical = SiegeSpacing.XSmall),
             textAlign = TextAlign.Center
         )
         HorizontalDivider(color = SiegeTheme.colors.outline)
     }
 }
 
-// ── Grade de capas ────────────────────────────────────────────────────────────
+// ── Grade ─────────────────────────────────────────────────────────────────────
 
 @Composable
 private fun CoversGrid(
     data: PaginatedCoversResult,
     isLoadingMore: Boolean,
+    galleryMap: Map<String, ItemStatus>,
     gridState: androidx.compose.foundation.lazy.grid.LazyGridState,
     onLoadMore: () -> Unit,
     onCoverClick: (CoverItem) -> Unit
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(3),
-        state = gridState,
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = androidx.compose.foundation.layout.PaddingValues(SiegeSpacing.Small),
-        verticalArrangement = Arrangement.spacedBy(SiegeSpacing.Small),
+        columns               = GridCells.Fixed(3),
+        state                 = gridState,
+        modifier              = Modifier.fillMaxSize(),
+        contentPadding        = androidx.compose.foundation.layout.PaddingValues(SiegeSpacing.Small),
+        verticalArrangement   = Arrangement.spacedBy(SiegeSpacing.Small),
         horizontalArrangement = Arrangement.spacedBy(SiegeSpacing.Small)
     ) {
         items(items = data.covers, key = { it.relativeLink }) { cover ->
-            CoverCell(cover = cover, onClick = { onCoverClick(cover) })
+            CoverCell(
+                cover    = cover,
+                category = galleryMap[cover.relativeLink],
+                onClick  = { onCoverClick(cover) }
+            )
         }
-
-        // Botão "Carregar mais" ou spinner — só aparece quando há próxima página
         if (data.paginationInfo.hasNextPage) {
             item(key = "load_more_footer", span = { GridItemSpan(maxLineSpan) }) {
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = SiegeSpacing.Medium),
+                    modifier         = Modifier.fillMaxWidth().padding(vertical = SiegeSpacing.Medium),
                     contentAlignment = Alignment.Center
                 ) {
-                    if (isLoadingMore) {
-                        CircularProgressIndicator(
-                            color = SiegeColors.AccentPink,
-                            modifier = Modifier.size(28.dp)
-                        )
-                    } else {
-                        SiegeButton(
-                            text = "Carregar mais",
-                            style = SiegeButtonStyle.Ghost,
-                            onClick = onLoadMore
-                        )
-                    }
+                    if (isLoadingMore) CircularProgressIndicator(color = SiegeColors.AccentPink, modifier = Modifier.size(28.dp))
+                    else SiegeButton(text = "Carregar mais", style = SiegeButtonStyle.Ghost, onClick = onLoadMore)
                 }
             }
         }
     }
 }
 
-// ── Célula de capa ────────────────────────────────────────────────────────────
+// ── Célula ────────────────────────────────────────────────────────────────────
 
 @Composable
-private fun CoverCell(cover: CoverItem, onClick: () -> Unit) {
-    SiegeCard(style = SiegeCardStyle.Elevated, onClick = onClick) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(cover.coverUrl)
-                .crossfade(true)
-                .build(),
-            contentDescription = cover.title,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(2f / 3f)
-                .clip(SiegeShapes.Small)
-        )
-        SiegeText(
-            text = cover.title,
-            style = SiegeTextStyle.Label,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(top = SiegeSpacing.XSmall)
-        )
+private fun CoverCell(cover: CoverItem, category: ItemStatus?, onClick: () -> Unit) {
+    Box {
+        SiegeCard(style = SiegeCardStyle.Elevated, onClick = onClick) {
+            AsyncImage(
+                model              = ImageRequest.Builder(LocalContext.current).data(cover.coverUrl).crossfade(true).build(),
+                contentDescription = cover.title,
+                contentScale       = ContentScale.Crop,
+                modifier           = Modifier.fillMaxWidth().aspectRatio(2f / 3f).clip(SiegeShapes.Small)
+            )
+            SiegeText(
+                text     = cover.title,
+                style    = SiegeTextStyle.Label,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(top = SiegeSpacing.XSmall)
+            )
+        }
+        if (category != null) {
+            CategoryBadge(
+                status   = category,
+                modifier = Modifier.align(Alignment.TopEnd).padding(SiegeSpacing.XSmall)
+            )
+        }
     }
 }
 
@@ -314,8 +287,8 @@ private fun CoverCell(cover: CoverItem, onClick: () -> Unit) {
 private fun CoversScreenPreview() {
     SiegeTheme {
         CoversScreen(
-            navController = rememberNavController(),
-            encodedSeriesUrl = "titulo%2Fbatman",
+            navController      = rememberNavController(),
+            encodedSeriesUrl   = "titulo%2Fbatman",
             encodedSeriesTitle = "Batman"
         )
     }

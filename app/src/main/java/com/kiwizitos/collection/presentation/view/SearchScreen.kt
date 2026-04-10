@@ -22,14 +22,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.kiwizitos.collection.data.model.ItemStatus
 import com.kiwizitos.collection.data.model.SerieResult
 import com.kiwizitos.collection.navigation.AppRoute
 import com.kiwizitos.collection.navigation.navEncode
+import com.kiwizitos.collection.presentation.viewmodel.GalleryViewModel
+import com.kiwizitos.collection.presentation.viewmodel.GalleryViewModelFactory
 import com.kiwizitos.collection.presentation.viewmodel.PaginatedSearchResult
 import com.kiwizitos.collection.presentation.viewmodel.SearchViewModel
 import com.kiwizitos.collection.presentation.viewmodel.SearchViewModelFactory
@@ -49,10 +53,12 @@ import com.kiwizitos.siege.tokens.SiegeSpacing
 fun SearchScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
+    galleryViewModel: GalleryViewModel = viewModel(factory = GalleryViewModelFactory()),
     viewModel: SearchViewModel = viewModel(factory = SearchViewModelFactory())
 ) {
     var query by rememberSaveable { mutableStateOf("") }
     val searchState by viewModel.searchState.collectAsState()
+    val galleryMap by galleryViewModel.galleryMap.collectAsState()
     val listState = rememberLazyListState()
 
     val onSearch = {
@@ -65,7 +71,6 @@ fun SearchScreen(
             .fillMaxSize()
             .padding(horizontal = SiegeSpacing.Regular)
     ) {
-        // ── Barra de busca — sempre visível ──────────────────────────────────
         SiegeSearchBar(
             value = query,
             onValueChange = { query = it },
@@ -74,60 +79,54 @@ fun SearchScreen(
             modifier = Modifier.padding(vertical = SiegeSpacing.Regular)
         )
 
-        // ── Contador fixo — visível quando há resultados, acima do scroll ────
-        when (val state = searchState) {
-            is UiState.Success ->
-                SearchCounter(state.data.series.size, state.data.paginationInfo.totalResults)
+        // Contador — visível apenas quando há resultados
+        when (val s = searchState) {
+            is UiState.Success -> SearchCounter(
+                s.data.series.size,
+                s.data.paginationInfo.totalResults
+            )
 
-            is UiState.LoadingMore ->
-                SearchCounter(
-                    state.currentData.series.size,
-                    state.currentData.paginationInfo.totalResults
-                )
+            is UiState.LoadingMore -> SearchCounter(
+                s.currentData.series.size,
+                s.currentData.paginationInfo.totalResults
+            )
 
             else -> Unit
         }
 
-        // ── Conteúdo principal ────────────────────────────────────────────────
-        when (val state = searchState) {
+        when (val s = searchState) {
             is UiState.Idle -> SearchIdleState()
             is UiState.Loading -> SearchLoadingState()
             is UiState.Empty -> SearchEmptyState(query = query)
-
-            is UiState.Error -> SearchErrorState(
-                message = state.message,
-                onRetry = { onSearch() }
-            )
+            is UiState.Error -> SearchErrorState(message = s.message, onRetry = { onSearch() })
 
             is UiState.Success -> SearchResultsList(
-                data = state.data,
+                data = s.data,
                 isLoadingMore = false,
+                galleryMap = galleryMap,
                 listState = listState,
                 onLoadMore = { viewModel.loadNextSearchPage() },
                 onSeriesClick = { serie ->
-                    val encodedUrl = navEncode(serie.relativeLink)
-                    val encodedTitle = navEncode(serie.title)
                     navController.navigate(
                         AppRoute.SeriesCovers.createRoute(
-                            encodedUrl,
-                            encodedTitle
+                            navEncode(serie.relativeLink),
+                            navEncode(serie.title)
                         )
                     )
                 }
             )
 
             is UiState.LoadingMore -> SearchResultsList(
-                data = state.currentData,
+                data = s.currentData,
                 isLoadingMore = true,
+                galleryMap = galleryMap,
                 listState = listState,
                 onLoadMore = {},
                 onSeriesClick = { serie ->
-                    val encodedUrl = navEncode(serie.relativeLink)
-                    val encodedTitle = navEncode(serie.title)
                     navController.navigate(
                         AppRoute.SeriesCovers.createRoute(
-                            encodedUrl,
-                            encodedTitle
+                            navEncode(serie.relativeLink),
+                            navEncode(serie.title)
                         )
                     )
                 }
@@ -136,14 +135,11 @@ fun SearchScreen(
     }
 }
 
-// ── Contador fixo ─────────────────────────────────────────────────────────────
+// ── Contador ─────────────────────────────────────────────────────────────────
 
 @Composable
 private fun SearchCounter(loaded: Int, total: Int) {
-    val text = when {
-        total > 0 -> "Exibindo $loaded de $total resultados"
-        else -> "$loaded resultado(s) encontrado(s)"
-    }
+    val text = if (total > 0) "Exibindo $loaded de $total resultados" else "$loaded resultado(s)"
     Column {
         SiegeText(
             text = text,
@@ -164,6 +160,7 @@ private fun SearchCounter(loaded: Int, total: Int) {
 private fun SearchResultsList(
     data: PaginatedSearchResult,
     isLoadingMore: Boolean,
+    galleryMap: Map<String, ItemStatus>,
     listState: androidx.compose.foundation.lazy.LazyListState,
     onLoadMore: () -> Unit,
     onSeriesClick: (SerieResult) -> Unit
@@ -173,19 +170,14 @@ private fun SearchResultsList(
         verticalArrangement = Arrangement.spacedBy(SiegeSpacing.Small),
         modifier = Modifier.padding(top = SiegeSpacing.Small)
     ) {
-        // itemsIndexed fornece o índice para o numerador lateral de cada card
-        itemsIndexed(
-            items = data.series,
-            key = { _, serie -> serie.relativeLink }
-        ) { index, serie ->
+        itemsIndexed(items = data.series, key = { _, s -> s.relativeLink }) { index, serie ->
             SerieResultCard(
                 serie = serie,
-                position = index + 1,  // exibe 1-based
+                position = index + 1,
+                category = galleryMap[serie.relativeLink],
                 onClick = { onSeriesClick(serie) }
             )
         }
-
-        // Rodapé: botão "Carregar mais" ou spinner
         if (data.paginationInfo.hasNextPage) {
             item(key = "load_more_footer") {
                 LoadMoreFooter(isLoading = isLoadingMore, onLoadMore = onLoadMore)
@@ -194,7 +186,7 @@ private fun SearchResultsList(
     }
 }
 
-// ── Rodapé de paginação ───────────────────────────────────────────────────────
+// ── Rodapé ────────────────────────────────────────────────────────────────────
 
 @Composable
 private fun LoadMoreFooter(isLoading: Boolean, onLoadMore: () -> Unit) {
@@ -204,18 +196,15 @@ private fun LoadMoreFooter(isLoading: Boolean, onLoadMore: () -> Unit) {
             .padding(vertical = SiegeSpacing.Medium),
         contentAlignment = Alignment.Center
     ) {
-        if (isLoading) {
-            CircularProgressIndicator(
-                color = SiegeColors.AccentPink,
-                modifier = Modifier.size(28.dp)
-            )
-        } else {
-            SiegeButton(
-                text = "Carregar mais",
-                style = SiegeButtonStyle.Ghost,
-                onClick = onLoadMore
-            )
-        }
+        if (isLoading) CircularProgressIndicator(
+            color = SiegeColors.AccentPink,
+            modifier = Modifier.size(28.dp)
+        )
+        else SiegeButton(
+            text = "Carregar mais",
+            style = SiegeButtonStyle.Ghost,
+            onClick = onLoadMore
+        )
     }
 }
 
@@ -225,6 +214,7 @@ private fun LoadMoreFooter(isLoading: Boolean, onLoadMore: () -> Unit) {
 private fun SerieResultCard(
     serie: SerieResult,
     position: Int,
+    category: ItemStatus?,
     onClick: () -> Unit
 ) {
     SiegeCard(style = SiegeCardStyle.Outlined, onClick = onClick) {
@@ -233,7 +223,6 @@ private fun SerieResultCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(SiegeSpacing.Medium)
         ) {
-            // Numerador lateral em destaque
             SiegeText(
                 text = "$position",
                 style = SiegeTextStyle.Label,
@@ -241,12 +230,19 @@ private fun SerieResultCard(
             )
 
             Column(modifier = Modifier.weight(1f)) {
-                SiegeText(
-                    text = serie.title,
-                    style = SiegeTextStyle.Body,
-                    maxLines = 1,
-                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(SiegeSpacing.XSmall)
+                ) {
+                    SiegeText(
+                        text = serie.title,
+                        style = SiegeTextStyle.Body,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f)
+                    )
+                    if (category != null) CategoryBadge(status = category)
+                }
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -334,11 +330,7 @@ private fun SearchErrorState(message: String, onRetry: () -> Unit) {
             color = SiegeColors.Error,
             textAlign = TextAlign.Center
         )
-        SiegeButton(
-            text = "Tentar novamente",
-            style = SiegeButtonStyle.Primary,
-            onClick = onRetry
-        )
+        SiegeButton(text = "Tentar novamente", style = SiegeButtonStyle.Primary, onClick = onRetry)
     }
 }
 
