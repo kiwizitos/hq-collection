@@ -1,6 +1,6 @@
-
 package com.kiwizitos.collection.navigation
 
+import android.net.Uri
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.AccountCircle
@@ -8,10 +8,22 @@ import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.ui.graphics.vector.ImageVector
 
+/**
+ * Encoding seguro para segmentos de rota e query params do Navigation Compose.
+ *
+ * Usa [Uri.encode] em vez de [java.net.URLEncoder] porque:
+ * - `URLEncoder` converte `/` em `%2F` mas o Navigation faz decode antes de
+ *   comparar com o pattern, quebrando rotas que contêm barras.
+ * - `Uri.encode` usa percent-encoding RFC 3986 que o Navigation respeita
+ *   corretamente em segmentos de path e query params.
+ */
+fun navEncode(value: String): String = Uri.encode(value)
+fun navDecode(value: String): String = Uri.decode(value)
+
 sealed class AppRoute(val route: String) {
     // ── Bottom Bar ────────────────────────────────────────────────────────────
-    data object Home    : AppRoute("home")
-    data object Search  : AppRoute("search")
+    data object Home : AppRoute("home")
+    data object Search : AppRoute("search")
     data object Library : AppRoute("library")
     data object Profile : AppRoute("profile")
 
@@ -21,27 +33,48 @@ sealed class AppRoute(val route: String) {
         fun createRoute(id: String) = "collection/$id"
     }
 
-    /** Detalhe de edição individual. Rota: "edition/{editionUrl}/{editionTitle}" */
-    data object EditionDetail : AppRoute("edition/{editionUrl}/{editionTitle}") {
-        /**
-         * @param editionUrl   URL da edição já codificada com [URLEncoder].
-         * @param editionTitle Título da edição já codificado com [URLEncoder].
-         */
-        fun createRoute(editionUrl: String, editionTitle: String) =
-            "edition/$editionUrl/$editionTitle"
+    /**
+     * Detalhe de uma edição individual.
+     *
+     * Rota base: `edition/{editionUrl}/{editionTitle}`
+     *
+     * Query parameters opcionais para contexto de série:
+     * - `seriesUrl`   → URL da série à qual esta edição pertence.
+     * - `seriesTitle` → Título da série, para exibição no card de contexto.
+     *
+     * Quando `seriesUrl` e `seriesTitle` estão presentes, a [DetailsScreen]
+     * exibe o card "Pertence ao título X" com link para a lista de capas.
+     * Quando ausentes, a tela é exibida sem esse card.
+     *
+     * Todos os parâmetros devem ser codificados com [navEncode] antes de
+     * criar a rota, pois URLs de edição/série contêm `/` que quebrariam
+     * o parsing do Navigation se não forem corretamente encoded.
+     */
+    data object EditionDetail : AppRoute(
+        "edition/{editionUrl}/{editionTitle}?seriesUrl={seriesUrl}&seriesTitle={seriesTitle}&showSeriesCard={showSeriesCard}"
+    ) {
+        /** Vindo do CoversScreen — suprime o card de série. */
+        fun createRoute(
+            editionUrl: String,
+            editionTitle: String
+        ) = "edition/$editionUrl/$editionTitle?showSeriesCard=false"
+
+        /** Vindo de qualquer outra origem — exibe o card de série. */
+        fun createRoute(
+            editionUrl: String,
+            editionTitle: String,
+            seriesUrl: String,
+            seriesTitle: String
+        ) =
+            "edition/$editionUrl/$editionTitle?seriesUrl=$seriesUrl&seriesTitle=$seriesTitle&showSeriesCard=true"
     }
 
     /**
      * Lista de capas de uma série. Rota: "covers/{seriesUrl}/{seriesTitle}"
      *
-     * Os parâmetros devem ser codificados com [URLEncoder] antes de criar a rota,
-     * pois URLs de série contêm `/` e `?` que quebrariam o parsing do Navigation.
+     * Os parâmetros devem ser codificados com [navEncode] antes de criar a rota.
      */
     data object SeriesCovers : AppRoute("covers/{seriesUrl}/{seriesTitle}") {
-        /**
-         * @param encodedSeriesUrl   URL da série codificada com [URLEncoder].
-         * @param encodedSeriesTitle Título da série codificado com [URLEncoder].
-         */
         fun createRoute(encodedSeriesUrl: String, encodedSeriesTitle: String) =
             "covers/$encodedSeriesUrl/$encodedSeriesTitle"
     }

@@ -46,7 +46,7 @@ fun AppNavHost(
         }
     ) { innerPadding ->
         NavHost(
-            navController    = navController,
+            navController = navController,
             startDestination = AppRoute.Home.route,
             // Sem padding aqui — cada tela gerencia seus próprios insets
             modifier = Modifier.fillMaxSize()
@@ -56,7 +56,10 @@ fun AppNavHost(
                 HomeScreen(navController = navController, modifier = Modifier.padding(innerPadding))
             }
             composable(AppRoute.Search.route) {
-                SearchScreen(navController = navController, modifier = Modifier.padding(innerPadding))
+                SearchScreen(
+                    navController = navController,
+                    modifier = Modifier.padding(innerPadding)
+                )
             }
             composable(AppRoute.Profile.route) {
                 ProfileScreen(modifier = Modifier.padding(innerPadding))
@@ -69,44 +72,50 @@ fun AppNavHost(
             composable(
                 route = AppRoute.SeriesCovers.route,
                 arguments = listOf(
-                    navArgument("seriesUrl")   { type = NavType.StringType },
+                    navArgument("seriesUrl") { type = NavType.StringType },
                     navArgument("seriesTitle") { type = NavType.StringType }
                 )
             ) { backStackEntry ->
-                val encodedUrl   = backStackEntry.arguments?.getString("seriesUrl")   ?: return@composable
-                val encodedTitle = backStackEntry.arguments?.getString("seriesTitle") ?: return@composable
+                val encodedUrl =
+                    backStackEntry.arguments?.getString("seriesUrl") ?: return@composable
+                val encodedTitle =
+                    backStackEntry.arguments?.getString("seriesTitle") ?: return@composable
                 CoversScreen(
-                    navController      = navController,
-                    encodedSeriesUrl   = encodedUrl,
+                    navController = navController,
+                    encodedSeriesUrl = encodedUrl,
                     encodedSeriesTitle = encodedTitle
-                )
-            }
-
-            composable(
-                route = AppRoute.CollectionDetail.route,
-                arguments = listOf(navArgument("id") { type = NavType.StringType })
-            ) { backStackEntry ->
-                val id = backStackEntry.arguments?.getString("id") ?: return@composable
-                DetailsScreen(
-                    encodedEditionUrl   = id,
-                    encodedEditionTitle = id,
-                    onBackClick         = { navController.popBackStack() }
                 )
             }
 
             composable(
                 route = AppRoute.EditionDetail.route,
                 arguments = listOf(
-                    navArgument("editionUrl")   { type = NavType.StringType },
-                    navArgument("editionTitle") { type = NavType.StringType }
+                    navArgument("editionUrl") { type = NavType.StringType },
+                    navArgument("editionTitle") { type = NavType.StringType },
+                    navArgument("seriesUrl") {
+                        type = NavType.StringType; nullable = true; defaultValue = null
+                    },
+                    navArgument("seriesTitle") {
+                        type = NavType.StringType; nullable = true; defaultValue = null
+                    },
+                    navArgument("showSeriesCard") { type = NavType.BoolType; defaultValue = true }
                 )
             ) { backStackEntry ->
-                val editionUrl   = backStackEntry.arguments?.getString("editionUrl")   ?: return@composable
-                val editionTitle = backStackEntry.arguments?.getString("editionTitle") ?: return@composable
+                val editionUrl =
+                    backStackEntry.arguments?.getString("editionUrl") ?: return@composable
+                val editionTitle =
+                    backStackEntry.arguments?.getString("editionTitle") ?: return@composable
+                val seriesUrl = backStackEntry.arguments?.getString("seriesUrl")
+                val seriesTitle = backStackEntry.arguments?.getString("seriesTitle")
+                val showSeriesCard = backStackEntry.arguments?.getBoolean("showSeriesCard") ?: true
                 DetailsScreen(
-                    encodedEditionUrl   = editionUrl,
+                    navController = navController,
+                    encodedEditionUrl = editionUrl,
                     encodedEditionTitle = editionTitle,
-                    onBackClick         = { navController.popBackStack() }
+                    encodedSeriesUrl = seriesUrl,
+                    encodedSeriesTitle = seriesTitle,
+                    showSeriesCard = showSeriesCard,
+                    onBackClick = { navController.popBackStack() }
                 )
             }
         }

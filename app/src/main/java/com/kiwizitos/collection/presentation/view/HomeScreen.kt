@@ -15,6 +15,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.kiwizitos.collection.navigation.AppRoute
+import com.kiwizitos.collection.navigation.navEncode
 import com.kiwizitos.siege.components.card.BadgeData
 import com.kiwizitos.siege.components.card.ContentCardStyle
 import com.kiwizitos.siege.components.card.ContentType
@@ -30,19 +32,27 @@ import com.kiwizitos.siege.theme.SiegeTheme
 import com.kiwizitos.siege.tokens.SiegeColors
 import com.kiwizitos.siege.tokens.SiegeSpacing
 
-// dados de exemplo — serão substituídos por ViewModel futuramente
+// ── Dado de teste real ────────────────────────────────────────────────────────
+// Edição: http://www.guiadosquadrinhos.com/edicao/x-men-2099-n-1/x-011158/179145
+// Série:  http://www.guiadosquadrinhos.com/capas/x-men-2099/x-011158
 private data class SeriesItem(
     val id: String,
     val title: String,
     val subtitle: String,
-    val type: ContentType = ContentType.Series  // distingue série de volume único
+    val type: ContentType = ContentType.Series,
+    val seriesUrl: String,
+    val latestEditionUrl: String
 )
 
 private val mockSeries = listOf(
-    SeriesItem("watchmen", "Watchmen", "DC Comics", ContentType.Volume),  // volume único
-    SeriesItem("berserk", "Berserk", "Young Animal", ContentType.Series),
-    SeriesItem("sandman", "Sandman", "Vertigo", ContentType.Series),
-    SeriesItem("one-piece", "One Piece", "Shonen Jump", ContentType.Series),
+    SeriesItem(
+        id = "x-men-2099",
+        title = "X-Men 2099",
+        subtitle = "Marvel Comics",
+        type = ContentType.Series,
+        seriesUrl = "capas/x-men-2099/x-011158",
+        latestEditionUrl = "edicao/x-men-2099-n-1/x-011158/179145"
+    )
 )
 
 @Composable
@@ -82,6 +92,7 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
             }
         }
 
+        // ── "Continue de onde parou" — navega para a última edição COM contexto de série ──
         item {
             SiegeList(
                 items = mockSeries,
@@ -96,7 +107,8 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
                         SiegeButton(
                             text = "Ver tudo",
                             style = SiegeButtonStyle.Ghost,
-                            onClick = { /* TODO */ })
+                            onClick = { /* TODO */ }
+                        )
                     }
                 }
             ) { item ->
@@ -108,11 +120,25 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
                     subtitle = item.subtitle,
                     progress = .1F,
                     badges = listOf(BadgeData("POSSUÍDA", SiegeColors.AccentCyan)),
-                    onClick = { /* TODO: navegar para detalhe */ }
+                    onClick = {
+                        val encEditionUrl = navEncode(item.latestEditionUrl)
+                        val encEditionTitle = navEncode(item.title)
+                        val encSeriesUrl = navEncode(item.seriesUrl)
+                        val encSeriesTitle = navEncode(item.title)
+                        navController.navigate(
+                            AppRoute.EditionDetail.createRoute(
+                                editionUrl = encEditionUrl,
+                                editionTitle = encEditionTitle,
+                                seriesUrl = encSeriesUrl,
+                                seriesTitle = encSeriesTitle
+                            )
+                        )
+                    }
                 )
             }
         }
 
+        // ── "Coleção completa" — navega para a lista de capas do título ───────
         item {
             SiegeList(
                 items = mockSeries,
@@ -127,7 +153,8 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
                         SiegeButton(
                             text = "Ver tudo",
                             style = SiegeButtonStyle.Ghost,
-                            onClick = { /* TODO */ })
+                            onClick = { /* TODO */ }
+                        )
                     }
                 }
             ) { item ->
@@ -138,7 +165,13 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
                     contentType = item.type,
                     subtitle = item.subtitle,
                     badges = listOf(BadgeData("POSSUÍDA", SiegeColors.AccentCyan)),
-                    onClick = { /* TODO: navegar para detalhe */ }
+                    onClick = {
+                        val encSeriesUrl = navEncode(item.seriesUrl)
+                        val encSeriesTitle = navEncode(item.title)
+                        navController.navigate(
+                            AppRoute.SeriesCovers.createRoute(encSeriesUrl, encSeriesTitle)
+                        )
+                    }
                 )
             }
         }

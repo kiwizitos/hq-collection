@@ -43,6 +43,8 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.kiwizitos.collection.data.model.CoverItem
 import com.kiwizitos.collection.navigation.AppRoute
+import com.kiwizitos.collection.navigation.navDecode
+import com.kiwizitos.collection.navigation.navEncode
 import com.kiwizitos.collection.presentation.viewmodel.PaginatedCoversResult
 import com.kiwizitos.collection.presentation.viewmodel.SearchViewModel
 import com.kiwizitos.collection.presentation.viewmodel.SearchViewModelFactory
@@ -57,8 +59,6 @@ import com.kiwizitos.siege.theme.SiegeTheme
 import com.kiwizitos.siege.tokens.SiegeColors
 import com.kiwizitos.siege.tokens.SiegeShapes
 import com.kiwizitos.siege.tokens.SiegeSpacing
-import java.net.URLDecoder
-import java.net.URLEncoder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,8 +68,8 @@ fun CoversScreen(
     encodedSeriesTitle: String,
     viewModel: SearchViewModel = viewModel(factory = SearchViewModelFactory())
 ) {
-    val seriesUrl   = URLDecoder.decode(encodedSeriesUrl,   "UTF-8")
-    val seriesTitle = URLDecoder.decode(encodedSeriesTitle, "UTF-8")
+    val seriesUrl = navDecode(encodedSeriesUrl)
+    val seriesTitle = navDecode(encodedSeriesTitle)
     val coversState by viewModel.coversState.collectAsState()
 
     // ── LazyGridState içado aqui ─────────────────────────────────────────────
@@ -86,8 +86,8 @@ fun CoversScreen(
             TopAppBar(
                 title = {
                     SiegeText(
-                        text     = seriesTitle,
-                        style    = SiegeTextStyle.Body,
+                        text = seriesTitle,
+                        style = SiegeTextStyle.Body,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -98,14 +98,14 @@ fun CoversScreen(
                         navController.popBackStack()
                     }) {
                         Icon(
-                            imageVector        = Icons.AutoMirrored.Filled.ArrowBack,
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Voltar",
-                            tint               = SiegeTheme.colors.textPrimary
+                            tint = SiegeTheme.colors.textPrimary
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor    = SiegeTheme.colors.surface,
+                    containerColor = SiegeTheme.colors.surface,
                     titleContentColor = SiegeTheme.colors.textPrimary
                 )
             )
@@ -118,10 +118,15 @@ fun CoversScreen(
         ) {
             // ── Contador fixo — fora da grade, sempre visível ────────────────
             when (val state = coversState) {
-                is UiState.Success     ->
+                is UiState.Success ->
                     CoversCounter(state.data.covers.size, state.data.paginationInfo.totalResults)
+
                 is UiState.LoadingMore ->
-                    CoversCounter(state.currentData.covers.size, state.currentData.paginationInfo.totalResults)
+                    CoversCounter(
+                        state.currentData.covers.size,
+                        state.currentData.paginationInfo.totalResults
+                    )
+
                 else -> Unit
             }
 
@@ -129,64 +134,74 @@ fun CoversScreen(
             when (val state = coversState) {
 
                 is UiState.Idle, is UiState.Loading -> Box(
-                    modifier         = Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) { CircularProgressIndicator(color = SiegeColors.AccentPink) }
 
                 is UiState.Empty -> Box(
-                    modifier         = Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
                     SiegeText(
-                        text  = "Nenhuma capa encontrada para esta série",
+                        text = "Nenhuma capa encontrada para esta série",
                         style = SiegeTextStyle.Body,
                         color = SiegeTheme.colors.textTertiary
                     )
                 }
 
                 is UiState.Error -> Column(
-                    modifier            = Modifier
+                    modifier = Modifier
                         .fillMaxSize()
                         .padding(SiegeSpacing.Regular),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
                     SiegeText(
-                        text      = state.message,
-                        style     = SiegeTextStyle.Body,
-                        color     = SiegeColors.Error,
+                        text = state.message,
+                        style = SiegeTextStyle.Body,
+                        color = SiegeColors.Error,
                         textAlign = TextAlign.Center
                     )
                     Box(modifier = Modifier.padding(top = SiegeSpacing.Medium)) {
                         SiegeButton(
-                            text    = "Tentar novamente",
-                            style   = SiegeButtonStyle.Primary,
+                            text = "Tentar novamente",
+                            style = SiegeButtonStyle.Primary,
                             onClick = { viewModel.getSeriesCovers(seriesUrl, seriesTitle) }
                         )
                     }
                 }
 
                 is UiState.Success -> CoversGrid(
-                    data          = state.data,
+                    data = state.data,
                     isLoadingMore = false,
-                    gridState     = gridState,
-                    onLoadMore    = { viewModel.loadNextCoversPage() },
-                    onCoverClick  = { cover ->
-                        val encUrl   = URLEncoder.encode(cover.relativeLink, "UTF-8")
-                        val encTitle = URLEncoder.encode(cover.title, "UTF-8")
-                        navController.navigate(AppRoute.EditionDetail.createRoute(encUrl, encTitle))
+                    gridState = gridState,
+                    onLoadMore = { viewModel.loadNextCoversPage() },
+                    onCoverClick = { cover ->
+                        val encUrl = navEncode(cover.relativeLink)
+                        val encTitle = navEncode(cover.title)
+                        navController.navigate(
+                            AppRoute.EditionDetail.createRoute(
+                                editionUrl = encUrl,
+                                editionTitle = encTitle
+                            )
+                        )
                     }
                 )
 
                 is UiState.LoadingMore -> CoversGrid(
-                    data          = state.currentData,
+                    data = state.currentData,
                     isLoadingMore = true,
-                    gridState     = gridState,
-                    onLoadMore    = {},
-                    onCoverClick  = { cover ->
-                        val encUrl   = URLEncoder.encode(cover.relativeLink, "UTF-8")
-                        val encTitle = URLEncoder.encode(cover.title, "UTF-8")
-                        navController.navigate(AppRoute.EditionDetail.createRoute(encUrl, encTitle))
+                    gridState = gridState,
+                    onLoadMore = {},
+                    onCoverClick = { cover ->
+                        val encUrl = navEncode(cover.relativeLink)
+                        val encTitle = navEncode(cover.title)
+                        navController.navigate(
+                            AppRoute.EditionDetail.createRoute(
+                                editionUrl = encUrl,
+                                editionTitle = encTitle
+                            )
+                        )
                     }
                 )
             }
@@ -200,14 +215,14 @@ fun CoversScreen(
 private fun CoversCounter(loaded: Int, total: Int) {
     val text = when {
         total > 0 -> "Exibindo $loaded de $total capas"
-        else      -> "$loaded capa(s) encontrada(s)"
+        else -> "$loaded capa(s) encontrada(s)"
     }
     Column {
         SiegeText(
-            text      = text,
-            style     = SiegeTextStyle.Label,
-            color     = SiegeTheme.colors.textTertiary,
-            modifier  = Modifier
+            text = text,
+            style = SiegeTextStyle.Label,
+            color = SiegeTheme.colors.textTertiary,
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = SiegeSpacing.XSmall),
             textAlign = TextAlign.Center
@@ -227,11 +242,11 @@ private fun CoversGrid(
     onCoverClick: (CoverItem) -> Unit
 ) {
     LazyVerticalGrid(
-        columns               = GridCells.Fixed(3),
-        state                 = gridState,
-        modifier              = Modifier.fillMaxSize(),
-        contentPadding        = androidx.compose.foundation.layout.PaddingValues(SiegeSpacing.Small),
-        verticalArrangement   = Arrangement.spacedBy(SiegeSpacing.Small),
+        columns = GridCells.Fixed(3),
+        state = gridState,
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = androidx.compose.foundation.layout.PaddingValues(SiegeSpacing.Small),
+        verticalArrangement = Arrangement.spacedBy(SiegeSpacing.Small),
         horizontalArrangement = Arrangement.spacedBy(SiegeSpacing.Small)
     ) {
         items(items = data.covers, key = { it.relativeLink }) { cover ->
@@ -242,20 +257,20 @@ private fun CoversGrid(
         if (data.paginationInfo.hasNextPage) {
             item(key = "load_more_footer", span = { GridItemSpan(maxLineSpan) }) {
                 Box(
-                    modifier         = Modifier
+                    modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = SiegeSpacing.Medium),
                     contentAlignment = Alignment.Center
                 ) {
                     if (isLoadingMore) {
                         CircularProgressIndicator(
-                            color    = SiegeColors.AccentPink,
+                            color = SiegeColors.AccentPink,
                             modifier = Modifier.size(28.dp)
                         )
                     } else {
                         SiegeButton(
-                            text    = "Carregar mais",
-                            style   = SiegeButtonStyle.Ghost,
+                            text = "Carregar mais",
+                            style = SiegeButtonStyle.Ghost,
                             onClick = onLoadMore
                         )
                     }
@@ -276,15 +291,15 @@ private fun CoverCell(cover: CoverItem, onClick: () -> Unit) {
                 .crossfade(true)
                 .build(),
             contentDescription = cover.title,
-            contentScale       = ContentScale.Crop,
-            modifier           = Modifier
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(2f / 3f)
                 .clip(SiegeShapes.Small)
         )
         SiegeText(
-            text     = cover.title,
-            style    = SiegeTextStyle.Label,
+            text = cover.title,
+            style = SiegeTextStyle.Label,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.padding(top = SiegeSpacing.XSmall)
@@ -299,8 +314,8 @@ private fun CoverCell(cover: CoverItem, onClick: () -> Unit) {
 private fun CoversScreenPreview() {
     SiegeTheme {
         CoversScreen(
-            navController      = rememberNavController(),
-            encodedSeriesUrl   = "titulo%2Fbatman",
+            navController = rememberNavController(),
+            encodedSeriesUrl = "titulo%2Fbatman",
             encodedSeriesTitle = "Batman"
         )
     }

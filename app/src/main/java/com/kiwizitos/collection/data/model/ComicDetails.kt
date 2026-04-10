@@ -10,16 +10,20 @@ package com.kiwizitos.collection.data.model
  */
 data class ComicDetails(
     val title: String,
-    val publishedIn: String? = null,   // "janeiro de 1996"
-    val publisher: String? = null,     // "Abril"
-    val licensor: String? = null,      // "Marvel Comics"
-    val category: String? = null,      // "Revista Periódica"
-    val genre: String? = null,         // "Super-heróis"
-    val status: String? = null,        // "Título encerrado"
-    val pages: String? = null,         // "52"
-    val format: String? = null,        // "Americano (17 x 26 cm)"
-    val coverPrice: String? = null,    // "R$ 2,50"
+    val publishedIn: String? = null,
+    val publisher: String? = null,
+    val licensor: String? = null,
+    val category: String? = null,
+    val genre: String? = null,
+    val status: String? = null,
+    val pages: String? = null,
+    val format: String? = null,
+    val coverPrice: String? = null,
     val coverUrl: String? = null,
-    val coverArtist: String? = null    // "Roger Cruz"
+    val coverArtist: String? = null,
+    // Extraído do link "Galeria de capas" → href='../../../capas/slug/codigo'
+    // Usado para navegar de volta à lista de capas da série na DetailsScreen.
+    val seriesUrl: String? = null,
+    val seriesTitle: String? = null
 )
 

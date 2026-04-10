@@ -1,8 +1,8 @@
 package com.kiwizitos.collection.data.remote
 
 import android.util.Log
-import com.kiwizitos.collection.data.model.CoverItem
 import com.kiwizitos.collection.data.model.ComicDetails
+import com.kiwizitos.collection.data.model.CoverItem
 import com.kiwizitos.collection.data.model.CoversSearchResult
 import com.kiwizitos.collection.data.model.PaginationInfo
 import com.kiwizitos.collection.data.model.SerieResult
@@ -30,7 +30,10 @@ object GuiaQuadrinhosParser {
     fun parseSeriesTableWithPagination(html: String): SeriesSearchResult {
         val series = parseSeriesTable(html)
         val pagination = extractPaginationInfo(html)
-        Log.d(TAG, "parseSeriesTable: ${series.size} séries, pg ${pagination.currentPage}, total ${pagination.totalResults}, hasNext=${pagination.hasNextPage}")
+        Log.d(
+            TAG,
+            "parseSeriesTable: ${series.size} séries, pg ${pagination.currentPage}, total ${pagination.totalResults}, hasNext=${pagination.hasNextPage}"
+        )
         return SeriesSearchResult(series = series, paginationInfo = pagination)
     }
 
@@ -59,12 +62,12 @@ object GuiaQuadrinhosParser {
 
                     results.add(
                         SerieResult(
-                            title             = title,
-                            relativeLink      = relativeLink,
-                            publisher         = cells[1].text().trim(),
+                            title = title,
+                            relativeLink = relativeLink,
+                            publisher = cells[1].text().trim(),
                             originalPublisher = cells[2].text().trim(),
-                            year              = cells[3].text().trim(),
-                            issueCount        = cells[4].text().trim()
+                            year = cells[3].text().trim(),
+                            issueCount = cells[4].text().trim()
                         )
                     )
                 } catch (e: Exception) {
@@ -88,10 +91,13 @@ object GuiaQuadrinhosParser {
     fun parseCoverListWithPagination(html: String, seriesTitle: String): CoversSearchResult {
         val covers = parseCoverList(html)
         val pagination = extractPaginationInfo(html)
-        Log.d(TAG, "parseCoverList: ${covers.size} capas, pg ${pagination.currentPage}, hasNext=${pagination.hasNextPage}")
+        Log.d(
+            TAG,
+            "parseCoverList: ${covers.size} capas, pg ${pagination.currentPage}, hasNext=${pagination.hasNextPage}"
+        )
         return CoversSearchResult(
-            seriesTitle    = seriesTitle,
-            covers         = covers,
+            seriesTitle = seriesTitle,
+            covers = covers,
             paginationInfo = pagination
         )
     }
@@ -111,8 +117,8 @@ object GuiaQuadrinhosParser {
                     val links = item.select("a")
                     if (links.isEmpty()) continue
 
-                    val imgLink  = links[0]  // link com a imagem e href para a edição
-                    val imgEl    = imgLink.selectFirst("img") ?: continue
+                    val imgLink = links[0]  // link com a imagem e href para a edição
+                    val imgEl = imgLink.selectFirst("img") ?: continue
 
                     // href: "../../edicao/titulo/codigo/id" → remove "../../"
                     val relativeLink = imgLink.attr("href")
@@ -134,10 +140,10 @@ object GuiaQuadrinhosParser {
 
                     results.add(
                         CoverItem(
-                            title        = titleText,
+                            title = titleText,
                             relativeLink = relativeLink,
-                            coverUrl     = coverUrl,
-                            year         = year
+                            coverUrl = coverUrl,
+                            year = year
                         )
                     )
                 } catch (e: Exception) {
@@ -162,32 +168,49 @@ object GuiaQuadrinhosParser {
             val title = doc.selectFirst("span#nome_titulo_lb")
                 ?.text()?.trim() ?: return null
 
-            val coverUrl    = doc.selectFirst("div#cover img")?.attr("src")?.trim()?.ifBlank { null }
+            val coverUrl = doc.selectFirst("div#cover img")?.attr("src")?.trim()?.ifBlank { null }
             val publishedIn = doc.selectFirst("span#data_publi")?.text()?.trim()?.ifBlank { null }
-            val publisher   = doc.selectFirst("a#editora_link")?.text()?.trim()?.ifBlank { null }
-            val licensor    = doc.selectFirst("span#licenciador")?.text()?.trim()?.ifBlank { null }
-            val category    = doc.selectFirst("span#categoria")?.text()?.trim()?.ifBlank { null }
-            val genre       = doc.selectFirst("span#genero")?.text()?.trim()?.ifBlank { null }
-            val status      = doc.selectFirst("span#status")?.text()?.trim()?.ifBlank { null }
-            val pages       = doc.selectFirst("span#paginas")?.text()?.trim()?.ifBlank { null }
-            val format      = doc.selectFirst("span#formato")?.text()?.trim()?.ifBlank { null }
-            val coverPrice  = doc.selectFirst("span#preco")?.text()?.trim()?.ifBlank { null }
+            val publisher = doc.selectFirst("a#editora_link")?.text()?.trim()?.ifBlank { null }
+            val licensor = doc.selectFirst("span#licenciador")?.text()?.trim()?.ifBlank { null }
+            val category = doc.selectFirst("span#categoria")?.text()?.trim()?.ifBlank { null }
+            val genre = doc.selectFirst("span#genero")?.text()?.trim()?.ifBlank { null }
+            val status = doc.selectFirst("span#status")?.text()?.trim()?.ifBlank { null }
+            val pages = doc.selectFirst("span#paginas")?.text()?.trim()?.ifBlank { null }
+            val format = doc.selectFirst("span#formato")?.text()?.trim()?.ifBlank { null }
+            val coverPrice = doc.selectFirst("span#preco")?.text()?.trim()?.ifBlank { null }
             val coverArtist = doc.selectFirst("div#texto_pag_detalhe")
                 ?.let { extractCoverArtist(it.html()) }
 
+            // "Galeria de capas" → <a href='../../../capas/slug/codigo'>
+            // Remove "../../../" para obter a URL relativa: "capas/slug/codigo"
+            val galeriaLink = doc.selectFirst("div.boxnumeros a[href*='capas/']")
+            val seriesUrl = galeriaLink?.attr("href")
+                ?.removePrefix("../../../")
+                ?.trim()
+                ?.ifBlank { null }
+            // Título da série vem do <h1> ou do span#nome_titulo_lb sem o número
+            val seriesTitle = doc.selectFirst("span#nome_titulo_lb")
+                ?.textNodes()
+                ?.firstOrNull()
+                ?.text()
+                ?.trim()
+                ?.ifBlank { null }
+
             ComicDetails(
-                title       = title,
+                title = title,
                 publishedIn = publishedIn,
-                publisher   = publisher,
-                licensor    = licensor,
-                category    = category,
-                genre       = genre,
-                status      = status,
-                pages       = pages,
-                format      = format,
-                coverPrice  = coverPrice,
-                coverUrl    = coverUrl,
-                coverArtist = coverArtist
+                publisher = publisher,
+                licensor = licensor,
+                category = category,
+                genre = genre,
+                status = status,
+                pages = pages,
+                format = format,
+                coverPrice = coverPrice,
+                coverUrl = coverUrl,
+                coverArtist = coverArtist,
+                seriesUrl = seriesUrl,
+                seriesTitle = seriesTitle
             )
         } catch (e: Exception) {
             Log.e(TAG, "Erro ao parsear detalhes: $url", e)
@@ -212,7 +235,9 @@ object GuiaQuadrinhosParser {
                 node = node.nextSibling()
             }
             result.toString().trim().replace(Regex("\\s+"), " ").ifBlank { null }
-        } catch (e: Exception) { null }
+        } catch (e: Exception) {
+            null
+        }
     }
 
     // ── Paginação ─────────────────────────────────────────────────────────────
@@ -232,7 +257,7 @@ object GuiaQuadrinhosParser {
         return try {
             val doc = Jsoup.parse(html)
 
-            val viewState       = doc.selectFirst("input#__VIEWSTATE")?.attr("value")
+            val viewState = doc.selectFirst("input#__VIEWSTATE")?.attr("value")
             val eventValidation = doc.selectFirst("input#__EVENTVALIDATION")?.attr("value")
 
             // Suporta tanto a página de títulos quanto a de capas.
@@ -240,9 +265,9 @@ object GuiaQuadrinhosParser {
             // Capas:    span#MainContent_lstProfileView_dataPagerNumeric2
             val pagerSpan = doc.selectFirst(
                 "span#dataPagerNumeric, " +
-                "span#dataPagerNumeric2, " +
-                "span#MainContent_lstProfileView_dataPagerNumeric, " +
-                "span#MainContent_lstProfileView_dataPagerNumeric2"
+                        "span#dataPagerNumeric2, " +
+                        "span#MainContent_lstProfileView_dataPagerNumeric, " +
+                        "span#MainContent_lstProfileView_dataPagerNumeric2"
             )
 
             // Botão ">" — a.next_last cujo texto é exatamente ">"
@@ -261,23 +286,26 @@ object GuiaQuadrinhosParser {
             // Suporta ambos os IDs do contador de resultados
             val pageInfoText = doc.selectFirst(
                 "span#dataPageDisplayNumberOfPages, " +
-                "span#dataPageDisplayNumberOfPages2, " +
-                "span#MainContent_lstProfileView_dataPageDisplayNumberOfPages, " +
-                "span#MainContent_lstProfileView_dataPageDisplayNumberOfPages2"
+                        "span#dataPageDisplayNumberOfPages2, " +
+                        "span#MainContent_lstProfileView_dataPageDisplayNumberOfPages, " +
+                        "span#MainContent_lstProfileView_dataPageDisplayNumberOfPages2"
             )?.text() ?: ""
 
             val totalResults = Regex("""de\s+(\d+)""")
                 .find(pageInfoText)?.groupValues?.get(1)?.toIntOrNull() ?: 0
 
-            Log.d(TAG, "Paginação: pg=$currentPage, total=$totalResults, hasNext=$hasNextPage, target=$eventTarget")
+            Log.d(
+                TAG,
+                "Paginação: pg=$currentPage, total=$totalResults, hasNext=$hasNextPage, target=$eventTarget"
+            )
 
             PaginationInfo(
-                currentPage     = currentPage,
-                totalResults    = totalResults,
-                hasNextPage     = hasNextPage,
-                viewState       = viewState,
+                currentPage = currentPage,
+                totalResults = totalResults,
+                hasNextPage = hasNextPage,
+                viewState = viewState,
                 eventValidation = eventValidation,
-                eventTarget     = eventTarget
+                eventTarget = eventTarget
             )
         } catch (e: Exception) {
             Log.e(TAG, "Erro ao extrair paginação", e)
