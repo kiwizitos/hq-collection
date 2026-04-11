@@ -9,21 +9,27 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberAsyncImagePainter
+import com.kiwizitos.collection.data.model.ReadStatus
+import com.kiwizitos.collection.data.model.UserSeries
 import com.kiwizitos.collection.navigation.AppRoute
 import com.kiwizitos.collection.navigation.navEncode
+import com.kiwizitos.collection.presentation.viewmodel.GalleryViewModel
+import com.kiwizitos.collection.presentation.viewmodel.GalleryViewModelFactory
 import com.kiwizitos.siege.components.card.BadgeData
 import com.kiwizitos.siege.components.card.ContentCardStyle
 import com.kiwizitos.siege.components.card.ContentType
 import com.kiwizitos.siege.components.card.SiegeContentCell
 import com.kiwizitos.siege.components.card.StatCard
-import com.kiwizitos.siege.components.foundation.SiegeButton
-import com.kiwizitos.siege.components.foundation.SiegeButtonStyle
 import com.kiwizitos.siege.components.foundation.SiegeText
 import com.kiwizitos.siege.components.foundation.SiegeTextStyle
 import com.kiwizitos.siege.components.layout.SiegeList
@@ -32,146 +38,145 @@ import com.kiwizitos.siege.theme.SiegeTheme
 import com.kiwizitos.siege.tokens.SiegeColors
 import com.kiwizitos.siege.tokens.SiegeSpacing
 
-// ── Dado de teste real ────────────────────────────────────────────────────────
-// Edição: http://www.guiadosquadrinhos.com/edicao/x-men-2099-n-1/x-011158/179145
-// Série:  http://www.guiadosquadrinhos.com/capas/x-men-2099/x-011158
-private data class SeriesItem(
-    val id: String,
-    val title: String,
-    val subtitle: String,
-    val type: ContentType = ContentType.Series,
-    val seriesUrl: String,
-    val latestEditionUrl: String
-)
-
-private val mockSeries = listOf(
-    SeriesItem(
-        id = "x-men-2099",
-        title = "X-Men 2099",
-        subtitle = "Marvel Comics",
-        type = ContentType.Series,
-        seriesUrl = "capas/x-men-2099/x-011158",
-        latestEditionUrl = "edicao/x-men-2099-n-1/x-011158/179145"
-    )
-)
-
 @Composable
-fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
+fun HomeScreen(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    galleryViewModel: GalleryViewModel = viewModel(factory = GalleryViewModelFactory())
+) {
+    val galleryMap by galleryViewModel.galleryMap.collectAsState()
+    val seriesMap  by galleryViewModel.seriesMap.collectAsState()
+
+    // ── Estatísticas ──────────────────────────────────────────────────────────
+    val totalSeries   = seriesMap.size
+    val totalEditions = galleryMap.size
+
+    val editionsFull  by galleryViewModel.editionsFull.collectAsState()
+    val lendoEditions = editionsFull.values.filter { it.readStatus == ReadStatus.LENDO }
+    val savedSeries   = ArrayList<UserSeries>(seriesMap.values)
+
     LazyColumn(
-        modifier = modifier
+        modifier            = modifier
             .fillMaxSize()
-            .padding(SiegeSpacing.Regular)
+            .padding(SiegeSpacing.Regular),
+        verticalArrangement = Arrangement.spacedBy(SiegeSpacing.Medium)
     ) {
+        // ── Saudação ──────────────────────────────────────────────────────────
         item {
-            SiegeText(text = "Bem vindo, usuário", style = SiegeTextStyle.Headline)
+            SiegeText(text = "Minha biblioteca", style = SiegeTextStyle.Headline)
         }
 
+        // ── Stats ─────────────────────────────────────────────────────────────
         item {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = SiegeSpacing.Medium),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                modifier              = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(SiegeSpacing.Small)
             ) {
                 StatCard(
-                    label = "Total de séries",
-                    value = "42",
+                    label       = "Séries salvas",
+                    value       = "$totalSeries",
                     accentColor = SiegeColors.AccentPink,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(SiegeSpacing.XXSmall)
+                    modifier    = Modifier.weight(1f)
                 )
                 StatCard(
-                    label = "Completas",
-                    value = "18",
+                    label       = "Volumes salvos",
+                    value       = "$totalEditions",
                     accentColor = SiegeColors.AccentCyan,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(SiegeSpacing.XXSmall)
+                    modifier    = Modifier.weight(1f)
                 )
             }
         }
 
-        // ── "Continue de onde parou" — navega para a última edição COM contexto de série ──
-        item {
-            SiegeList(
-                items = mockSeries,
-                style = SiegeListStyle.Horizontal,
-                header = {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        SiegeText(text = "Continue de onde parou", style = SiegeTextStyle.Body)
-                        SiegeButton(
-                            text = "Ver tudo",
-                            style = SiegeButtonStyle.Ghost,
-                            onClick = { /* TODO */ }
-                        )
+        // ── Continue lendo ────────────────────────────────────────────────────
+        if (lendoEditions.isNotEmpty()) {
+            item {
+                SiegeList(
+                    items  = lendoEditions,
+                    style  = SiegeListStyle.Horizontal,
+                    header = {
+                        SiegeText(text = "Continue lendo", style = SiegeTextStyle.Body)
                     }
-                }
-            ) { item ->
-                SiegeContentCell(
-                    coverImage = painterResource(ic_menu_gallery),
-                    title = item.title,
-                    style = ContentCardStyle.Cover,
-                    contentType = item.type,
-                    subtitle = item.subtitle,
-                    progress = .1F,
-                    badges = listOf(BadgeData("POSSUÍDA", SiegeColors.AccentCyan)),
-                    onClick = {
-                        val encEditionUrl = navEncode(item.latestEditionUrl)
-                        val encEditionTitle = navEncode(item.title)
-                        val encSeriesUrl = navEncode(item.seriesUrl)
-                        val encSeriesTitle = navEncode(item.title)
-                        navController.navigate(
-                            AppRoute.EditionDetail.createRoute(
-                                editionUrl = encEditionUrl,
-                                editionTitle = encEditionTitle,
-                                seriesUrl = encSeriesUrl,
-                                seriesTitle = encSeriesTitle
+                ) { edition ->
+                    val coverPainter = if (!edition.coverUrl.isNullOrBlank())
+                        rememberAsyncImagePainter(edition.coverUrl)
+                    else
+                        painterResource(ic_menu_gallery)
+
+                    val badges = buildList {
+                        edition.ownership?.let  { add(BadgeData(it.displayLabel.uppercase(), it.badgeColor)) }
+                        edition.readStatus?.let { add(BadgeData(it.displayLabel.uppercase(), it.badgeColor)) }
+                    }
+
+                    SiegeContentCell(
+                        coverImage  = coverPainter,
+                        title       = edition.title,
+                        style       = ContentCardStyle.Cover,
+                        contentType = ContentType.Volume,
+                        subtitle    = edition.seriesTitle,
+                        badges      = badges,
+                        onClick     = {
+                            navController.navigate(
+                                AppRoute.EditionDetail.createRoute(
+                                    editionUrl   = navEncode(edition.guiaUrl),
+                                    editionTitle = navEncode(edition.title),
+                                    seriesUrl    = edition.seriesUrl?.let { navEncode(it) } ?: "",
+                                    seriesTitle  = edition.seriesTitle?.let { navEncode(it) } ?: ""
+                                )
                             )
-                        )
-                    }
-                )
+                        }
+                    )
+                }
             }
         }
 
-        // ── "Coleção completa" — navega para a lista de capas do título ───────
-        item {
-            SiegeList(
-                items = mockSeries,
-                style = SiegeListStyle.Grid(2),
-                header = {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        SiegeText(text = "Coleção completa", style = SiegeTextStyle.Body)
-                        SiegeButton(
-                            text = "Ver tudo",
-                            style = SiegeButtonStyle.Ghost,
-                            onClick = { /* TODO */ }
-                        )
+        // ── Minhas séries ─────────────────────────────────────────────────────
+        if (savedSeries.isNotEmpty()) {
+            item {
+                SiegeList(
+                    items  = savedSeries,
+                    style  = SiegeListStyle.Grid(2),
+                    header = {
+                        Row(
+                            modifier              = Modifier.fillMaxWidth(),
+                            horizontalArrangement = SpaceBetween,
+                            verticalAlignment     = Alignment.CenterVertically
+                        ) {
+                            SiegeText(text = "Minhas séries", style = SiegeTextStyle.Body)
+                        }
                     }
+                ) { series: UserSeries ->
+                    val coverPainter = if (!series.coverUrl.isNullOrBlank())
+                        rememberAsyncImagePainter(series.coverUrl)
+                    else
+                        painterResource(ic_menu_gallery)
+
+                    SiegeContentCell(
+                        coverImage  = coverPainter,
+                        title       = series.seriesTitle,
+                        style       = ContentCardStyle.Grid,
+                        contentType = ContentType.Series,
+                        subtitle    = series.publisher,
+                        onClick     = {
+                            navController.navigate(
+                                AppRoute.SeriesCovers.createRoute(
+                                    navEncode(series.seriesUrl),
+                                    navEncode(series.seriesTitle)
+                                )
+                            )
+                        }
+                    )
                 }
-            ) { item ->
-                SiegeContentCell(
-                    coverImage = painterResource(ic_menu_gallery),
-                    title = item.title,
-                    style = ContentCardStyle.Grid,
-                    contentType = item.type,
-                    subtitle = item.subtitle,
-                    badges = listOf(BadgeData("POSSUÍDA", SiegeColors.AccentCyan)),
-                    onClick = {
-                        val encSeriesUrl = navEncode(item.seriesUrl)
-                        val encSeriesTitle = navEncode(item.title)
-                        navController.navigate(
-                            AppRoute.SeriesCovers.createRoute(encSeriesUrl, encSeriesTitle)
-                        )
-                    }
+            }
+        }
+
+        // ── Estado vazio ──────────────────────────────────────────────────────
+        if (savedSeries.isEmpty() && editionsFull.isEmpty()) {
+            item {
+                SiegeText(
+                    text     = "Sua biblioteca está vazia.\nBusque séries ou edições para começar!",
+                    style    = SiegeTextStyle.Body,
+                    color    = SiegeTheme.colors.textTertiary,
+                    modifier = Modifier.fillMaxWidth().padding(vertical = SiegeSpacing.XLarge)
                 )
             }
         }

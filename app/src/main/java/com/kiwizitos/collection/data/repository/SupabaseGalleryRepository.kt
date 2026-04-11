@@ -3,24 +3,24 @@ package com.kiwizitos.collection.data.repository
 import android.util.Log
 import com.kiwizitos.collection.data.model.ItemStatus
 import com.kiwizitos.collection.data.model.UserItem
+import com.kiwizitos.collection.data.model.UserSeries
 import com.kiwizitos.collection.data.remote.SupabaseModule
 import io.github.jan.supabase.postgrest.from
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-private const val TAG   = "GalleryRepo"
-private const val TABLE = "user_items"
+private const val TAG            = "GalleryRepo"
+private const val TABLE_EDITIONS = "user_editions"
+private const val TABLE_SERIES   = "user_series"
 
 /**
  * Implementação de [GalleryRepository] usando Supabase PostgREST v3.
- * Singleton — use [SupabaseGalleryRepository.instance].
  *
- * Mantém um cache reativo [_galleryCache] indexado por `guiaUrl → ItemStatus`
- * para consultas instantâneas nas telas de busca e capas sem requisições extras.
- *
- * Nota: o upsert no SDK v3 não suporta `returning` — o cache é atualizado
- * otimisticamente com os dados já disponíveis, sem round-trip extra.
+ * • `user_editions` — volumes com status de posse/leitura
+ * • `user_series`   — séries salvas para acesso rápido (sem status)
  */
 class SupabaseGalleryRepository private constructor() : GalleryRepository {
 
@@ -28,43 +28,63 @@ class SupabaseGalleryRepository private constructor() : GalleryRepository {
         val instance: SupabaseGalleryRepository by lazy { SupabaseGalleryRepository() }
     }
 
-    private val _galleryCache = MutableStateFlow<Map<String, ItemStatus>>(emptyMap())
-    override val galleryCache: StateFlow<Map<String, ItemStatus>> = _galleryCache.asStateFlow()
+    private val _editionsCache = MutableStateFlow<Map<String, ItemStatus>>(emptyMap())
+    override val editionsCache: StateFlow<Map<String, ItemStatus>> = _editionsCache.asStateFlow()
 
-    override suspend fun loadGallery(userId: String): Result<List<UserItem>> {
+    private val _editionsFull = MutableStateFlow<Map<String, UserItem>>(emptyMap())
+    override val editionsFull: StateFlow<Map<String, UserItem>> = _editionsFull.asStateFlow()
+
+    private val _seriesCache = MutableStateFlow<Map<String, UserSeries>>(emptyMap())
+    override val seriesCache: StateFlow<Map<String, UserSeries>> = _seriesCache.asStateFlow()
+
+    // ── Carregar galeria completa ─────────────────────────────────────────────
+
+    override suspend fun loadGallery(userId: String): Result<Unit> {
         return try {
-            val items = SupabaseModule.client
-                .from(TABLE)
-                .select {
-                    filter { eq("user_id", userId) }
+            coroutineScope {
+                val editionsDeferred = async {
+                    SupabaseModule.client
+                        .from(TABLE_EDITIONS)
+                        .select { filter { eq("user_id", userId) } }
+                        .decodeList<UserItem>()
                 }
-                .decodeList<UserItem>()
+                val seriesDeferred = async {
+                    SupabaseModule.client
+                        .from(TABLE_SERIES)
+                        .select { filter { eq("user_id", userId) } }
+                        .decodeList<UserSeries>()
+                }
+                val editions   = editionsDeferred.await()
+                val seriesList = seriesDeferred.await()
 
-            _galleryCache.value = items.associate { it.guiaUrl to it.toItemStatus() }
-            Log.d(TAG, "loadGallery: ${items.size} itens carregados")
-            Result.success(items)
+                _editionsCache.value = editions.associate { it.guiaUrl to it.toItemStatus() }
+                _editionsFull.value  = editions.associateBy { it.guiaUrl }
+                _seriesCache.value   = seriesList.associate { it.seriesUrl to it }
+                Log.d(TAG, "loadGallery: ${editions.size} edições, ${seriesList.size} séries")
+            }
+            Result.success(Unit)
         } catch (e: Exception) {
             Log.e(TAG, "loadGallery: erro", e)
             Result.failure(e)
         }
     }
 
+    // ── Edições ───────────────────────────────────────────────────────────────
+
     override suspend fun saveItem(item: UserItem): Result<UserItem> {
         return try {
-            // Garante que user_id está preenchido com o usuário da sessão atual.
-            // Sem isso o RLS INSERT policy rejeita a linha (auth.uid() != user_id).
             val userId = SupabaseModule.auth.currentUserOrNull()?.id
                 ?: return Result.failure(IllegalStateException("Usuário não autenticado"))
 
-            val itemWithUser = item.copy(userId = userId)
-
+            val withUser = item.copy(userId = userId)
             SupabaseModule.client
-                .from(TABLE)
-                .upsert(itemWithUser) { onConflict = "user_id,guia_url" }
+                .from(TABLE_EDITIONS)
+                .upsert(withUser) { onConflict = "user_id,guia_url" }
 
-            _galleryCache.value = _galleryCache.value + (itemWithUser.guiaUrl to itemWithUser.toItemStatus())
-            Log.d(TAG, "saveItem: ${itemWithUser.guiaUrl} → ${itemWithUser.toItemStatus()}")
-            Result.success(itemWithUser)
+            _editionsCache.value = _editionsCache.value + (withUser.guiaUrl to withUser.toItemStatus())
+            _editionsFull.value  = _editionsFull.value  + (withUser.guiaUrl to withUser)
+            Log.d(TAG, "saveItem: ${withUser.guiaUrl} → ${withUser.toItemStatus()}")
+            Result.success(withUser)
         } catch (e: Exception) {
             Log.e(TAG, "saveItem: erro", e)
             Result.failure(e)
@@ -77,7 +97,7 @@ class SupabaseGalleryRepository private constructor() : GalleryRepository {
                 ?: return Result.failure(IllegalStateException("Usuário não autenticado"))
 
             SupabaseModule.client
-                .from(TABLE)
+                .from(TABLE_EDITIONS)
                 .update({
                     set("ownership",   status.ownership?.name)
                     set("read_status", status.readStatus?.name)
@@ -88,7 +108,14 @@ class SupabaseGalleryRepository private constructor() : GalleryRepository {
                     }
                 }
 
-            _galleryCache.value = _galleryCache.value + (guiaUrl to status)
+            _editionsCache.value = _editionsCache.value + (guiaUrl to status)
+            // Atualiza o item completo preservando os campos de metadados
+            _editionsFull.value = _editionsFull.value[guiaUrl]?.let { existing ->
+                _editionsFull.value + (guiaUrl to existing.copy(
+                    ownership  = status.ownership,
+                    readStatus = status.readStatus
+                ))
+            } ?: _editionsFull.value
             Log.d(TAG, "updateStatus: $guiaUrl → $status")
             Result.success(Unit)
         } catch (e: Exception) {
@@ -103,15 +130,11 @@ class SupabaseGalleryRepository private constructor() : GalleryRepository {
                 ?: return Result.failure(IllegalStateException("Usuário não autenticado"))
 
             SupabaseModule.client
-                .from(TABLE)
-                .delete {
-                    filter {
-                        eq("guia_url", guiaUrl)
-                        eq("user_id",  userId)
-                    }
-                }
+                .from(TABLE_EDITIONS)
+                .delete { filter { eq("guia_url", guiaUrl); eq("user_id", userId) } }
 
-            _galleryCache.value = _galleryCache.value - guiaUrl
+            _editionsCache.value = _editionsCache.value - guiaUrl
+            _editionsFull.value  = _editionsFull.value  - guiaUrl
             Log.d(TAG, "removeItem: $guiaUrl removido")
             Result.success(Unit)
         } catch (e: Exception) {
@@ -120,8 +143,49 @@ class SupabaseGalleryRepository private constructor() : GalleryRepository {
         }
     }
 
+    // ── Séries ────────────────────────────────────────────────────────────────
+
+    override suspend fun saveSeries(series: UserSeries): Result<UserSeries> {
+        return try {
+            val userId = SupabaseModule.auth.currentUserOrNull()?.id
+                ?: return Result.failure(IllegalStateException("Usuário não autenticado"))
+
+            val withUser = series.copy(userId = userId)
+            SupabaseModule.client
+                .from(TABLE_SERIES)
+                .upsert(withUser) { onConflict = "user_id,series_url" }
+
+            _seriesCache.value = _seriesCache.value + (withUser.seriesUrl to withUser)
+            Log.d(TAG, "saveSeries: ${withUser.seriesUrl}")
+            Result.success(withUser)
+        } catch (e: Exception) {
+            Log.e(TAG, "saveSeries: erro", e)
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun removeSeries(seriesUrl: String): Result<Unit> {
+        return try {
+            val userId = SupabaseModule.auth.currentUserOrNull()?.id
+                ?: return Result.failure(IllegalStateException("Usuário não autenticado"))
+
+            SupabaseModule.client
+                .from(TABLE_SERIES)
+                .delete { filter { eq("series_url", seriesUrl); eq("user_id", userId) } }
+
+            _seriesCache.value = _seriesCache.value - seriesUrl
+            Log.d(TAG, "removeSeries: $seriesUrl removida")
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Log.e(TAG, "removeSeries: erro", e)
+            Result.failure(e)
+        }
+    }
+
     override fun clearCache() {
-        _galleryCache.value = emptyMap()
-        Log.d(TAG, "clearCache: cache limpo")
+        _editionsCache.value = emptyMap()
+        _editionsFull.value  = emptyMap()
+        _seriesCache.value   = emptyMap()
+        Log.d(TAG, "clearCache: caches limpos")
     }
 }

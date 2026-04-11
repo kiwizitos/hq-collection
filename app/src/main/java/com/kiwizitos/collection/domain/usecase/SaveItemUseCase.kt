@@ -7,4 +7,3 @@ class SaveItemUseCase(private val repo: GalleryRepository) {
     suspend operator fun invoke(item: UserItem): Result<UserItem> =
         repo.saveItem(item)
 }
-

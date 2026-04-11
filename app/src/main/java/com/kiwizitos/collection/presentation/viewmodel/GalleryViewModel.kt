@@ -5,55 +5,63 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.kiwizitos.collection.data.model.ItemStatus
 import com.kiwizitos.collection.data.model.UserItem
+import com.kiwizitos.collection.data.model.UserSeries
 import com.kiwizitos.collection.data.repository.GalleryRepository
 import com.kiwizitos.collection.data.repository.SupabaseGalleryRepository
 import com.kiwizitos.collection.domain.usecase.GetGalleryUseCase
 import com.kiwizitos.collection.domain.usecase.RemoveItemUseCase
+import com.kiwizitos.collection.domain.usecase.RemoveSeriesUseCase
 import com.kiwizitos.collection.domain.usecase.SaveItemUseCase
+import com.kiwizitos.collection.domain.usecase.SaveSeriesUseCase
 import com.kiwizitos.collection.domain.usecase.UpdateItemStatusUseCase
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class GalleryViewModel(
-    private val galleryRepository:       GalleryRepository,
-    private val getGalleryUseCase:       GetGalleryUseCase,
-    private val saveItemUseCase:         SaveItemUseCase,
+    private val getGalleryUseCase: GetGalleryUseCase,
+    private val saveItemUseCase: SaveItemUseCase,
     private val updateItemStatusUseCase: UpdateItemStatusUseCase,
-    private val removeItemUseCase:       RemoveItemUseCase
+    private val removeItemUseCase: RemoveItemUseCase,
+    private val saveSeriesUseCase: SaveSeriesUseCase,
+    private val removeSeriesUseCase: RemoveSeriesUseCase,
+    galleryRepository: GalleryRepository
 ) : ViewModel() {
 
-    /**
-     * Mapa reativo `guiaUrl → ItemStatus` compartilhado via cache do repositório.
-     * Coletado diretamente nas telas para exibir badges.
-     */
-    val galleryMap: StateFlow<Map<String, ItemStatus>> = galleryRepository.galleryCache
+    /** `guiaUrl → ItemStatus` para edições. Usado para badges em busca/capas. */
+    val galleryMap: StateFlow<Map<String, ItemStatus>> = galleryRepository.editionsCache
 
-    /** Carrega a galeria do usuário e popula o cache. Chamar após o login. */
+    /** `guiaUrl → UserItem` — edições completas com title, coverUrl, etc. Usado na Home. */
+    val editionsFull: StateFlow<Map<String, UserItem>> = galleryRepository.editionsFull
+
+    /** `seriesUrl → UserSeries` para séries salvas. Usado na home/biblioteca. */
+    val seriesMap: StateFlow<Map<String, UserSeries>> = galleryRepository.seriesCache
+
     fun loadGallery(userId: String) {
-        viewModelScope.launch {
-            getGalleryUseCase(userId)
-        }
+        viewModelScope.launch { getGalleryUseCase(userId) }
     }
 
-    /** Salva (ou atualiza via upsert) um item na galeria. */
+    // ── Edições (com status) ──────────────────────────────────────────────────
+
     fun saveItem(item: UserItem) {
-        viewModelScope.launch {
-            saveItemUseCase(item)
-        }
+        viewModelScope.launch { saveItemUseCase(item) }
     }
 
-    /** Altera o status (ownership e/ou readStatus) de um item já salvo. */
     fun updateStatus(guiaUrl: String, status: ItemStatus) {
-        viewModelScope.launch {
-            updateItemStatusUseCase(guiaUrl, status)
-        }
+        viewModelScope.launch { updateItemStatusUseCase(guiaUrl, status) }
     }
 
-    /** Remove um item da galeria. */
     fun removeItem(guiaUrl: String) {
-        viewModelScope.launch {
-            removeItemUseCase(guiaUrl)
-        }
+        viewModelScope.launch { removeItemUseCase(guiaUrl) }
+    }
+
+    // ── Séries (sem status — só referência) ───────────────────────────────────
+
+    fun saveSeries(series: UserSeries) {
+        viewModelScope.launch { saveSeriesUseCase(series) }
+    }
+
+    fun removeSeries(seriesUrl: String) {
+        viewModelScope.launch { removeSeriesUseCase(seriesUrl) }
     }
 }
 
@@ -62,11 +70,13 @@ class GalleryViewModelFactory : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val repo = SupabaseGalleryRepository.instance
         return GalleryViewModel(
-            galleryRepository       = repo,
-            getGalleryUseCase       = GetGalleryUseCase(repo),
-            saveItemUseCase         = SaveItemUseCase(repo),
+            galleryRepository = repo,
+            getGalleryUseCase = GetGalleryUseCase(repo),
+            saveItemUseCase = SaveItemUseCase(repo),
             updateItemStatusUseCase = UpdateItemStatusUseCase(repo),
-            removeItemUseCase       = RemoveItemUseCase(repo)
+            removeItemUseCase = RemoveItemUseCase(repo),
+            saveSeriesUseCase = SaveSeriesUseCase(repo),
+            removeSeriesUseCase = RemoveSeriesUseCase(repo)
         ) as T
     }
 }

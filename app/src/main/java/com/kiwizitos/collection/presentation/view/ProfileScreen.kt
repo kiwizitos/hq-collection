@@ -37,15 +37,17 @@ fun ProfileScreen(
     modifier:         Modifier = Modifier
 ) {
     val galleryMap = galleryViewModel.galleryMap.collectAsState().value
+    val seriesMap  = galleryViewModel.seriesMap.collectAsState().value
     val email      = authViewModel.currentUserEmail() ?: "—"
 
-    val totalItems = galleryMap.size
+    val totalEditions = galleryMap.size
+    val totalSeries   = seriesMap.size
 
-    // Contagem por status de posse
+    // Contagem por status de posse — edições
     val countTenho = galleryMap.values.count { it.ownership == Ownership.TENHO }
     val countQuero = galleryMap.values.count { it.ownership == Ownership.QUERO }
 
-    // Contagem por status de leitura
+    // Contagem por status de leitura — edições
     val countLido  = galleryMap.values.count { it.readStatus == ReadStatus.LIDO }
     val countLendo = galleryMap.values.count { it.readStatus == ReadStatus.LENDO }
 
@@ -104,7 +106,8 @@ fun ProfileScreen(
                     Spacer(Modifier.height(SiegeSpacing.XXSmall))
 
                     // Total
-                    StatRow(label = "Total de itens", value = "$totalItems", valueColor = SiegeColors.AccentCyan)
+                    StatRow(label = "Volumes salvos", value = "$totalEditions", valueColor = SiegeColors.AccentCyan)
+                    StatRow(label = "Séries salvas",  value = "$totalSeries",   valueColor = SiegeColors.AccentCyan)
 
                     HorizontalDivider(color = SiegeTheme.colors.outline)
 

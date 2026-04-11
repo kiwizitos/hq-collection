@@ -73,7 +73,11 @@ fun AppNavHost(
 
             // ── Rotas de nível raiz: recebem o padding da bottom bar ──────────
             composable(AppRoute.Home.route) {
-                HomeScreen(navController = navController, modifier = Modifier.padding(innerPadding))
+                HomeScreen(
+                    navController    = navController,
+                    galleryViewModel = galleryViewModel,
+                    modifier         = Modifier.padding(innerPadding)
+                )
             }
             composable(AppRoute.Search.route) {
                 SearchScreen(

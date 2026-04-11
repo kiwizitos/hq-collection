@@ -96,9 +96,7 @@ fun DetailsScreen(
     val galleryMap   by galleryViewModel.galleryMap.collectAsState()
     val uriHandler   = LocalUriHandler.current
 
-    LaunchedEffect(editionUrl) {
-        viewModel.load(editionUrl)
-    }
+    LaunchedEffect(editionUrl) { viewModel.load(editionUrl) }
 
     Scaffold(
         topBar = {
@@ -114,25 +112,22 @@ fun DetailsScreen(
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            imageVector        = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Voltar",
-                            tint = SiegeTheme.colors.textPrimary
+                            tint               = SiegeTheme.colors.textPrimary
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = SiegeTheme.colors.surface,
+                    containerColor    = SiegeTheme.colors.surface,
                     titleContentColor = SiegeTheme.colors.textPrimary
                 )
             )
         }
     ) { innerPadding ->
         when (val s = state) {
-
             is UiState.Idle, is UiState.Loading -> Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
+                modifier = Modifier.fillMaxSize().padding(innerPadding),
                 contentAlignment = Alignment.Center
             ) { CircularProgressIndicator(color = SiegeColors.AccentPink) }
 
@@ -144,31 +139,16 @@ fun DetailsScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                SiegeText(
-                    text = s.message,
-                    style = SiegeTextStyle.Body,
-                    color = SiegeColors.Error,
-                    textAlign = TextAlign.Center
-                )
+                SiegeText(text = s.message, style = SiegeTextStyle.Body, color = SiegeColors.Error, textAlign = TextAlign.Center)
                 Spacer(Modifier.height(SiegeSpacing.Medium))
-                SiegeButton(
-                    text = "Tentar novamente",
-                    style = SiegeButtonStyle.Primary,
-                    onClick = { viewModel.load(editionUrl) }
-                )
+                SiegeButton(text = "Tentar novamente", style = SiegeButtonStyle.Primary, onClick = { viewModel.load(editionUrl) })
             }
 
             is UiState.Empty -> Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
+                modifier = Modifier.fillMaxSize().padding(innerPadding),
                 contentAlignment = Alignment.Center
             ) {
-                SiegeText(
-                    text = "Dados não encontrados",
-                    style = SiegeTextStyle.Body,
-                    color = SiegeTheme.colors.textTertiary
-                )
+                SiegeText(text = "Dados não encontrados", style = SiegeTextStyle.Body, color = SiegeTheme.colors.textTertiary)
             }
 
             is UiState.Success, is UiState.LoadingMore -> {
@@ -177,34 +157,28 @@ fun DetailsScreen(
                     is UiState.LoadingMore -> s.currentData
                     else                   -> return@Scaffold
                 }
-                val resolvedSeriesUrl = if (showSeriesCard) details.seriesUrl
-                    ?: encodedSeriesUrl?.let { navDecode(it) } else null
-                val resolvedSeriesTitle =
-                    if (showSeriesCard) details.seriesTitle ?: encodedSeriesTitle?.let {
-                        navDecode(it)
-                    } else null
+                val resolvedSeriesUrl = if (showSeriesCard)
+                    details.seriesUrl ?: encodedSeriesUrl?.let { navDecode(it) }
+                else null
+                val resolvedSeriesTitle = if (showSeriesCard)
+                    details.seriesTitle ?: encodedSeriesTitle?.let { navDecode(it) }
+                else null
 
                 val currentStatus = galleryMap[editionUrl]
 
                 EditionContent(
-                    details       = details,
-                    seriesTitle   = resolvedSeriesTitle,
-                    itemStatus    = currentStatus,
-                    onSeriesClick = if (resolvedSeriesUrl != null && resolvedSeriesTitle != null) {
-                        {
-                            navController.navigate(
-                                AppRoute.SeriesCovers.createRoute(
-                                    navEncode(resolvedSeriesUrl),
-                                    navEncode(resolvedSeriesTitle)
-                                )
-                            )
-                        }
+                    details        = details,
+                    seriesTitle    = resolvedSeriesTitle,
+                    itemStatus     = currentStatus,
+                    onSeriesClick  = if (resolvedSeriesUrl != null && resolvedSeriesTitle != null) {
+                        { navController.navigate(AppRoute.SeriesCovers.createRoute(navEncode(resolvedSeriesUrl), navEncode(resolvedSeriesTitle))) }
                     } else null,
-                    onSaveItem    = { status ->
+                    onSaveItem     = { status ->
                         galleryViewModel.saveItem(
                             UserItem(
                                 guiaUrl     = editionUrl,
-                                guiaTitle   = details.title,
+                                title       = details.title,
+                                coverUrl    = details.coverUrl,
                                 seriesUrl   = resolvedSeriesUrl,
                                 seriesTitle = resolvedSeriesTitle,
                                 ownership   = status.ownership,
@@ -213,16 +187,12 @@ fun DetailsScreen(
                         )
                     },
                     onUpdateStatus = { status ->
-                        if (status.isNotEmpty()) {
-                            galleryViewModel.updateStatus(editionUrl, status)
-                        } else {
-                            galleryViewModel.removeItem(editionUrl)
-                        }
+                        if (status.isNotEmpty()) galleryViewModel.updateStatus(editionUrl, status)
+                        else galleryViewModel.removeItem(editionUrl)
                     },
                     onRemoveItem   = { galleryViewModel.removeItem(editionUrl) },
                     onOpenWeb      = {
-                        val fullUrl = if (editionUrl.startsWith("http")) editionUrl
-                                      else "$GUIA_BASE/$editionUrl"
+                        val fullUrl = if (editionUrl.startsWith("http")) editionUrl else "$GUIA_BASE/$editionUrl"
                         uriHandler.openUri(fullUrl)
                     },
                     modifier       = Modifier.padding(innerPadding)
@@ -256,9 +226,8 @@ private fun EditionContent(
                 SeriesBelongsToCard(
                     seriesTitle = seriesTitle,
                     onClick     = onSeriesClick,
-                    modifier    = Modifier
-                        .fillMaxWidth()
-                        .padding(start = SiegeSpacing.Regular, end = SiegeSpacing.Regular, top = SiegeSpacing.Regular)
+                    modifier    = Modifier.fillMaxWidth()
+                        .padding(horizontal = SiegeSpacing.Regular, vertical = SiegeSpacing.Regular)
                 )
             }
         }
@@ -284,7 +253,7 @@ private fun EditionContent(
                 modifier            = Modifier.fillMaxWidth().padding(horizontal = SiegeSpacing.Regular),
                 verticalArrangement = Arrangement.spacedBy(SiegeSpacing.XSmall)
             ) {
-                SiegeText(text = details.title, style = SiegeTextStyle.Headline, color = SiegeTheme.colors.textPrimary)
+                SiegeText(text = details.title, style = SiegeTextStyle.Headline)
                 details.publishedIn?.let {
                     SiegeText(text = it, style = SiegeTextStyle.Label, color = SiegeTheme.colors.textTertiary)
                 }
@@ -313,7 +282,7 @@ private fun EditionContent(
             }
         }
 
-        // ── Painel de galeria ─────────────────────────────────────────────────
+        // ── Painel de galeria — edição ─────────────────────────────────────
         item { Spacer(Modifier.height(SiegeSpacing.Regular)) }
         item {
             GalleryPanel(
@@ -369,9 +338,9 @@ private fun GalleryPanel(
     fun applyStatus(newOwnership: Ownership?, newRead: ReadStatus?) {
         val newStatus = ItemStatus(newOwnership, newRead)
         when {
-            itemStatus == null  -> if (newStatus.isNotEmpty()) onSaveItem(newStatus)
+            itemStatus == null     -> if (newStatus.isNotEmpty()) onSaveItem(newStatus)
             newStatus.isNotEmpty() -> onUpdateStatus(newStatus)
-            else                -> onRemoveItem()
+            else                   -> onRemoveItem()
         }
     }
 
@@ -384,11 +353,7 @@ private fun GalleryPanel(
             modifier            = Modifier.fillMaxWidth().padding(SiegeSpacing.Regular),
             verticalArrangement = Arrangement.spacedBy(SiegeSpacing.Small)
         ) {
-            SiegeText(
-                text  = "MINHA GALERIA",
-                style = SiegeTextStyle.Label,
-                color = SiegeColors.AccentPink
-            )
+            SiegeText(text = "MINHA GALERIA", style = SiegeTextStyle.Label, color = SiegeColors.AccentPink)
             Spacer(Modifier.height(SiegeSpacing.XXSmall))
 
             // ── Grupo POSSE ───────────────────────────────────────────────────
@@ -406,11 +371,7 @@ private fun GalleryPanel(
                     SiegeButton(
                         text     = own.displayLabel,
                         style    = if (isSelected) SiegeButtonStyle.Primary else SiegeButtonStyle.Outlined,
-                        onClick  = {
-                            // Clique no chip ativo → deseleciona (toggle)
-                            val newOwn = if (isSelected) null else own
-                            applyStatus(newOwn, currentReadStatus)
-                        },
+                        onClick  = { applyStatus(if (isSelected) null else own, currentReadStatus) },
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -432,11 +393,7 @@ private fun GalleryPanel(
                     SiegeButton(
                         text     = read.displayLabel,
                         style    = if (isSelected) SiegeButtonStyle.Primary else SiegeButtonStyle.Outlined,
-                        onClick  = {
-                            // Clique no chip ativo → deseleciona (toggle)
-                            val newRead = if (isSelected) null else read
-                            applyStatus(currentOwnership, newRead)
-                        },
+                        onClick  = { applyStatus(currentOwnership, if (isSelected) null else read) },
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -459,69 +416,29 @@ private fun GalleryPanel(
 // ── Card "Pertence ao título" ─────────────────────────────────────────────────
 
 @Composable
-private fun SeriesBelongsToCard(
-    seriesTitle: String,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    SiegeCard(
-        style = SiegeCardStyle.Outlined,
-        onClick = onClick,
-        modifier = modifier
-    ) {
+private fun SeriesBelongsToCard(seriesTitle: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
+    SiegeCard(style = SiegeCardStyle.Outlined, onClick = onClick, modifier = modifier) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
+            modifier              = Modifier.fillMaxWidth(),
+            verticalAlignment     = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                SiegeText(
-                    text = "Pertence ao título",
-                    style = SiegeTextStyle.Label,
-                    color = SiegeTheme.colors.textTertiary
-                )
-                SiegeText(
-                    text = seriesTitle,
-                    style = SiegeTextStyle.Body,
-                    color = SiegeColors.AccentCyan,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                SiegeText(text = "Pertence ao título", style = SiegeTextStyle.Label, color = SiegeTheme.colors.textTertiary)
+                SiegeText(text = seriesTitle, style = SiegeTextStyle.Body, color = SiegeColors.AccentCyan, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                contentDescription = "Ver título",
-                tint = SiegeTheme.colors.textTertiary,
-                modifier = Modifier.size(20.dp)
-            )
+            Icon(imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null, tint = SiegeTheme.colors.textTertiary, modifier = Modifier.size(20.dp))
         }
     }
 }
 
-// ── Componentes de ficha ──────────────────────────────────────────────────────
+// ── Ficha técnica ─────────────────────────────────────────────────────────────
 
 @Composable
-private fun InfoCard(
-    title: String,
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
-) {
-    Surface(
-        modifier = modifier,
-        shape = SiegeShapes.Medium,
-        color = SiegeTheme.colors.surfaceVariant
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(SiegeSpacing.Regular),
-            verticalArrangement = Arrangement.spacedBy(SiegeSpacing.Small)
-        ) {
-            SiegeText(
-                text = title,
-                style = SiegeTextStyle.Label,
-                color = SiegeColors.AccentPink
-            )
+private fun InfoCard(title: String, modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+    Surface(modifier = modifier, shape = SiegeShapes.Medium, color = SiegeTheme.colors.surfaceVariant) {
+        Column(modifier = Modifier.fillMaxWidth().padding(SiegeSpacing.Regular), verticalArrangement = Arrangement.spacedBy(SiegeSpacing.Small)) {
+            SiegeText(text = title, style = SiegeTextStyle.Label, color = SiegeColors.AccentPink)
             Spacer(Modifier.height(SiegeSpacing.XXSmall))
             content()
         }
@@ -530,25 +447,9 @@ private fun InfoCard(
 
 @Composable
 private fun InfoRow(label: String, value: String) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.Top
-    ) {
-        SiegeText(
-            text = label,
-            style = SiegeTextStyle.Label,
-            color = SiegeTheme.colors.textTertiary,
-            modifier = Modifier.weight(0.4f)
-        )
-        SiegeText(
-            text = value,
-            style = SiegeTextStyle.Label,
-            color = SiegeTheme.colors.textPrimary,
-            modifier = Modifier
-                .weight(0.6f)
-                .padding(start = SiegeSpacing.Small)
-        )
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.Top) {
+        SiegeText(text = label, style = SiegeTextStyle.Label, color = SiegeTheme.colors.textTertiary, modifier = Modifier.weight(0.4f))
+        SiegeText(text = value, style = SiegeTextStyle.Label, color = SiegeTheme.colors.textPrimary, modifier = Modifier.weight(0.6f).padding(start = SiegeSpacing.Small))
     }
 }
 
@@ -559,10 +460,10 @@ private fun InfoRow(label: String, value: String) {
 private fun DetailsScreenPreview() {
     SiegeTheme(darkTheme = true) {
         DetailsScreen(
-            navController        = rememberNavController(),
-            encodedEditionUrl    = "edicao%2Fx-men-2099-n-1%2Fx-011158%2F179145",
-            encodedEditionTitle  = "X-Men+2099+n%C2%B0+1",
-            onBackClick          = {}
+            navController       = rememberNavController(),
+            encodedEditionUrl   = "edicao%2Fx-men-2099-n-1%2Fx-011158%2F179145",
+            encodedEditionTitle = "X-Men+2099+n%C2%B0+1",
+            onBackClick         = {}
         )
     }
 }

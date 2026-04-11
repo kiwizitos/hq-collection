@@ -2,35 +2,38 @@ package com.kiwizitos.collection.data.repository
 
 import com.kiwizitos.collection.data.model.ItemStatus
 import com.kiwizitos.collection.data.model.UserItem
+import com.kiwizitos.collection.data.model.UserSeries
 import kotlinx.coroutines.flow.StateFlow
 
 /**
  * Contrato da galeria do usuário.
  *
- * O cache em memória [galleryCache] é um [StateFlow] indexado por `guiaUrl`,
- * consultado pelas telas de busca, capas e detalhes para exibir badges sem
- * requisições adicionais ao Supabase.
+ * Dois caches reativos:
+ * - [editionsCache] `guiaUrl → ItemStatus` — edições com status de posse/leitura
+ * - [seriesCache]   `seriesUrl → UserSeries` — séries salvas para acesso rápido
  */
 interface GalleryRepository {
 
-    /**
-     * Mapa reativo: `guiaUrl → ItemStatus`.
-     * Atualizado automaticamente após cada operação de escrita.
-     */
-    val galleryCache: StateFlow<Map<String, ItemStatus>>
+    /** `guiaUrl → ItemStatus` para edições. */
+    val editionsCache: StateFlow<Map<String, ItemStatus>>
 
-    /** Carrega todos os itens do usuário e popula [galleryCache]. */
-    suspend fun loadGallery(userId: String): Result<List<UserItem>>
+    /** `guiaUrl → UserItem` — mapa completo de edições, inclui title, coverUrl, etc. */
+    val editionsFull: StateFlow<Map<String, UserItem>>
 
-    /** Insere ou atualiza (upsert) um item. Atualiza [galleryCache]. */
+    /** `seriesUrl → UserSeries` para séries salvas. */
+    val seriesCache: StateFlow<Map<String, UserSeries>>
+
+    /** Carrega edições e séries do usuário, populando ambos os caches. */
+    suspend fun loadGallery(userId: String): Result<Unit>
+
+    // ── Edições ───────────────────────────────────────────────────────────────
     suspend fun saveItem(item: UserItem): Result<UserItem>
-
-    /** Altera o status (ownership e/ou readStatus) de um item existente. Atualiza [galleryCache]. */
     suspend fun updateStatus(guiaUrl: String, status: ItemStatus): Result<Unit>
-
-    /** Remove um item da galeria. Atualiza [galleryCache]. */
     suspend fun removeItem(guiaUrl: String): Result<Unit>
 
-    /** Limpa o cache (ex: ao fazer logout). */
+    // ── Séries ────────────────────────────────────────────────────────────────
+    suspend fun saveSeries(series: UserSeries): Result<UserSeries>
+    suspend fun removeSeries(seriesUrl: String): Result<Unit>
+
     fun clearCache()
 }

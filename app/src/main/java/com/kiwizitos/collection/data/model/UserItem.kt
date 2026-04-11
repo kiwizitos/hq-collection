@@ -4,28 +4,22 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Representa um item salvo na galeria do usuário.
+ * Volume/edição salvo na galeria do usuário, com status de posse/leitura.
+ * Mapeado para `user_editions` no Supabase.
  *
- * Mapeado para a tabela `user_items` no Supabase.
- * Os nomes das propriedades seguem snake_case via [@SerialName] para
- * corresponder às colunas do banco sem precisar configurar o cliente.
- *
- * [ownership] e [readStatus] são independentes entre si:
- * - Posse: TENHO / QUERO (mutuamente exclusivos)
- * - Leitura: LIDO / LENDO (mutuamente exclusivos)
- * Ao menos um deles deve ser não-nulo para o item estar na galeria.
+ * [ownership] e [readStatus] são independentes — ao menos um deve ser não-nulo.
  */
 @Serializable
 data class UserItem(
-    @SerialName("id")            val id: String           = "",
-    @SerialName("user_id")       val userId: String       = "",
-    @SerialName("guia_url")      val guiaUrl: String,
-    @SerialName("guia_title")    val guiaTitle: String,
-    @SerialName("series_url")    val seriesUrl: String?   = null,
-    @SerialName("series_title")  val seriesTitle: String? = null,
-    @SerialName("ownership")     val ownership: Ownership?   = null,
-    @SerialName("read_status")   val readStatus: ReadStatus? = null
+    @SerialName("id")           val id: String           = "",
+    @SerialName("user_id")      val userId: String       = "",
+    @SerialName("guia_url")     val guiaUrl: String,
+    @SerialName("title")        val title: String,
+    @SerialName("cover_url")    val coverUrl: String?    = null,
+    @SerialName("series_url")   val seriesUrl: String?   = null,
+    @SerialName("series_title") val seriesTitle: String? = null,
+    @SerialName("ownership")    val ownership: Ownership?   = null,
+    @SerialName("read_status")  val readStatus: ReadStatus? = null
 ) {
-    /** Converte para [ItemStatus] para uso na UI e no cache. */
     fun toItemStatus(): ItemStatus = ItemStatus(ownership, readStatus)
 }
