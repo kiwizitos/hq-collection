@@ -2,6 +2,7 @@ package com.kiwizitos.collection.domain.usecase
 
 import com.kiwizitos.collection.data.model.CoversSearchResult
 import com.kiwizitos.collection.data.repository.ComicDataSource
+import javax.inject.Inject
 
 /**
  * Parâmetros para [LoadNextCoversPageUseCase].
@@ -25,7 +26,7 @@ data class LoadNextCoversPageParams(
  *
  * @param dataSource Fonte de dados de quadrinhos.
  */
-class LoadNextCoversPageUseCase(
+class LoadNextCoversPageUseCase @Inject constructor(
     private val dataSource: ComicDataSource
 ) {
     /**
@@ -39,11 +40,11 @@ class LoadNextCoversPageUseCase(
             return Result.failure(IllegalArgumentException("URL da série inválida para paginação de capas"))
         }
         return dataSource.getSeriesCoversNextPage(
-            seriesUrl       = params.seriesUrl,
-            seriesTitle     = params.seriesTitle,
-            viewState       = params.viewState,
+            seriesUrl = params.seriesUrl,
+            seriesTitle = params.seriesTitle,
+            viewState = params.viewState,
             eventValidation = params.eventValidation,
-            eventTarget     = params.eventTarget
+            eventTarget = params.eventTarget
         )
     }
 }

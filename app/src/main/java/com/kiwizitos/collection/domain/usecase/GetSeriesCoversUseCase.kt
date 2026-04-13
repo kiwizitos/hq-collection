@@ -2,6 +2,7 @@ package com.kiwizitos.collection.domain.usecase
 
 import com.kiwizitos.collection.data.model.CoversSearchResult
 import com.kiwizitos.collection.data.repository.ComicDataSource
+import javax.inject.Inject
 
 /**
  * Parâmetros para [GetSeriesCoversUseCase].
@@ -19,7 +20,7 @@ data class GetSeriesCoversParams(
  *
  * @param dataSource Fonte de dados de quadrinhos.
  */
-class GetSeriesCoversUseCase(
+class GetSeriesCoversUseCase @Inject constructor(
     private val dataSource: ComicDataSource
 ) {
     /**
@@ -33,7 +34,7 @@ class GetSeriesCoversUseCase(
             return Result.failure(IllegalArgumentException("URL da série inválida"))
         }
         return dataSource.getSeriesCovers(
-            seriesUrl   = params.seriesUrl,
+            seriesUrl = params.seriesUrl,
             seriesTitle = params.seriesTitle
         )
     }

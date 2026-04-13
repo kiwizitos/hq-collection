@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.ksp)
 }
 
 // Lê credenciais do local.properties sem expô-las no repositório
@@ -26,8 +28,12 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "SUPABASE_URL",      "\"${localProperties["supabase.url"] ?: ""}\"")
-        buildConfigField("String", "SUPABASE_ANON_KEY", "\"${localProperties["supabase.anon.key"] ?: ""}\"")
+        buildConfigField("String", "SUPABASE_URL", "\"${localProperties["supabase.url"] ?: ""}\"")
+        buildConfigField(
+            "String",
+            "SUPABASE_ANON_KEY",
+            "\"${localProperties["supabase.anon.key"] ?: ""}\""
+        )
     }
 
     buildTypes {
@@ -80,6 +86,10 @@ dependencies {
     implementation(libs.supabase.postgrest)
     implementation(libs.ktor.android)
     implementation(libs.kotlinx.serialization.json)
+    // Hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

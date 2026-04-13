@@ -10,28 +10,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
-import com.kiwizitos.collection.data.repository.SupabaseAuthRepository
-import com.kiwizitos.collection.data.repository.SupabaseGalleryRepository
 import com.kiwizitos.collection.navigation.AppNavHost
-import com.kiwizitos.collection.presentation.viewmodel.AuthViewModelFactory
 import com.kiwizitos.collection.presentation.viewmodel.AuthViewModel
 import com.kiwizitos.collection.presentation.viewmodel.GalleryViewModel
-import com.kiwizitos.collection.presentation.viewmodel.GalleryViewModelFactory
 import com.kiwizitos.siege.theme.SiegeTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    // ViewModels criados no nível da Activity para sobreviver a recomposições
-    private val authViewModel: AuthViewModel by viewModels {
-        AuthViewModelFactory(
-            authRepository    = SupabaseAuthRepository.instance,
-            galleryRepository = SupabaseGalleryRepository.instance
-        )
-    }
-
-    private val galleryViewModel: GalleryViewModel by viewModels {
-        GalleryViewModelFactory()
-    }
+    private val authViewModel: AuthViewModel by viewModels()
+    private val galleryViewModel: GalleryViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +31,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             CollectionApp(
-                authViewModel    = authViewModel,
+                authViewModel = authViewModel,
                 galleryViewModel = galleryViewModel
             )
         }
@@ -51,16 +40,16 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun CollectionApp(
-    authViewModel:    AuthViewModel,
+    authViewModel: AuthViewModel,
     galleryViewModel: GalleryViewModel
 ) {
     val navController = rememberNavController()
     SiegeTheme(darkTheme = true) {
         AppNavHost(
-            navController    = navController,
-            authViewModel    = authViewModel,
+            navController = navController,
+            authViewModel = authViewModel,
             galleryViewModel = galleryViewModel,
-            modifier         = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         )
     }
 }

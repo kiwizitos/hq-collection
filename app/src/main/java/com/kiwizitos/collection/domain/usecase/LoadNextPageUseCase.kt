@@ -2,6 +2,7 @@ package com.kiwizitos.collection.domain.usecase
 
 import com.kiwizitos.collection.data.model.SeriesSearchResult
 import com.kiwizitos.collection.data.repository.ComicDataSource
+import javax.inject.Inject
 
 /**
  * Parâmetros para [LoadNextPageUseCase].
@@ -23,7 +24,7 @@ data class LoadNextPageParams(
  *
  * @param dataSource Fonte de dados de quadrinhos.
  */
-class LoadNextPageUseCase(
+class LoadNextPageUseCase @Inject constructor(
     private val dataSource: ComicDataSource
 ) {
     /**
@@ -37,10 +38,10 @@ class LoadNextPageUseCase(
             return Result.failure(IllegalArgumentException("Query inválida para paginação"))
         }
         return dataSource.searchSeriesNextPage(
-            query           = params.query,
-            viewState       = params.viewState,
+            query = params.query,
+            viewState = params.viewState,
             eventValidation = params.eventValidation,
-            eventTarget     = params.eventTarget
+            eventTarget = params.eventTarget
         )
     }
 }

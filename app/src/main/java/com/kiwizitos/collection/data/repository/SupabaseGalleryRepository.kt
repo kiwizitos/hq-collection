@@ -4,17 +4,19 @@ import android.util.Log
 import com.kiwizitos.collection.data.model.ItemStatus
 import com.kiwizitos.collection.data.model.UserItem
 import com.kiwizitos.collection.data.model.UserSeries
-import com.kiwizitos.collection.data.remote.SupabaseModule
+import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
-private const val TAG            = "GalleryRepo"
+private const val TAG = "GalleryRepo"
 private const val TABLE_EDITIONS = "user_editions"
-private const val TABLE_SERIES   = "user_series"
+private const val TABLE_SERIES = "user_series"
 
 /**
  * Implementação de [GalleryRepository] usando Supabase PostgREST v3.
@@ -22,11 +24,9 @@ private const val TABLE_SERIES   = "user_series"
  * • `user_editions` — volumes com status de posse/leitura
  * • `user_series`   — séries salvas para acesso rápido (sem status)
  */
-class SupabaseGalleryRepository private constructor() : GalleryRepository {
-
-    companion object {
-        val instance: SupabaseGalleryRepository by lazy { SupabaseGalleryRepository() }
-    }
+class SupabaseGalleryRepository @Inject constructor(
+    private val client: SupabaseClient
+) : GalleryRepository {
 
     private val _editionsCache = MutableStateFlow<Map<String, ItemStatus>>(emptyMap())
     override val editionsCache: StateFlow<Map<String, ItemStatus>> = _editionsCache.asStateFlow()
@@ -43,23 +43,23 @@ class SupabaseGalleryRepository private constructor() : GalleryRepository {
         return try {
             coroutineScope {
                 val editionsDeferred = async {
-                    SupabaseModule.client
+                    client
                         .from(TABLE_EDITIONS)
                         .select { filter { eq("user_id", userId) } }
                         .decodeList<UserItem>()
                 }
                 val seriesDeferred = async {
-                    SupabaseModule.client
+                    client
                         .from(TABLE_SERIES)
                         .select { filter { eq("user_id", userId) } }
                         .decodeList<UserSeries>()
                 }
-                val editions   = editionsDeferred.await()
+                val editions = editionsDeferred.await()
                 val seriesList = seriesDeferred.await()
 
                 _editionsCache.value = editions.associate { it.guiaUrl to it.toItemStatus() }
-                _editionsFull.value  = editions.associateBy { it.guiaUrl }
-                _seriesCache.value   = seriesList.associate { it.seriesUrl to it }
+                _editionsFull.value = editions.associateBy { it.guiaUrl }
+                _seriesCache.value = seriesList.associate { it.seriesUrl to it }
                 Log.d(TAG, "loadGallery: ${editions.size} edições, ${seriesList.size} séries")
             }
             Result.success(Unit)
@@ -73,16 +73,17 @@ class SupabaseGalleryRepository private constructor() : GalleryRepository {
 
     override suspend fun saveItem(item: UserItem): Result<UserItem> {
         return try {
-            val userId = SupabaseModule.auth.currentUserOrNull()?.id
+            val userId = client.auth.currentUserOrNull()?.id
                 ?: return Result.failure(IllegalStateException("Usuário não autenticado"))
 
             val withUser = item.copy(userId = userId)
-            SupabaseModule.client
+            client
                 .from(TABLE_EDITIONS)
                 .upsert(withUser) { onConflict = "user_id,guia_url" }
 
-            _editionsCache.value = _editionsCache.value + (withUser.guiaUrl to withUser.toItemStatus())
-            _editionsFull.value  = _editionsFull.value  + (withUser.guiaUrl to withUser)
+            _editionsCache.value =
+                _editionsCache.value + (withUser.guiaUrl to withUser.toItemStatus())
+            _editionsFull.value = _editionsFull.value + (withUser.guiaUrl to withUser)
             Log.d(TAG, "saveItem: ${withUser.guiaUrl} → ${withUser.toItemStatus()}")
             Result.success(withUser)
         } catch (e: Exception) {
@@ -93,18 +94,18 @@ class SupabaseGalleryRepository private constructor() : GalleryRepository {
 
     override suspend fun updateStatus(guiaUrl: String, status: ItemStatus): Result<Unit> {
         return try {
-            val userId = SupabaseModule.auth.currentUserOrNull()?.id
+            val userId = client.auth.currentUserOrNull()?.id
                 ?: return Result.failure(IllegalStateException("Usuário não autenticado"))
 
-            SupabaseModule.client
+            client
                 .from(TABLE_EDITIONS)
                 .update({
-                    set("ownership",   status.ownership?.name)
+                    set("ownership", status.ownership?.name)
                     set("read_status", status.readStatus?.name)
                 }) {
                     filter {
                         eq("guia_url", guiaUrl)
-                        eq("user_id",  userId)
+                        eq("user_id", userId)
                     }
                 }
 
@@ -112,7 +113,7 @@ class SupabaseGalleryRepository private constructor() : GalleryRepository {
             // Atualiza o item completo preservando os campos de metadados
             _editionsFull.value = _editionsFull.value[guiaUrl]?.let { existing ->
                 _editionsFull.value + (guiaUrl to existing.copy(
-                    ownership  = status.ownership,
+                    ownership = status.ownership,
                     readStatus = status.readStatus
                 ))
             } ?: _editionsFull.value
@@ -126,15 +127,15 @@ class SupabaseGalleryRepository private constructor() : GalleryRepository {
 
     override suspend fun removeItem(guiaUrl: String): Result<Unit> {
         return try {
-            val userId = SupabaseModule.auth.currentUserOrNull()?.id
+            val userId = client.auth.currentUserOrNull()?.id
                 ?: return Result.failure(IllegalStateException("Usuário não autenticado"))
 
-            SupabaseModule.client
+            client
                 .from(TABLE_EDITIONS)
                 .delete { filter { eq("guia_url", guiaUrl); eq("user_id", userId) } }
 
             _editionsCache.value = _editionsCache.value - guiaUrl
-            _editionsFull.value  = _editionsFull.value  - guiaUrl
+            _editionsFull.value = _editionsFull.value - guiaUrl
             Log.d(TAG, "removeItem: $guiaUrl removido")
             Result.success(Unit)
         } catch (e: Exception) {
@@ -147,11 +148,11 @@ class SupabaseGalleryRepository private constructor() : GalleryRepository {
 
     override suspend fun saveSeries(series: UserSeries): Result<UserSeries> {
         return try {
-            val userId = SupabaseModule.auth.currentUserOrNull()?.id
+            val userId = client.auth.currentUserOrNull()?.id
                 ?: return Result.failure(IllegalStateException("Usuário não autenticado"))
 
             val withUser = series.copy(userId = userId)
-            SupabaseModule.client
+            client
                 .from(TABLE_SERIES)
                 .upsert(withUser) { onConflict = "user_id,series_url" }
 
@@ -166,10 +167,10 @@ class SupabaseGalleryRepository private constructor() : GalleryRepository {
 
     override suspend fun removeSeries(seriesUrl: String): Result<Unit> {
         return try {
-            val userId = SupabaseModule.auth.currentUserOrNull()?.id
+            val userId = client.auth.currentUserOrNull()?.id
                 ?: return Result.failure(IllegalStateException("Usuário não autenticado"))
 
-            SupabaseModule.client
+            client
                 .from(TABLE_SERIES)
                 .delete { filter { eq("series_url", seriesUrl); eq("user_id", userId) } }
 
@@ -184,8 +185,8 @@ class SupabaseGalleryRepository private constructor() : GalleryRepository {
 
     override fun clearCache() {
         _editionsCache.value = emptyMap()
-        _editionsFull.value  = emptyMap()
-        _seriesCache.value   = emptyMap()
+        _editionsFull.value = emptyMap()
+        _seriesCache.value = emptyMap()
         Log.d(TAG, "clearCache: caches limpos")
     }
 }

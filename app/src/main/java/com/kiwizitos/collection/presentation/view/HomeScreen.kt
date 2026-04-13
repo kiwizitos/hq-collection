@@ -15,7 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
@@ -24,7 +24,6 @@ import com.kiwizitos.collection.data.model.UserSeries
 import com.kiwizitos.collection.navigation.AppRoute
 import com.kiwizitos.collection.navigation.navEncode
 import com.kiwizitos.collection.presentation.viewmodel.GalleryViewModel
-import com.kiwizitos.collection.presentation.viewmodel.GalleryViewModelFactory
 import com.kiwizitos.siege.components.card.BadgeData
 import com.kiwizitos.siege.components.card.ContentCardStyle
 import com.kiwizitos.siege.components.card.ContentType
@@ -42,21 +41,21 @@ import com.kiwizitos.siege.tokens.SiegeSpacing
 fun HomeScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
-    galleryViewModel: GalleryViewModel = viewModel(factory = GalleryViewModelFactory())
+    galleryViewModel: GalleryViewModel = hiltViewModel()
 ) {
     val galleryMap by galleryViewModel.galleryMap.collectAsState()
-    val seriesMap  by galleryViewModel.seriesMap.collectAsState()
+    val seriesMap by galleryViewModel.seriesMap.collectAsState()
 
     // ── Estatísticas ──────────────────────────────────────────────────────────
-    val totalSeries   = seriesMap.size
+    val totalSeries = seriesMap.size
     val totalEditions = galleryMap.size
 
-    val editionsFull  by galleryViewModel.editionsFull.collectAsState()
+    val editionsFull by galleryViewModel.editionsFull.collectAsState()
     val lendoEditions = editionsFull.values.filter { it.readStatus == ReadStatus.LENDO }
-    val savedSeries   = ArrayList<UserSeries>(seriesMap.values)
+    val savedSeries = ArrayList<UserSeries>(seriesMap.values)
 
     LazyColumn(
-        modifier            = modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(SiegeSpacing.Regular),
         verticalArrangement = Arrangement.spacedBy(SiegeSpacing.Medium)
@@ -69,20 +68,20 @@ fun HomeScreen(
         // ── Stats ─────────────────────────────────────────────────────────────
         item {
             Row(
-                modifier              = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(SiegeSpacing.Small)
             ) {
                 StatCard(
-                    label       = "Séries salvas",
-                    value       = "$totalSeries",
+                    label = "Séries salvas",
+                    value = "$totalSeries",
                     accentColor = SiegeColors.AccentPink,
-                    modifier    = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f)
                 )
                 StatCard(
-                    label       = "Volumes salvos",
-                    value       = "$totalEditions",
+                    label = "Volumes salvos",
+                    value = "$totalEditions",
                     accentColor = SiegeColors.AccentCyan,
-                    modifier    = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f)
                 )
             }
         }
@@ -91,8 +90,8 @@ fun HomeScreen(
         if (lendoEditions.isNotEmpty()) {
             item {
                 SiegeList(
-                    items  = lendoEditions,
-                    style  = SiegeListStyle.Horizontal,
+                    items = lendoEditions,
+                    style = SiegeListStyle.Horizontal,
                     header = {
                         SiegeText(text = "Continue lendo", style = SiegeTextStyle.Body)
                     }
@@ -103,24 +102,38 @@ fun HomeScreen(
                         painterResource(ic_menu_gallery)
 
                     val badges = buildList {
-                        edition.ownership?.let  { add(BadgeData(it.displayLabel.uppercase(), it.badgeColor)) }
-                        edition.readStatus?.let { add(BadgeData(it.displayLabel.uppercase(), it.badgeColor)) }
+                        edition.ownership?.let {
+                            add(
+                                BadgeData(
+                                    it.displayLabel.uppercase(),
+                                    it.badgeColor
+                                )
+                            )
+                        }
+                        edition.readStatus?.let {
+                            add(
+                                BadgeData(
+                                    it.displayLabel.uppercase(),
+                                    it.badgeColor
+                                )
+                            )
+                        }
                     }
 
                     SiegeContentCell(
-                        coverImage  = coverPainter,
-                        title       = edition.title,
-                        style       = ContentCardStyle.Cover,
+                        coverImage = coverPainter,
+                        title = edition.title,
+                        style = ContentCardStyle.Cover,
                         contentType = ContentType.Volume,
-                        subtitle    = edition.seriesTitle,
-                        badges      = badges,
-                        onClick     = {
+                        subtitle = edition.seriesTitle,
+                        badges = badges,
+                        onClick = {
                             navController.navigate(
                                 AppRoute.EditionDetail.createRoute(
-                                    editionUrl   = navEncode(edition.guiaUrl),
+                                    editionUrl = navEncode(edition.guiaUrl),
                                     editionTitle = navEncode(edition.title),
-                                    seriesUrl    = edition.seriesUrl?.let { navEncode(it) } ?: "",
-                                    seriesTitle  = edition.seriesTitle?.let { navEncode(it) } ?: ""
+                                    seriesUrl = edition.seriesUrl?.let { navEncode(it) } ?: "",
+                                    seriesTitle = edition.seriesTitle?.let { navEncode(it) } ?: ""
                                 )
                             )
                         }
@@ -133,13 +146,13 @@ fun HomeScreen(
         if (savedSeries.isNotEmpty()) {
             item {
                 SiegeList(
-                    items  = savedSeries,
-                    style  = SiegeListStyle.Grid(2),
+                    items = savedSeries,
+                    style = SiegeListStyle.Grid(2),
                     header = {
                         Row(
-                            modifier              = Modifier.fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = SpaceBetween,
-                            verticalAlignment     = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             SiegeText(text = "Minhas séries", style = SiegeTextStyle.Body)
                         }
@@ -151,12 +164,12 @@ fun HomeScreen(
                         painterResource(ic_menu_gallery)
 
                     SiegeContentCell(
-                        coverImage  = coverPainter,
-                        title       = series.seriesTitle,
-                        style       = ContentCardStyle.Grid,
+                        coverImage = coverPainter,
+                        title = series.seriesTitle,
+                        style = ContentCardStyle.Grid,
                         contentType = ContentType.Series,
-                        subtitle    = series.publisher,
-                        onClick     = {
+                        subtitle = series.publisher,
+                        onClick = {
                             navController.navigate(
                                 AppRoute.SeriesCovers.createRoute(
                                     navEncode(series.seriesUrl),
@@ -173,10 +186,12 @@ fun HomeScreen(
         if (savedSeries.isEmpty() && editionsFull.isEmpty()) {
             item {
                 SiegeText(
-                    text     = "Sua biblioteca está vazia.\nBusque séries ou edições para começar!",
-                    style    = SiegeTextStyle.Body,
-                    color    = SiegeTheme.colors.textTertiary,
-                    modifier = Modifier.fillMaxWidth().padding(vertical = SiegeSpacing.XLarge)
+                    text = "Sua biblioteca está vazia.\nBusque séries ou edições para começar!",
+                    style = SiegeTextStyle.Body,
+                    color = SiegeTheme.colors.textTertiary,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = SiegeSpacing.XLarge)
                 )
             }
         }

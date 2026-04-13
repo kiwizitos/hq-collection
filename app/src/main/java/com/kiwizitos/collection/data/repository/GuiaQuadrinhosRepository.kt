@@ -7,6 +7,7 @@ import com.kiwizitos.collection.data.model.SeriesSearchResult
 import com.kiwizitos.collection.data.remote.GuiaQuadrinhosParser
 import com.kiwizitos.collection.data.remote.GuiaQuadrinhosService
 import kotlinx.coroutines.delay
+import javax.inject.Inject
 
 private const val TAG = "GuiaRepository"
 private const val BASE_URL = "http://www.guiadosquadrinhos.com"
@@ -18,7 +19,7 @@ private const val DELAY_MS = 2000L
  * Usa o padrão padrão do site (30 itens/página para séries, 30 para capas).
  * A paginação é feita via POST com ViewState ASP.NET.
  */
-class GuiaQuadrinhosRepository(
+class GuiaQuadrinhosRepository @Inject constructor(
     private val service: GuiaQuadrinhosService
 ) : ComicDataSource {
 
@@ -58,10 +59,10 @@ class GuiaQuadrinhosRepository(
             applyRateLimit()
             Log.d(TAG, "POST próxima página → $url (target=$eventTarget)")
             val html = service.postPageNavigation(
-                url             = url,
-                viewState       = viewState,
+                url = url,
+                viewState = viewState,
                 eventValidation = eventValidation,
-                eventTarget     = eventTarget
+                eventTarget = eventTarget
             )
             Result.success(GuiaQuadrinhosParser.parseSeriesTableWithPagination(html))
         } catch (e: Exception) {
@@ -100,10 +101,10 @@ class GuiaQuadrinhosRepository(
             applyRateLimit()
             Log.d(TAG, "POST capas próxima página → $url")
             val html = service.postPageNavigation(
-                url             = url,
-                viewState       = viewState,
+                url = url,
+                viewState = viewState,
                 eventValidation = eventValidation,
-                eventTarget     = eventTarget
+                eventTarget = eventTarget
             )
             Result.success(GuiaQuadrinhosParser.parseCoverListWithPagination(html, seriesTitle))
         } catch (e: Exception) {

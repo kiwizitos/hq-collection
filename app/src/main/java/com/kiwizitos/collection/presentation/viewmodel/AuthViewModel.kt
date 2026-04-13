@@ -1,23 +1,25 @@
 package com.kiwizitos.collection.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.kiwizitos.collection.data.repository.AuthRepository
 import com.kiwizitos.collection.domain.usecase.SignInUseCase
 import com.kiwizitos.collection.domain.usecase.SignOutUseCase
 import com.kiwizitos.collection.domain.usecase.SignUpUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.net.UnknownHostException
+import javax.inject.Inject
 
-class AuthViewModel(
+@HiltViewModel
+class AuthViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val signInUseCase:  SignInUseCase,
-    private val signUpUseCase:  SignUpUseCase,
+    private val signInUseCase: SignInUseCase,
+    private val signUpUseCase: SignUpUseCase,
     private val signOutUseCase: SignOutUseCase
 ) : ViewModel() {
 
@@ -27,7 +29,7 @@ class AuthViewModel(
     val isLoggedIn: Boolean get() = authRepository.isLoggedIn()
 
     fun currentUserEmail(): String? = authRepository.currentUserEmail()
-    fun currentUserId():    String? = authRepository.currentUserId()
+    fun currentUserId(): String? = authRepository.currentUserId()
 
     fun signIn(email: String, password: String) {
         viewModelScope.launch {
@@ -65,24 +67,11 @@ class AuthViewModel(
     }
 
     private fun friendlyMessage(t: Throwable) = when (t) {
-        is UnknownHostException        -> "Sem conexão com a internet"
-        is IOException                 -> "Erro de conexão. Verifique sua internet."
-        is IllegalArgumentException    -> t.message ?: "Dados inválidos"
-        else                           -> t.message ?: "Erro desconhecido. Tente novamente."
+        is UnknownHostException -> "Sem conexão com a internet"
+        is IOException -> "Erro de conexão. Verifique sua internet."
+        is IllegalArgumentException -> t.message ?: "Dados inválidos"
+        else -> t.message ?: "Erro desconhecido. Tente novamente."
     }
 }
 
-class AuthViewModelFactory(
-    private val authRepository: AuthRepository,
-    private val galleryRepository: com.kiwizitos.collection.data.repository.GalleryRepository
-) : ViewModelProvider.Factory {
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T =
-        AuthViewModel(
-            authRepository = authRepository,
-            signInUseCase  = SignInUseCase(authRepository),
-            signUpUseCase  = SignUpUseCase(authRepository),
-            signOutUseCase = SignOutUseCase(authRepository, galleryRepository)
-        ) as T
-}
 

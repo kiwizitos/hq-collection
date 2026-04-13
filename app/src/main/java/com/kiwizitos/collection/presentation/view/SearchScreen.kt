@@ -25,7 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.kiwizitos.collection.data.model.ItemStatus
@@ -33,10 +33,8 @@ import com.kiwizitos.collection.data.model.SerieResult
 import com.kiwizitos.collection.navigation.AppRoute
 import com.kiwizitos.collection.navigation.navEncode
 import com.kiwizitos.collection.presentation.viewmodel.GalleryViewModel
-import com.kiwizitos.collection.presentation.viewmodel.GalleryViewModelFactory
 import com.kiwizitos.collection.presentation.viewmodel.PaginatedSearchResult
 import com.kiwizitos.collection.presentation.viewmodel.SearchViewModel
-import com.kiwizitos.collection.presentation.viewmodel.SearchViewModelFactory
 import com.kiwizitos.collection.presentation.viewmodel.UiState
 import com.kiwizitos.siege.components.card.SiegeCard
 import com.kiwizitos.siege.components.card.SiegeCardStyle
@@ -53,8 +51,8 @@ import com.kiwizitos.siege.tokens.SiegeSpacing
 fun SearchScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
-    galleryViewModel: GalleryViewModel = viewModel(factory = GalleryViewModelFactory()),
-    viewModel: SearchViewModel = viewModel(factory = SearchViewModelFactory())
+    galleryViewModel: GalleryViewModel = hiltViewModel(),
+    viewModel: SearchViewModel = hiltViewModel()
 ) {
     var query by rememberSaveable { mutableStateOf("") }
     val searchState by viewModel.searchState.collectAsState()

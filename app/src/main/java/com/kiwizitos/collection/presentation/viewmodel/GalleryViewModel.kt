@@ -1,23 +1,24 @@
 package com.kiwizitos.collection.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.kiwizitos.collection.data.model.ItemStatus
 import com.kiwizitos.collection.data.model.UserItem
 import com.kiwizitos.collection.data.model.UserSeries
 import com.kiwizitos.collection.data.repository.GalleryRepository
-import com.kiwizitos.collection.data.repository.SupabaseGalleryRepository
 import com.kiwizitos.collection.domain.usecase.GetGalleryUseCase
 import com.kiwizitos.collection.domain.usecase.RemoveItemUseCase
 import com.kiwizitos.collection.domain.usecase.RemoveSeriesUseCase
 import com.kiwizitos.collection.domain.usecase.SaveItemUseCase
 import com.kiwizitos.collection.domain.usecase.SaveSeriesUseCase
 import com.kiwizitos.collection.domain.usecase.UpdateItemStatusUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class GalleryViewModel(
+@HiltViewModel
+class GalleryViewModel @Inject constructor(
     private val getGalleryUseCase: GetGalleryUseCase,
     private val saveItemUseCase: SaveItemUseCase,
     private val updateItemStatusUseCase: UpdateItemStatusUseCase,
@@ -65,18 +66,3 @@ class GalleryViewModel(
     }
 }
 
-class GalleryViewModelFactory : ViewModelProvider.Factory {
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        val repo = SupabaseGalleryRepository.instance
-        return GalleryViewModel(
-            galleryRepository = repo,
-            getGalleryUseCase = GetGalleryUseCase(repo),
-            saveItemUseCase = SaveItemUseCase(repo),
-            updateItemStatusUseCase = UpdateItemStatusUseCase(repo),
-            removeItemUseCase = RemoveItemUseCase(repo),
-            saveSeriesUseCase = SaveSeriesUseCase(repo),
-            removeSeriesUseCase = RemoveSeriesUseCase(repo)
-        ) as T
-    }
-}

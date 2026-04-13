@@ -1,25 +1,28 @@
-package com.kiwizitos.collection.data.remote
+package com.kiwizitos.collection.di
 
+import com.kiwizitos.collection.data.remote.GuiaQuadrinhosService
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 
-/**
- * Módulo de rede — provê instâncias singleton de [OkHttpClient], [Retrofit]
- * e [GuiaQuadrinhosService] sem necessidade de injeção de dependência.
- *
- * Inicialização lazy: as instâncias só são criadas na primeira utilização.
- */
-object NetworkModule {
+@Module
+@InstallIn(SingletonComponent::class)
+object NetworkDiModule {
 
-    private val okHttpClient: OkHttpClient by lazy {
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(): OkHttpClient {
         val logging = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BASIC
         }
-
-        OkHttpClient.Builder()
+        return OkHttpClient.Builder()
             .addInterceptor(logging)
             .addInterceptor { chain ->
                 val request = chain.request().newBuilder()
@@ -34,17 +37,18 @@ object NetworkModule {
             .build()
     }
 
-    private val retrofit: Retrofit by lazy {
+    @Provides
+    @Singleton
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit =
         Retrofit.Builder()
             .baseUrl("http://www.guiadosquadrinhos.com/")
             .client(okHttpClient)
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
-    }
 
-    /** Instância singleton do serviço Retrofit. */
-    val service: GuiaQuadrinhosService by lazy {
+    @Provides
+    @Singleton
+    fun provideGuiaQuadrinhosService(retrofit: Retrofit): GuiaQuadrinhosService =
         retrofit.create(GuiaQuadrinhosService::class.java)
-    }
 }
 

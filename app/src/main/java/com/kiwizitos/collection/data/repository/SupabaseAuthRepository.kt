@@ -1,27 +1,23 @@
 package com.kiwizitos.collection.data.repository
 
 import android.util.Log
-import com.kiwizitos.collection.data.remote.SupabaseModule
+import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
+import javax.inject.Inject
 
 private const val TAG = "SupabaseAuth"
 
-/**
- * Implementação de [AuthRepository] usando o SDK do Supabase v3.
- * Singleton — use [SupabaseAuthRepository.instance].
- */
-class SupabaseAuthRepository private constructor() : AuthRepository {
+class SupabaseAuthRepository @Inject constructor(
+    private val client: SupabaseClient
+) : AuthRepository {
 
-    companion object {
-        val instance: SupabaseAuthRepository by lazy { SupabaseAuthRepository() }
-    }
-
-    private val auth get() = SupabaseModule.auth
+    private val auth get() = client.auth
 
     override suspend fun signIn(email: String, password: String): Result<Unit> {
         return try {
             auth.signInWith(Email) {
-                this.email    = email
+                this.email = email
                 this.password = password
             }
             Log.d(TAG, "signIn: sucesso para $email")
@@ -35,7 +31,7 @@ class SupabaseAuthRepository private constructor() : AuthRepository {
     override suspend fun signUp(email: String, password: String): Result<Unit> {
         return try {
             auth.signUpWith(Email) {
-                this.email    = email
+                this.email = email
                 this.password = password
             }
             Log.d(TAG, "signUp: sucesso para $email")
@@ -57,8 +53,8 @@ class SupabaseAuthRepository private constructor() : AuthRepository {
         }
     }
 
-    override fun currentUserId(): String?    = auth.currentUserOrNull()?.id
+    override fun currentUserId(): String? = auth.currentUserOrNull()?.id
     override fun currentUserEmail(): String? = auth.currentUserOrNull()?.email
-    override fun isLoggedIn(): Boolean       = auth.currentSessionOrNull() != null
+    override fun isLoggedIn(): Boolean = auth.currentUserOrNull() != null
 }
 

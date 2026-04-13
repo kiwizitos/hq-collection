@@ -13,6 +13,7 @@ import com.kiwizitos.collection.domain.usecase.LoadNextPageParams
 import com.kiwizitos.collection.domain.usecase.LoadNextPageUseCase
 import com.kiwizitos.collection.domain.usecase.SearchComicsParams
 import com.kiwizitos.collection.domain.usecase.SearchComicsUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,6 +22,7 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
+import javax.inject.Inject
 
 // ── UiState ───────────────────────────────────────────────────────────────────
 
@@ -88,7 +90,8 @@ data class PaginatedCoversResult(
  * @param getSeriesCoversUseCase  Caso de uso de capas de uma série.
  * @param loadNextCoversPageUseCase Caso de uso de próxima página de capas.
  */
-class SearchViewModel(
+@HiltViewModel
+class SearchViewModel @Inject constructor(
     private val searchComicsUseCase: SearchComicsUseCase,
     private val loadNextPageUseCase: LoadNextPageUseCase,
     private val getSeriesCoversUseCase: GetSeriesCoversUseCase,
@@ -147,7 +150,7 @@ class SearchViewModel(
                     } else {
                         UiState.Success(
                             PaginatedSearchResult(
-                                series         = searchResult.series,
+                                series = searchResult.series,
                                 paginationInfo = searchResult.paginationInfo
                             )
                         )
@@ -183,10 +186,10 @@ class SearchViewModel(
 
             val result = loadNextPageUseCase(
                 LoadNextPageParams(
-                    query           = currentSearchQuery,
-                    viewState       = pagination.viewState,
+                    query = currentSearchQuery,
+                    viewState = pagination.viewState,
                     eventValidation = pagination.eventValidation,
-                    eventTarget     = pagination.eventTarget
+                    eventTarget = pagination.eventTarget
                 )
             )
 
@@ -196,7 +199,7 @@ class SearchViewModel(
                 onSuccess = { newPage ->
                     UiState.Success(
                         PaginatedSearchResult(
-                            series         = currentState.data.series + newPage.series,
+                            series = currentState.data.series + newPage.series,
                             paginationInfo = newPage.paginationInfo
                         )
                     )
@@ -209,7 +212,11 @@ class SearchViewModel(
                         )
                     ).also {
                         // Log do erro sem bloquear a UI
-                        android.util.Log.e("SearchViewModel", "loadNextSearchPage error: ${error.message}", error)
+                        android.util.Log.e(
+                            "SearchViewModel",
+                            "loadNextSearchPage error: ${error.message}",
+                            error
+                        )
                     }
                 }
             )
@@ -233,7 +240,7 @@ class SearchViewModel(
 
             val result = getSeriesCoversUseCase(
                 GetSeriesCoversParams(
-                    seriesUrl   = seriesUrl,
+                    seriesUrl = seriesUrl,
                     seriesTitle = seriesTitle
                 )
             )
@@ -245,8 +252,8 @@ class SearchViewModel(
                     } else {
                         UiState.Success(
                             PaginatedCoversResult(
-                                seriesTitle    = coversResult.seriesTitle,
-                                covers         = coversResult.covers,
+                                seriesTitle = coversResult.seriesTitle,
+                                covers = coversResult.covers,
                                 paginationInfo = coversResult.paginationInfo
                             )
                         )
@@ -282,11 +289,11 @@ class SearchViewModel(
 
             val result = loadNextCoversPageUseCase(
                 LoadNextCoversPageParams(
-                    seriesUrl       = currentSeriesUrl,
-                    seriesTitle     = currentState.data.seriesTitle,
-                    viewState       = pagination.viewState,
+                    seriesUrl = currentSeriesUrl,
+                    seriesTitle = currentState.data.seriesTitle,
+                    viewState = pagination.viewState,
                     eventValidation = pagination.eventValidation,
-                    eventTarget     = pagination.eventTarget
+                    eventTarget = pagination.eventTarget
                 )
             )
 
@@ -296,14 +303,18 @@ class SearchViewModel(
                 onSuccess = { newPage ->
                     UiState.Success(
                         PaginatedCoversResult(
-                            seriesTitle    = currentState.data.seriesTitle,
-                            covers         = currentState.data.covers + newPage.covers,
+                            seriesTitle = currentState.data.seriesTitle,
+                            covers = currentState.data.covers + newPage.covers,
                             paginationInfo = newPage.paginationInfo
                         )
                     )
                 },
                 onFailure = { error ->
-                    android.util.Log.e("SearchViewModel", "loadNextCoversPage error: ${error.message}", error)
+                    android.util.Log.e(
+                        "SearchViewModel",
+                        "loadNextCoversPage error: ${error.message}",
+                        error
+                    )
                     UiState.Success(currentState.data)
                 }
             )
@@ -320,9 +331,9 @@ class SearchViewModel(
 
     /** Converte uma exceção em mensagem amigável para o usuário. */
     private fun friendlyErrorMessage(throwable: Throwable): String = when (throwable) {
-        is UnknownHostException    -> "Sem conexão com a internet"
-        is SocketTimeoutException  -> "Tempo de conexão esgotado. Tente novamente."
-        is IOException             -> "Erro de conexão. Verifique sua internet."
+        is UnknownHostException -> "Sem conexão com a internet"
+        is SocketTimeoutException -> "Tempo de conexão esgotado. Tente novamente."
+        is IOException -> "Erro de conexão. Verifique sua internet."
         is IllegalArgumentException -> throwable.message ?: "Parâmetros inválidos"
         else -> throwable.message ?: "Erro desconhecido. Tente novamente."
     }
