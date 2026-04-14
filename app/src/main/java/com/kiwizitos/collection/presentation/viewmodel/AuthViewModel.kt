@@ -26,6 +26,20 @@ class AuthViewModel @Inject constructor(
     private val _authState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
     val authState: StateFlow<UiState<Unit>> = _authState.asStateFlow()
 
+    /**
+     * `true` assim que a sessão persistida foi restaurada do armazenamento local.
+     * A UI deve aguardar esse sinal antes de decidir a rota inicial ou carregar dados.
+     */
+    private val _sessionRestored = MutableStateFlow(false)
+    val sessionRestored: StateFlow<Boolean> = _sessionRestored.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            authRepository.restoreSession()
+            _sessionRestored.value = true
+        }
+    }
+
     val isLoggedIn: Boolean get() = authRepository.isLoggedIn()
 
     fun currentUserEmail(): String? = authRepository.currentUserEmail()

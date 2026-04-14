@@ -9,12 +9,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.kiwizitos.collection.navigation.AppNavHost
 import com.kiwizitos.collection.presentation.viewmodel.AuthViewModel
 import com.kiwizitos.collection.presentation.viewmodel.GalleryViewModel
 import com.kiwizitos.siege.theme.SiegeTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -26,8 +29,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        // Restaura galeria se já há sessão ativa (cold start com sessão salva)
-        authViewModel.currentUserId()?.let { galleryViewModel.loadGallery(it) }
+        // Aguarda a restauração da sessão persistida antes de carregar a galeria.
+        // authViewModel.restoreSession() é chamado no init do ViewModel, então
+        // apenas esperamos o sinal de sessão restaurada aqui.
+        lifecycleScope.launch {
+            authViewModel.sessionRestored.first { it }
+            authViewModel.currentUserId()?.let { galleryViewModel.loadGallery(it) }
+        }
 
         setContent {
             CollectionApp(

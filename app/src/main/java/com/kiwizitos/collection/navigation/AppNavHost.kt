@@ -1,10 +1,14 @@
 package com.kiwizitos.collection.navigation
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -37,6 +41,18 @@ fun AppNavHost(
     galleryViewModel: GalleryViewModel,
     modifier: Modifier = Modifier
 ) {
+    val sessionRestored by authViewModel.sessionRestored.collectAsState()
+
+    // Aguarda restauração da sessão antes de montar o grafo de navegação.
+    // Isso evita que a tela inicial seja determinada com currentUserOrNull() == null
+    // enquanto o Supabase ainda está carregando a sessão do armazenamento local.
+    if (!sessionRestored) {
+        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+        return
+    }
+
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 

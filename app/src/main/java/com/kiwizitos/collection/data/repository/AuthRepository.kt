@@ -5,6 +5,12 @@ package com.kiwizitos.collection.data.repository
  * A implementação concreta [SupabaseAuthRepository] usa o SDK do Supabase.
  */
 interface AuthRepository {
+    /**
+     * Restaura a sessão persistida do armazenamento local.
+     * Deve ser chamado no startup antes de qualquer verificação de estado de login.
+     */
+    suspend fun restoreSession(): Result<Unit>
+
     /** Autentica com e-mail e senha. */
     suspend fun signIn(email: String, password: String): Result<Unit>
 

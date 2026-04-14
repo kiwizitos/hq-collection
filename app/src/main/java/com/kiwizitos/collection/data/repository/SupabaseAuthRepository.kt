@@ -14,6 +14,18 @@ class SupabaseAuthRepository @Inject constructor(
 
     private val auth get() = client.auth
 
+    override suspend fun restoreSession(): Result<Unit> {
+        return try {
+            auth.loadFromStorage()
+            Log.d(TAG, "restoreSession: sessão restaurada — userId=${auth.currentUserOrNull()?.id}")
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Log.e(TAG, "restoreSession: erro ao restaurar sessão", e)
+            // Não é um erro fatal — o usuário simplesmente precisará logar novamente
+            Result.success(Unit)
+        }
+    }
+
     override suspend fun signIn(email: String, password: String): Result<Unit> {
         return try {
             auth.signInWith(Email) {
