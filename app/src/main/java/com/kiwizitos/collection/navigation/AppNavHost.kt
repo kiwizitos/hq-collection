@@ -115,7 +115,11 @@ fun AppNavHost(
                 )
             }
             composable(AppRoute.Library.route) {
-                LibraryScreen(modifier = Modifier.padding(innerPadding))
+                LibraryScreen(
+                    modifier      = Modifier.padding(innerPadding),
+                    navController = navController,
+                    galleryViewModel = galleryViewModel
+                )
             }
 
             // ── Telas de detalhe: têm Scaffold próprio, ignoram innerPadding ──
