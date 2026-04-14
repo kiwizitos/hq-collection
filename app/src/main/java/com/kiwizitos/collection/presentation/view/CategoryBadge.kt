@@ -29,7 +29,7 @@ fun CategoryBadge(status: ItemStatus, modifier: Modifier = Modifier) {
     if (badges.isEmpty()) return
 
     Row(
-        modifier            = modifier,
+        modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(SiegeSpacing.XXSmall)
     ) {
         badges.forEach { (label, color) ->
@@ -49,7 +49,7 @@ private fun StatusChip(label: String, color: Color) {
             .padding(horizontal = SiegeSpacing.Small, vertical = SiegeSpacing.XXSmall)
     ) {
         SiegeText(
-            text  = label.uppercase(),
+            text = label.uppercase(),
             style = SiegeTextStyle.Label,
             color = color
         )

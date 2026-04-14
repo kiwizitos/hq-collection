@@ -31,28 +31,28 @@ import com.kiwizitos.siege.tokens.SiegeSpacing
 
 @Composable
 fun ProfileScreen(
-    authViewModel:    AuthViewModel,
+    authViewModel: AuthViewModel,
     galleryViewModel: GalleryViewModel,
-    onSignOut:        () -> Unit,
-    modifier:         Modifier = Modifier
+    onSignOut: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val galleryMap = galleryViewModel.galleryMap.collectAsState().value
-    val seriesMap  = galleryViewModel.seriesMap.collectAsState().value
-    val email      = authViewModel.currentUserEmail() ?: "—"
+    val seriesMap = galleryViewModel.seriesMap.collectAsState().value
+    val email = authViewModel.currentUserEmail() ?: "—"
 
     val totalEditions = galleryMap.size
-    val totalSeries   = seriesMap.size
+    val totalSeries = seriesMap.size
 
     // Contagem por status de posse — edições
     val countTenho = galleryMap.values.count { it.ownership == Ownership.TENHO }
     val countQuero = galleryMap.values.count { it.ownership == Ownership.QUERO }
 
     // Contagem por status de leitura — edições
-    val countLido  = galleryMap.values.count { it.readStatus == ReadStatus.LIDO }
+    val countLido = galleryMap.values.count { it.readStatus == ReadStatus.LIDO }
     val countLendo = galleryMap.values.count { it.readStatus == ReadStatus.LENDO }
 
     LazyColumn(
-        modifier            = modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(SiegeSpacing.Regular),
         verticalArrangement = Arrangement.spacedBy(SiegeSpacing.Regular)
@@ -70,16 +70,16 @@ fun ProfileScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(
-                    modifier            = Modifier.padding(SiegeSpacing.Regular),
+                    modifier = Modifier.padding(SiegeSpacing.Regular),
                     verticalArrangement = Arrangement.spacedBy(SiegeSpacing.XSmall)
                 ) {
                     SiegeText(
-                        text  = "E-mail",
+                        text = "E-mail",
                         style = SiegeTextStyle.Label,
                         color = SiegeTheme.colors.textTertiary
                     )
                     SiegeText(
-                        text  = email,
+                        text = email,
                         style = SiegeTextStyle.Body,
                         color = SiegeTheme.colors.textPrimary
                     )
@@ -90,36 +90,60 @@ fun ProfileScreen(
         // ── Stats da galeria ──────────────────────────────────────────────────
         item {
             Surface(
-                shape    = SiegeShapes.Medium,
-                color    = SiegeTheme.colors.surfaceVariant,
+                shape = SiegeShapes.Medium,
+                color = SiegeTheme.colors.surfaceVariant,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(
-                    modifier            = Modifier.padding(SiegeSpacing.Regular),
+                    modifier = Modifier.padding(SiegeSpacing.Regular),
                     verticalArrangement = Arrangement.spacedBy(SiegeSpacing.Small)
                 ) {
                     SiegeText(
-                        text  = "GALERIA",
+                        text = "GALERIA",
                         style = SiegeTextStyle.Label,
                         color = SiegeColors.AccentPink
                     )
                     Spacer(Modifier.height(SiegeSpacing.XXSmall))
 
                     // Total
-                    StatRow(label = "Volumes salvos", value = "$totalEditions", valueColor = SiegeColors.AccentCyan)
-                    StatRow(label = "Séries salvas",  value = "$totalSeries",   valueColor = SiegeColors.AccentCyan)
+                    StatRow(
+                        label = "Volumes salvos",
+                        value = "$totalEditions",
+                        valueColor = SiegeColors.AccentCyan
+                    )
+                    StatRow(
+                        label = "Séries salvas",
+                        value = "$totalSeries",
+                        valueColor = SiegeColors.AccentCyan
+                    )
 
                     HorizontalDivider(color = SiegeTheme.colors.outline)
 
                     // Posse
-                    StatRow(label = "Tenho",  value = "$countTenho", valueColor = Ownership.TENHO.badgeColor)
-                    StatRow(label = "Quero",  value = "$countQuero", valueColor = Ownership.QUERO.badgeColor)
+                    StatRow(
+                        label = "Tenho",
+                        value = "$countTenho",
+                        valueColor = Ownership.TENHO.badgeColor
+                    )
+                    StatRow(
+                        label = "Quero",
+                        value = "$countQuero",
+                        valueColor = Ownership.QUERO.badgeColor
+                    )
 
                     HorizontalDivider(color = SiegeTheme.colors.outline)
 
                     // Leitura
-                    StatRow(label = "Lido",   value = "$countLido",  valueColor = ReadStatus.LIDO.badgeColor)
-                    StatRow(label = "Lendo",  value = "$countLendo", valueColor = ReadStatus.LENDO.badgeColor)
+                    StatRow(
+                        label = "Lido",
+                        value = "$countLido",
+                        valueColor = ReadStatus.LIDO.badgeColor
+                    )
+                    StatRow(
+                        label = "Lendo",
+                        value = "$countLendo",
+                        valueColor = ReadStatus.LENDO.badgeColor
+                    )
                 }
             }
         }
@@ -127,9 +151,9 @@ fun ProfileScreen(
         // ── Botão sair ────────────────────────────────────────────────────────
         item {
             SiegeButton(
-                text     = "Sair",
-                style    = SiegeButtonStyle.Outlined,
-                onClick  = {
+                text = "Sair",
+                style = SiegeButtonStyle.Outlined,
+                onClick = {
                     authViewModel.signOut()
                     onSignOut()
                 },
@@ -142,11 +166,15 @@ fun ProfileScreen(
 @Composable
 private fun StatRow(label: String, value: String, valueColor: androidx.compose.ui.graphics.Color) {
     Row(
-        modifier              = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment     = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        SiegeText(text = label, style = SiegeTextStyle.Label, color = SiegeTheme.colors.textSecondary)
+        SiegeText(
+            text = label,
+            style = SiegeTextStyle.Label,
+            color = SiegeTheme.colors.textSecondary
+        )
         SiegeText(text = value, style = SiegeTextStyle.Label, color = valueColor)
     }
 }

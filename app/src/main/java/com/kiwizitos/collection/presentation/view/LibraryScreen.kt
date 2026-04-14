@@ -1,7 +1,6 @@
 package com.kiwizitos.collection.presentation.view
 
 import android.R.drawable.ic_menu_gallery
-import android.provider.CalendarContract
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -55,6 +54,7 @@ import com.kiwizitos.collection.data.model.UserItem
 import com.kiwizitos.collection.data.model.UserSeries
 import com.kiwizitos.collection.navigation.AppRoute
 import com.kiwizitos.collection.navigation.navEncode
+import com.kiwizitos.collection.presentation.view.VolumeFilter.TODOS
 import com.kiwizitos.collection.presentation.viewmodel.GalleryViewModel
 import com.kiwizitos.collection.util.NaturalOrderComparator
 import com.kiwizitos.siege.components.card.BadgeData
@@ -81,17 +81,17 @@ private enum class LibraryTab(val label: String) {
  * [TODOS] mostra tudo; os demais correspondem aos valores de [Ownership] e [ReadStatus].
  */
 private enum class VolumeFilter(val label: String, val color: Color) {
-    TODOS ("Todos",  Color.Unspecified),
-    TENHO ("Tenho",  Ownership.TENHO.badgeColor),
-    QUERO ("Quero",  Ownership.QUERO.badgeColor),
-    LIDO  ("Lido",   ReadStatus.LIDO.badgeColor),
-    LENDO ("Lendo",  ReadStatus.LENDO.badgeColor);
+    TODOS("Todos", Color.Unspecified),
+    TENHO("Tenho", Ownership.TENHO.badgeColor),
+    QUERO("Quero", Ownership.QUERO.badgeColor),
+    LIDO("Lido", ReadStatus.LIDO.badgeColor),
+    LENDO("Lendo", ReadStatus.LENDO.badgeColor);
 
     fun matches(item: UserItem): Boolean = when (this) {
         TODOS -> true
         TENHO -> item.ownership == Ownership.TENHO
         QUERO -> item.ownership == Ownership.QUERO
-        LIDO  -> item.readStatus == ReadStatus.LIDO
+        LIDO -> item.readStatus == ReadStatus.LIDO
         LENDO -> item.readStatus == ReadStatus.LENDO
     }
 }
@@ -104,7 +104,7 @@ fun LibraryScreen(
     navController: NavController = rememberNavController(),
     galleryViewModel: GalleryViewModel = hiltViewModel()
 ) {
-    val seriesMap    by galleryViewModel.seriesMap.collectAsState()
+    val seriesMap by galleryViewModel.seriesMap.collectAsState()
     val editionsFull by galleryViewModel.editionsFull.collectAsState()
 
     var selectedTab by rememberSaveable { mutableStateOf(LibraryTab.SERIES) }
@@ -116,9 +116,9 @@ fun LibraryScreen(
             text = "Galeria",
             style = SiegeTextStyle.Headline,
             modifier = Modifier.padding(
-                start  = SiegeSpacing.Regular,
-                end    = SiegeSpacing.Regular,
-                top    = SiegeSpacing.Regular,
+                start = SiegeSpacing.Regular,
+                end = SiegeSpacing.Regular,
+                top = SiegeSpacing.Regular,
                 bottom = SiegeSpacing.Small
             )
         )
@@ -126,12 +126,12 @@ fun LibraryScreen(
         // ── Tab toggle ────────────────────────────────────────────────────────
         TabRow(
             selectedTabIndex = selectedTab.ordinal,
-            containerColor   = Color.Transparent,
-            contentColor     = SiegeColors.AccentPink,
-            indicator        = { tabPositions ->
+            containerColor = Color.Transparent,
+            contentColor = SiegeColors.AccentPink,
+            indicator = { tabPositions ->
                 TabRowDefaults.SecondaryIndicator(
                     modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTab.ordinal]),
-                    color    = SiegeColors.AccentPink
+                    color = SiegeColors.AccentPink
                 )
             },
             divider = {}
@@ -140,7 +140,7 @@ fun LibraryScreen(
                 val selected = tab == selectedTab
                 Tab(
                     selected = selected,
-                    onClick  = { selectedTab = tab },
+                    onClick = { selectedTab = tab },
                     icon = {
                         Icon(
                             imageVector = if (tab == LibraryTab.SERIES)
@@ -149,15 +149,15 @@ fun LibraryScreen(
                                 Icons.AutoMirrored.Filled.List,
                             contentDescription = tab.label,
                             tint = if (selected) SiegeColors.AccentPink
-                                   else SiegeTheme.colors.textTertiary
+                            else SiegeTheme.colors.textTertiary
                         )
                     },
                     text = {
                         SiegeText(
-                            text  = tab.label,
+                            text = tab.label,
                             style = SiegeTextStyle.Label,
                             color = if (selected) SiegeColors.AccentPink
-                                    else SiegeTheme.colors.textTertiary
+                            else SiegeTheme.colors.textTertiary
                         )
                     }
                 )
@@ -168,12 +168,13 @@ fun LibraryScreen(
 
         // ── Content ───────────────────────────────────────────────────────────
         when (selectedTab) {
-            LibraryTab.SERIES  -> SeriesTab(
-                series        = seriesMap.values.toList(),
+            LibraryTab.SERIES -> SeriesTab(
+                series = seriesMap.values.toList(),
                 navController = navController
             )
+
             LibraryTab.VOLUMES -> VolumesTab(
-                editions      = editionsFull.values.toList(),
+                editions = editionsFull.values.toList(),
                 navController = navController
             )
         }
@@ -193,13 +194,13 @@ private fun SeriesTab(
     }
 
     LazyVerticalGrid(
-        columns               = GridCells.Fixed(2),
-        modifier              = Modifier
+        columns = GridCells.Fixed(2),
+        modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = SiegeSpacing.Regular),
-        verticalArrangement   = Arrangement.spacedBy(SiegeSpacing.Small),
+        verticalArrangement = Arrangement.spacedBy(SiegeSpacing.Small),
         horizontalArrangement = Arrangement.spacedBy(SiegeSpacing.Small),
-        contentPadding        = PaddingValues(vertical = SiegeSpacing.Regular)
+        contentPadding = PaddingValues(vertical = SiegeSpacing.Regular)
     ) {
         val sorted = series.sortedWith(compareBy(NaturalOrderComparator) { it.seriesTitle })
         items(sorted, key = { it.seriesUrl }) { s ->
@@ -209,12 +210,12 @@ private fun SeriesTab(
                 painterResource(ic_menu_gallery)
 
             SiegeContentCell(
-                coverImage  = painter,
-                title       = s.seriesTitle,
-                style       = ContentCardStyle.Grid,
+                coverImage = painter,
+                title = s.seriesTitle,
+                style = ContentCardStyle.Grid,
                 contentType = ContentType.Series,
-                subtitle    = s.publisher,
-                onClick     = {
+                subtitle = s.publisher,
+                onClick = {
                     navController.navigate(
                         AppRoute.SeriesCovers.createRoute(
                             navEncode(s.seriesUrl),
@@ -243,7 +244,7 @@ private fun VolumesTab(
 
         // ── Filter chips ──────────────────────────────────────────────────────
         FilterChipRow(
-            active   = activeFilter,
+            active = activeFilter,
             onSelect = { activeFilter = it }
         )
 
@@ -271,7 +272,7 @@ private fun VolumesTab(
         val singleGroup = grouped.size == 1
 
         LazyColumn(
-            modifier       = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(bottom = SiegeSpacing.Regular)
         ) {
             grouped.forEach { (groupTitle, items) ->
@@ -281,7 +282,7 @@ private fun VolumesTab(
                         item(key = edition.guiaUrl) {
                             VolumeRow(edition = edition, navController = navController)
                             HorizontalDivider(
-                                color     = SiegeTheme.colors.surface,
+                                color = SiegeTheme.colors.surface,
                                 thickness = androidx.compose.ui.unit.Dp.Hairline
                             )
                         }
@@ -289,8 +290,8 @@ private fun VolumesTab(
                 } else {
                     item(key = "header_${activeFilter.name}_$groupTitle") {
                         ExpandableGroupHeader(
-                            title    = groupTitle,
-                            count    = items.size,
+                            title = groupTitle,
+                            count = items.size,
                             groupKey = "${activeFilter.name}_$groupTitle"
                         ) { expanded ->
                             AnimatedVisibility(visible = expanded) {
@@ -298,7 +299,7 @@ private fun VolumesTab(
                                     items.forEach { edition ->
                                         VolumeRow(edition = edition, navController = navController)
                                         HorizontalDivider(
-                                            color     = SiegeTheme.colors.surface,
+                                            color = SiegeTheme.colors.surface,
                                             thickness = androidx.compose.ui.unit.Dp.Hairline
                                         )
                                     }
@@ -320,46 +321,46 @@ private fun FilterChipRow(
     onSelect: (VolumeFilter) -> Unit
 ) {
     Row(
-        modifier              = Modifier
+        modifier = Modifier
             .fillMaxWidth()
             .horizontalScroll(rememberScrollState())
             .padding(horizontal = SiegeSpacing.Regular, vertical = SiegeSpacing.Small),
         horizontalArrangement = Arrangement.spacedBy(SiegeSpacing.Small)
     ) {
         VolumeFilter.entries.forEach { filter ->
-            val selected      = filter == active
-            val accentColor   = if (filter == VolumeFilter.TODOS) SiegeColors.AccentPink
-                                else filter.color
+            val selected = filter == active
+            val accentColor = if (filter == VolumeFilter.TODOS) SiegeColors.AccentPink
+            else filter.color
 
             FilterChip(
                 selected = selected,
-                onClick  = { onSelect(filter) },
-                label    = {
+                onClick = { onSelect(filter) },
+                label = {
                     SiegeText(
-                        text  = filter.label,
+                        text = filter.label,
                         style = SiegeTextStyle.Label,
                         color = if (selected) SiegeTheme.colors.background
-                                else SiegeTheme.colors.textSecondary
+                        else SiegeTheme.colors.textSecondary
                     )
                 },
                 leadingIcon = if (selected) ({
                     Icon(
-                        imageVector        = Icons.Filled.Check,
+                        imageVector = Icons.Filled.Check,
                         contentDescription = null,
-                        tint               = SiegeTheme.colors.background
+                        tint = SiegeTheme.colors.background
                     )
                 }) else null,
                 colors = FilterChipDefaults.filterChipColors(
-                    selectedContainerColor      = accentColor,
-                    selectedLabelColor          = SiegeTheme.colors.background,
-                    selectedLeadingIconColor    = SiegeTheme.colors.background,
-                    containerColor              = SiegeTheme.colors.surface,
-                    labelColor                  = SiegeTheme.colors.textSecondary
+                    selectedContainerColor = accentColor,
+                    selectedLabelColor = SiegeTheme.colors.background,
+                    selectedLeadingIconColor = SiegeTheme.colors.background,
+                    containerColor = SiegeTheme.colors.surface,
+                    labelColor = SiegeTheme.colors.textSecondary
                 ),
                 border = FilterChipDefaults.filterChipBorder(
-                    enabled           = true,
-                    selected          = selected,
-                    borderColor       = if (selected) Color.Transparent else accentColor.copy(alpha = 0.4f),
+                    enabled = true,
+                    selected = selected,
+                    borderColor = if (selected) Color.Transparent else accentColor.copy(alpha = 0.4f),
                     selectedBorderColor = Color.Transparent
                 )
             )
@@ -379,7 +380,7 @@ private fun ExpandableGroupHeader(
     var expanded by rememberSaveable(groupKey) { mutableStateOf(true) }
     val arrowAngle by animateFloatAsState(
         targetValue = if (expanded) 0f else -90f,
-        label       = "arrow_$groupKey"
+        label = "arrow_$groupKey"
     )
 
     Column {
@@ -389,30 +390,30 @@ private fun ExpandableGroupHeader(
                 .clickable { expanded = !expanded }
                 .background(SiegeTheme.colors.surface)
                 .padding(horizontal = SiegeSpacing.Regular, vertical = SiegeSpacing.Medium),
-            verticalAlignment     = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             SiegeText(
-                text     = title,
-                style    = SiegeTextStyle.Body,
+                text = title,
+                style = SiegeTextStyle.Body,
                 modifier = Modifier.weight(1f),
                 maxLines = 1,
                 overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
             )
             Row(
-                verticalAlignment     = Alignment.CenterVertically,
+                verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(SiegeSpacing.XSmall)
             ) {
                 SiegeText(
-                    text  = "$count",
+                    text = "$count",
                     style = SiegeTextStyle.Label,
                     color = SiegeColors.TextTertiary
                 )
                 Icon(
-                    imageVector        = Icons.Filled.KeyboardArrowDown,
+                    imageVector = Icons.Filled.KeyboardArrowDown,
                     contentDescription = if (expanded) "Recolher" else "Expandir",
-                    tint               = SiegeColors.TextTertiary,
-                    modifier           = Modifier.rotate(arrowAngle)
+                    tint = SiegeColors.TextTertiary,
+                    modifier = Modifier.rotate(arrowAngle)
                 )
             }
         }
@@ -431,28 +432,28 @@ private fun VolumeRow(edition: UserItem, navController: NavController) {
         painterResource(ic_menu_gallery)
 
     val badges = buildList {
-        edition.ownership?.let  { add(BadgeData(it.displayLabel.uppercase(), it.badgeColor)) }
+        edition.ownership?.let { add(BadgeData(it.displayLabel.uppercase(), it.badgeColor)) }
         edition.readStatus?.let { add(BadgeData(it.displayLabel.uppercase(), it.badgeColor)) }
     }
 
     SiegeContentCell(
-        coverImage  = painter,
-        title       = edition.title,
-        style       = ContentCardStyle.Row,
+        coverImage = painter,
+        title = edition.title,
+        style = ContentCardStyle.Row,
         contentType = ContentType.Volume,
-        subtitle    = edition.seriesTitle,
-        badges      = badges,
-        modifier    = Modifier.padding(
+        subtitle = edition.seriesTitle,
+        badges = badges,
+        modifier = Modifier.padding(
             horizontal = SiegeSpacing.Regular,
-            vertical   = SiegeSpacing.XSmall
+            vertical = SiegeSpacing.XSmall
         ),
         onClick = {
             navController.navigate(
                 AppRoute.EditionDetail.createRoute(
-                    editionUrl   = navEncode(edition.guiaUrl),
+                    editionUrl = navEncode(edition.guiaUrl),
                     editionTitle = navEncode(edition.title),
-                    seriesUrl    = edition.seriesUrl?.let { navEncode(it) } ?: "",
-                    seriesTitle  = edition.seriesTitle?.let { navEncode(it) } ?: ""
+                    seriesUrl = edition.seriesUrl?.let { navEncode(it) } ?: "",
+                    seriesTitle = edition.seriesTitle?.let { navEncode(it) } ?: ""
                 )
             )
         }
@@ -464,15 +465,15 @@ private fun VolumeRow(edition: UserItem, navController: NavController) {
 @Composable
 private fun LibraryEmptyState(message: String) {
     Box(
-        modifier          = Modifier
+        modifier = Modifier
             .fillMaxSize()
             .padding(SiegeSpacing.XLarge),
-        contentAlignment  = Alignment.Center
+        contentAlignment = Alignment.Center
     ) {
         SiegeText(
-            text      = message,
-            style     = SiegeTextStyle.Body,
-            color     = SiegeTheme.colors.textTertiary,
+            text = message,
+            style = SiegeTextStyle.Body,
+            color = SiegeTheme.colors.textTertiary,
             textAlign = androidx.compose.ui.text.style.TextAlign.Center
         )
     }

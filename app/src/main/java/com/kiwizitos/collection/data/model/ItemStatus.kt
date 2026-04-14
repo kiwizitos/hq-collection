@@ -39,13 +39,13 @@ enum class ReadStatus {
 
     val displayLabel: String
         get() = when (this) {
-            LIDO  -> "Lido"
+            LIDO -> "Lido"
             LENDO -> "Lendo"
         }
 
     val badgeColor: Color
         get() = when (this) {
-            LIDO  -> SiegeColors.AccentPink
+            LIDO -> SiegeColors.AccentPink
             LENDO -> SiegeColors.AccentCyan
         }
 }
@@ -69,16 +69,16 @@ data class ItemStatus(
      * Útil para renderizar múltiplos [CategoryBadge] lado a lado.
      */
     fun badges(): List<Pair<String, Color>> = buildList {
-        ownership?.let  { add(it.displayLabel to it.badgeColor) }
+        ownership?.let { add(it.displayLabel to it.badgeColor) }
         readStatus?.let { add(it.displayLabel to it.badgeColor) }
     }
 
     companion object {
         /** Converte um [Category] legado para o novo modelo. */
         fun fromLegacy(category: Category): ItemStatus = when (category) {
-            Category.TEM   -> ItemStatus(Ownership.TENHO, null)
+            Category.TEM -> ItemStatus(Ownership.TENHO, null)
             Category.QUERO -> ItemStatus(Ownership.QUERO, null)
-            Category.LIDO  -> ItemStatus(null, ReadStatus.LIDO)
+            Category.LIDO -> ItemStatus(null, ReadStatus.LIDO)
             Category.LENDO -> ItemStatus(null, ReadStatus.LENDO)
         }
     }

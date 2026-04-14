@@ -19,8 +19,8 @@ enum class Category {
     /** Rótulo exibido nos badges e chips da UI. */
     val displayLabel: String
         get() = when (this) {
-            TEM   -> "Tenho"
-            LIDO  -> "Lido"
+            TEM -> "Tenho"
+            LIDO -> "Lido"
             LENDO -> "Lendo"
             QUERO -> "Quero"
         }
@@ -28,8 +28,8 @@ enum class Category {
     /** Cor de destaque associada a cada categoria, usando tokens do Siege. */
     val badgeColor: Color
         get() = when (this) {
-            TEM   -> SiegeColors.AccentCyan
-            LIDO  -> SiegeColors.AccentPink
+            TEM -> SiegeColors.AccentCyan
+            LIDO -> SiegeColors.AccentPink
             LENDO -> SiegeColors.AccentCyan
             QUERO -> SiegeColors.AccentPink
         }

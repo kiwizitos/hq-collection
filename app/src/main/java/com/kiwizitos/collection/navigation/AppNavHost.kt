@@ -60,23 +60,23 @@ fun AppNavHost(
 
     // Determina tela inicial: Auth se não logado, Home se logado
     val startDestination = if (authViewModel.isLoggedIn) AppRoute.Home.route
-                           else AppRoute.Auth.route
+    else AppRoute.Auth.route
 
     Scaffold(
-        modifier  = modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         bottomBar = {
             if (showBottomBar) AppBottomBar(navController = navController)
         }
     ) { innerPadding ->
         NavHost(
-            navController    = navController,
+            navController = navController,
             startDestination = startDestination,
-            modifier         = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         ) {
             // ── Auth — fora da bottom bar ─────────────────────────────────────
             composable(AppRoute.Auth.route) {
                 AuthScreen(
-                    viewModel    = authViewModel,
+                    viewModel = authViewModel,
                     onAuthSuccess = {
                         // Carrega galeria após login e vai para Home
                         authViewModel.currentUserId()?.let { galleryViewModel.loadGallery(it) }
@@ -90,24 +90,24 @@ fun AppNavHost(
             // ── Rotas de nível raiz: recebem o padding da bottom bar ──────────
             composable(AppRoute.Home.route) {
                 HomeScreen(
-                    navController    = navController,
+                    navController = navController,
                     galleryViewModel = galleryViewModel,
-                    modifier         = Modifier.padding(innerPadding)
+                    modifier = Modifier.padding(innerPadding)
                 )
             }
             composable(AppRoute.Search.route) {
                 SearchScreen(
-                    navController    = navController,
+                    navController = navController,
                     galleryViewModel = galleryViewModel,
-                    modifier         = Modifier.padding(innerPadding)
+                    modifier = Modifier.padding(innerPadding)
                 )
             }
             composable(AppRoute.Profile.route) {
                 ProfileScreen(
-                    authViewModel    = authViewModel,
+                    authViewModel = authViewModel,
                     galleryViewModel = galleryViewModel,
-                    modifier         = Modifier.padding(innerPadding),
-                    onSignOut        = {
+                    modifier = Modifier.padding(innerPadding),
+                    onSignOut = {
                         navController.navigate(AppRoute.Auth.route) {
                             popUpTo(0) { inclusive = true }
                         }
@@ -116,7 +116,7 @@ fun AppNavHost(
             }
             composable(AppRoute.Library.route) {
                 LibraryScreen(
-                    modifier      = Modifier.padding(innerPadding),
+                    modifier = Modifier.padding(innerPadding),
                     navController = navController,
                     galleryViewModel = galleryViewModel
                 )
@@ -126,44 +126,52 @@ fun AppNavHost(
             composable(
                 route = AppRoute.SeriesCovers.route,
                 arguments = listOf(
-                    navArgument("seriesUrl")   { type = NavType.StringType },
+                    navArgument("seriesUrl") { type = NavType.StringType },
                     navArgument("seriesTitle") { type = NavType.StringType }
                 )
             ) { backStackEntry ->
-                val encodedUrl   = backStackEntry.arguments?.getString("seriesUrl")   ?: return@composable
-                val encodedTitle = backStackEntry.arguments?.getString("seriesTitle") ?: return@composable
+                val encodedUrl =
+                    backStackEntry.arguments?.getString("seriesUrl") ?: return@composable
+                val encodedTitle =
+                    backStackEntry.arguments?.getString("seriesTitle") ?: return@composable
                 CoversScreen(
-                    navController      = navController,
-                    encodedSeriesUrl   = encodedUrl,
+                    navController = navController,
+                    encodedSeriesUrl = encodedUrl,
                     encodedSeriesTitle = encodedTitle,
-                    galleryViewModel   = galleryViewModel
+                    galleryViewModel = galleryViewModel
                 )
             }
 
             composable(
                 route = AppRoute.EditionDetail.route,
                 arguments = listOf(
-                    navArgument("editionUrl")     { type = NavType.StringType },
-                    navArgument("editionTitle")   { type = NavType.StringType },
-                    navArgument("seriesUrl")      { type = NavType.StringType; nullable = true; defaultValue = null },
-                    navArgument("seriesTitle")    { type = NavType.StringType; nullable = true; defaultValue = null },
-                    navArgument("showSeriesCard") { type = NavType.BoolType;   defaultValue = true }
+                    navArgument("editionUrl") { type = NavType.StringType },
+                    navArgument("editionTitle") { type = NavType.StringType },
+                    navArgument("seriesUrl") {
+                        type = NavType.StringType; nullable = true; defaultValue = null
+                    },
+                    navArgument("seriesTitle") {
+                        type = NavType.StringType; nullable = true; defaultValue = null
+                    },
+                    navArgument("showSeriesCard") { type = NavType.BoolType; defaultValue = true }
                 )
             ) { backStackEntry ->
-                val editionUrl     = backStackEntry.arguments?.getString("editionUrl")    ?: return@composable
-                val editionTitle   = backStackEntry.arguments?.getString("editionTitle")  ?: return@composable
-                val seriesUrl      = backStackEntry.arguments?.getString("seriesUrl")
-                val seriesTitle    = backStackEntry.arguments?.getString("seriesTitle")
+                val editionUrl =
+                    backStackEntry.arguments?.getString("editionUrl") ?: return@composable
+                val editionTitle =
+                    backStackEntry.arguments?.getString("editionTitle") ?: return@composable
+                val seriesUrl = backStackEntry.arguments?.getString("seriesUrl")
+                val seriesTitle = backStackEntry.arguments?.getString("seriesTitle")
                 val showSeriesCard = backStackEntry.arguments?.getBoolean("showSeriesCard") ?: true
                 DetailsScreen(
-                    navController       = navController,
-                    encodedEditionUrl   = editionUrl,
+                    navController = navController,
+                    encodedEditionUrl = editionUrl,
                     encodedEditionTitle = editionTitle,
-                    encodedSeriesUrl    = seriesUrl,
-                    encodedSeriesTitle  = seriesTitle,
-                    showSeriesCard      = showSeriesCard,
-                    onBackClick         = { navController.popBackStack() },
-                    galleryViewModel    = galleryViewModel
+                    encodedSeriesUrl = seriesUrl,
+                    encodedSeriesTitle = seriesTitle,
+                    showSeriesCard = showSeriesCard,
+                    onBackClick = { navController.popBackStack() },
+                    galleryViewModel = galleryViewModel
                 )
             }
         }

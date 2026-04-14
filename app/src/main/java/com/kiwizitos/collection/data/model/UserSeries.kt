@@ -13,12 +13,12 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class UserSeries(
-    @SerialName("id")           val id: String          = "",
-    @SerialName("user_id")      val userId: String      = "",
-    @SerialName("series_url")   val seriesUrl: String,
+    @SerialName("id") val id: String = "",
+    @SerialName("user_id") val userId: String = "",
+    @SerialName("series_url") val seriesUrl: String,
     @SerialName("series_title") val seriesTitle: String,
-    @SerialName("cover_url")    val coverUrl: String?   = null,
-    @SerialName("publisher")    val publisher: String?  = null,
-    @SerialName("issue_count")  val issueCount: String? = null
+    @SerialName("cover_url") val coverUrl: String? = null,
+    @SerialName("publisher") val publisher: String? = null,
+    @SerialName("issue_count") val issueCount: String? = null
 )
 

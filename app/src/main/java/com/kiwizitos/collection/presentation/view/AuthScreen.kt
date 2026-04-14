@@ -55,9 +55,9 @@ fun AuthScreen(
     val authState by viewModel.authState.collectAsState()
     val colors = SiegeTheme.colors
 
-    var email       by remember { mutableStateOf("") }
-    var password    by remember { mutableStateOf("") }
-    var isRegister  by remember { mutableStateOf(false) }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var isRegister by remember { mutableStateOf(false) }
 
     // Navega ao sucesso
     LaunchedEffect(authState) {
@@ -70,25 +70,25 @@ fun AuthScreen(
     val isLoading = authState is UiState.Loading
 
     Box(
-        modifier         = Modifier
+        modifier = Modifier
             .fillMaxSize()
             .padding(SiegeSpacing.Regular),
         contentAlignment = Alignment.Center
     ) {
         Column(
-            modifier            = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(SiegeSpacing.Regular)
         ) {
             // ── Título ────────────────────────────────────────────────────────
             SiegeText(
-                text  = if (isRegister) "Criar conta" else "Entrar",
+                text = if (isRegister) "Criar conta" else "Entrar",
                 style = SiegeTextStyle.Headline,
                 color = colors.textPrimary
             )
             SiegeText(
-                text  = if (isRegister) "Crie sua conta para salvar sua coleção"
-                        else            "Acesse sua coleção de quadrinhos",
+                text = if (isRegister) "Crie sua conta para salvar sua coleção"
+                else "Acesse sua coleção de quadrinhos",
                 style = SiegeTextStyle.Label,
                 color = colors.textTertiary,
                 textAlign = TextAlign.Center
@@ -98,45 +98,53 @@ fun AuthScreen(
 
             // ── Campo e-mail ──────────────────────────────────────────────────
             OutlinedTextField(
-                value         = email,
+                value = email,
                 onValueChange = { email = it },
-                label         = {
-                    SiegeText(text = "E-mail", style = SiegeTextStyle.Label, color = colors.textTertiary)
+                label = {
+                    SiegeText(
+                        text = "E-mail",
+                        style = SiegeTextStyle.Label,
+                        color = colors.textTertiary
+                    )
                 },
-                singleLine    = true,
-                enabled       = !isLoading,
+                singleLine = true,
+                enabled = !isLoading,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                shape         = SiegeShapes.Medium,
-                colors        = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor   = SiegeColors.AccentCyan,
+                shape = SiegeShapes.Medium,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = SiegeColors.AccentCyan,
                     unfocusedBorderColor = colors.outline,
-                    focusedLabelColor    = SiegeColors.AccentCyan,
-                    cursorColor          = SiegeColors.AccentCyan,
-                    focusedTextColor     = colors.textPrimary,
-                    unfocusedTextColor   = colors.textPrimary
+                    focusedLabelColor = SiegeColors.AccentCyan,
+                    cursorColor = SiegeColors.AccentCyan,
+                    focusedTextColor = colors.textPrimary,
+                    unfocusedTextColor = colors.textPrimary
                 ),
                 modifier = Modifier.fillMaxWidth()
             )
 
             // ── Campo senha ───────────────────────────────────────────────────
             OutlinedTextField(
-                value                  = password,
-                onValueChange          = { password = it },
-                label                  = {
-                    SiegeText(text = "Senha", style = SiegeTextStyle.Label, color = colors.textTertiary)
+                value = password,
+                onValueChange = { password = it },
+                label = {
+                    SiegeText(
+                        text = "Senha",
+                        style = SiegeTextStyle.Label,
+                        color = colors.textTertiary
+                    )
                 },
-                singleLine             = true,
-                enabled                = !isLoading,
-                visualTransformation   = PasswordVisualTransformation(),
-                keyboardOptions        = KeyboardOptions(keyboardType = KeyboardType.Password),
-                shape                  = SiegeShapes.Medium,
-                colors                 = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor   = SiegeColors.AccentCyan,
+                singleLine = true,
+                enabled = !isLoading,
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                shape = SiegeShapes.Medium,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = SiegeColors.AccentCyan,
                     unfocusedBorderColor = colors.outline,
-                    focusedLabelColor    = SiegeColors.AccentCyan,
-                    cursorColor          = SiegeColors.AccentCyan,
-                    focusedTextColor     = colors.textPrimary,
-                    unfocusedTextColor   = colors.textPrimary
+                    focusedLabelColor = SiegeColors.AccentCyan,
+                    cursorColor = SiegeColors.AccentCyan,
+                    focusedTextColor = colors.textPrimary,
+                    unfocusedTextColor = colors.textPrimary
                 ),
                 modifier = Modifier.fillMaxWidth()
             )
@@ -144,28 +152,28 @@ fun AuthScreen(
             // ── Mensagem de erro ──────────────────────────────────────────────
             if (authState is UiState.Error) {
                 SiegeText(
-                    text      = (authState as UiState.Error).message,
-                    style     = SiegeTextStyle.Label,
-                    color     = SiegeColors.Error,
+                    text = (authState as UiState.Error).message,
+                    style = SiegeTextStyle.Label,
+                    color = SiegeColors.Error,
                     textAlign = TextAlign.Center,
-                    modifier  = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
 
             // ── Botão principal ───────────────────────────────────────────────
             if (isLoading) {
                 CircularProgressIndicator(
-                    color    = SiegeColors.AccentPink,
+                    color = SiegeColors.AccentPink,
                     modifier = Modifier.size(36.dp)
                 )
             } else {
                 SiegeButton(
-                    text     = if (isRegister) "Cadastrar" else "Entrar",
-                    style    = SiegeButtonStyle.Primary,
-                    enabled  = email.isNotBlank() && password.isNotBlank(),
-                    onClick  = {
+                    text = if (isRegister) "Cadastrar" else "Entrar",
+                    style = SiegeButtonStyle.Primary,
+                    enabled = email.isNotBlank() && password.isNotBlank(),
+                    onClick = {
                         if (isRegister) viewModel.signUp(email, password)
-                        else            viewModel.signIn(email, password)
+                        else viewModel.signIn(email, password)
                     },
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -173,9 +181,9 @@ fun AuthScreen(
 
             // ── Toggle login / cadastro ───────────────────────────────────────
             SiegeButton(
-                text    = if (isRegister) "Já tem conta? Entrar"
-                          else            "Não tem conta? Cadastre-se",
-                style   = SiegeButtonStyle.Ghost,
+                text = if (isRegister) "Já tem conta? Entrar"
+                else "Não tem conta? Cadastre-se",
+                style = SiegeButtonStyle.Ghost,
                 enabled = !isLoading,
                 onClick = {
                     isRegister = !isRegister
