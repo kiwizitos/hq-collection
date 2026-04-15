@@ -28,7 +28,6 @@ interface GalleryRepository {
 
     // ── Edições ───────────────────────────────────────────────────────────────
     suspend fun saveItem(item: UserItem): Result<UserItem>
-    suspend fun updateStatus(guiaUrl: String, status: ItemStatus): Result<Unit>
     suspend fun removeItem(guiaUrl: String): Result<Unit>
 
     // ── Séries ────────────────────────────────────────────────────────────────

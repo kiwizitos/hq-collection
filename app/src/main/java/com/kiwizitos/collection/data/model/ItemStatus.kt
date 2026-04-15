@@ -66,21 +66,10 @@ data class ItemStatus(
 
     /**
      * Todos os badges visíveis, na ordem: Posse (se presente), Leitura (se presente).
-     * Útil para renderizar múltiplos [CategoryBadge] lado a lado.
      */
     fun badges(): List<Pair<String, Color>> = buildList {
         ownership?.let { add(it.displayLabel to it.badgeColor) }
         readStatus?.let { add(it.displayLabel to it.badgeColor) }
-    }
-
-    companion object {
-        /** Converte um [Category] legado para o novo modelo. */
-        fun fromLegacy(category: Category): ItemStatus = when (category) {
-            Category.TEM -> ItemStatus(Ownership.TENHO, null)
-            Category.QUERO -> ItemStatus(Ownership.QUERO, null)
-            Category.LIDO -> ItemStatus(null, ReadStatus.LIDO)
-            Category.LENDO -> ItemStatus(null, ReadStatus.LENDO)
-        }
     }
 }
 

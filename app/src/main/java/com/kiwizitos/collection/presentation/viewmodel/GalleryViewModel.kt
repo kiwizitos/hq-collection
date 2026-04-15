@@ -11,7 +11,6 @@ import com.kiwizitos.collection.domain.usecase.RemoveItemUseCase
 import com.kiwizitos.collection.domain.usecase.RemoveSeriesUseCase
 import com.kiwizitos.collection.domain.usecase.SaveItemUseCase
 import com.kiwizitos.collection.domain.usecase.SaveSeriesUseCase
-import com.kiwizitos.collection.domain.usecase.UpdateItemStatusUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -21,7 +20,6 @@ import javax.inject.Inject
 class GalleryViewModel @Inject constructor(
     private val getGalleryUseCase: GetGalleryUseCase,
     private val saveItemUseCase: SaveItemUseCase,
-    private val updateItemStatusUseCase: UpdateItemStatusUseCase,
     private val removeItemUseCase: RemoveItemUseCase,
     private val saveSeriesUseCase: SaveSeriesUseCase,
     private val removeSeriesUseCase: RemoveSeriesUseCase,
@@ -47,9 +45,6 @@ class GalleryViewModel @Inject constructor(
         viewModelScope.launch { saveItemUseCase(item) }
     }
 
-    fun updateStatus(guiaUrl: String, status: ItemStatus) {
-        viewModelScope.launch { updateItemStatusUseCase(guiaUrl, status) }
-    }
 
     fun removeItem(guiaUrl: String) {
         viewModelScope.launch { removeItemUseCase(guiaUrl) }

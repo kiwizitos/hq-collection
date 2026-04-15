@@ -1,16 +1,12 @@
 package com.kiwizitos.collection.presentation.view
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -20,13 +16,14 @@ import com.kiwizitos.collection.data.model.Ownership
 import com.kiwizitos.collection.data.model.ReadStatus
 import com.kiwizitos.collection.presentation.viewmodel.AuthViewModel
 import com.kiwizitos.collection.presentation.viewmodel.GalleryViewModel
+import com.kiwizitos.siege.components.card.SiegeCard
+import com.kiwizitos.siege.components.card.SiegeCardStyle
 import com.kiwizitos.siege.components.foundation.SiegeButton
 import com.kiwizitos.siege.components.foundation.SiegeButtonStyle
 import com.kiwizitos.siege.components.foundation.SiegeText
 import com.kiwizitos.siege.components.foundation.SiegeTextStyle
 import com.kiwizitos.siege.theme.SiegeTheme
 import com.kiwizitos.siege.tokens.SiegeColors
-import com.kiwizitos.siege.tokens.SiegeShapes
 import com.kiwizitos.siege.tokens.SiegeSpacing
 
 @Composable
@@ -64,87 +61,44 @@ fun ProfileScreen(
 
         // ── Info do usuário ───────────────────────────────────────────────────
         item {
-            Surface(
-                shape = SiegeShapes.Medium,
-                color = SiegeTheme.colors.surfaceVariant,
+            SiegeCard(
+                style = SiegeCardStyle.Filled,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Column(
-                    modifier = Modifier.padding(SiegeSpacing.Regular),
-                    verticalArrangement = Arrangement.spacedBy(SiegeSpacing.XSmall)
-                ) {
-                    SiegeText(
-                        text = "E-mail",
-                        style = SiegeTextStyle.Label,
-                        color = SiegeTheme.colors.textTertiary
-                    )
-                    SiegeText(
-                        text = email,
-                        style = SiegeTextStyle.Body,
-                        color = SiegeTheme.colors.textPrimary
-                    )
-                }
+                SiegeText(
+                    text = "E-mail",
+                    style = SiegeTextStyle.Label,
+                    color = SiegeTheme.colors.textTertiary
+                )
+                SiegeText(
+                    text = email,
+                    style = SiegeTextStyle.Body,
+                    color = SiegeTheme.colors.textPrimary
+                )
             }
         }
 
         // ── Stats da galeria ──────────────────────────────────────────────────
         item {
-            Surface(
-                shape = SiegeShapes.Medium,
-                color = SiegeTheme.colors.surfaceVariant,
+            SiegeCard(
+                style = SiegeCardStyle.Filled,
+                title = "GALERIA",
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Column(
-                    modifier = Modifier.padding(SiegeSpacing.Regular),
-                    verticalArrangement = Arrangement.spacedBy(SiegeSpacing.Small)
-                ) {
-                    SiegeText(
-                        text = "GALERIA",
-                        style = SiegeTextStyle.Label,
-                        color = SiegeColors.AccentPink
-                    )
-                    Spacer(Modifier.height(SiegeSpacing.XXSmall))
-
-                    // Total
-                    StatRow(
-                        label = "Volumes salvos",
-                        value = "$totalEditions",
-                        valueColor = SiegeColors.AccentCyan
-                    )
-                    StatRow(
-                        label = "Séries salvas",
-                        value = "$totalSeries",
-                        valueColor = SiegeColors.AccentCyan
-                    )
-
-                    HorizontalDivider(color = SiegeTheme.colors.outline)
-
-                    // Posse
-                    StatRow(
-                        label = "Tenho",
-                        value = "$countTenho",
-                        valueColor = Ownership.TENHO.badgeColor
-                    )
-                    StatRow(
-                        label = "Quero",
-                        value = "$countQuero",
-                        valueColor = Ownership.QUERO.badgeColor
-                    )
-
-                    HorizontalDivider(color = SiegeTheme.colors.outline)
-
-                    // Leitura
-                    StatRow(
-                        label = "Lido",
-                        value = "$countLido",
-                        valueColor = ReadStatus.LIDO.badgeColor
-                    )
-                    StatRow(
-                        label = "Lendo",
-                        value = "$countLendo",
-                        valueColor = ReadStatus.LENDO.badgeColor
-                    )
-                }
+                StatRow("Volumes salvos", "$totalEditions", SiegeColors.AccentCyan)
+                StatRow("Séries salvas", "$totalSeries", SiegeColors.AccentCyan)
+                HorizontalDivider(
+                    color = SiegeTheme.colors.outline,
+                    modifier = Modifier.padding(vertical = SiegeSpacing.XSmall)
+                )
+                StatRow("Tenho", "$countTenho", Ownership.TENHO.badgeColor)
+                StatRow("Quero", "$countQuero", Ownership.QUERO.badgeColor)
+                HorizontalDivider(
+                    color = SiegeTheme.colors.outline,
+                    modifier = Modifier.padding(vertical = SiegeSpacing.XSmall)
+                )
+                StatRow("Lido", "$countLido", ReadStatus.LIDO.badgeColor)
+                StatRow("Lendo", "$countLendo", ReadStatus.LENDO.badgeColor)
             }
         }
 
@@ -170,11 +124,7 @@ private fun StatRow(label: String, value: String, valueColor: androidx.compose.u
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        SiegeText(
-            text = label,
-            style = SiegeTextStyle.Label,
-            color = SiegeTheme.colors.textSecondary
-        )
+        SiegeText(text = label, style = SiegeTextStyle.Label, color = SiegeTheme.colors.textSecondary)
         SiegeText(text = value, style = SiegeTextStyle.Label, color = valueColor)
     }
 }

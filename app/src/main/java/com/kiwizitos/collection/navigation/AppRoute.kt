@@ -31,10 +31,6 @@ sealed class AppRoute(val route: String) {
     data object Profile : AppRoute("profile")
 
     // ── Detail screens ────────────────────────────────────────────────────────
-    /** Detalhe de coleção. Rota: "collection/{id}" */
-    data object CollectionDetail : AppRoute("collection/{id}") {
-        fun createRoute(id: String) = "collection/$id"
-    }
 
     /**
      * Detalhe de uma edição individual.
@@ -45,7 +41,7 @@ sealed class AppRoute(val route: String) {
      * - `seriesUrl`   → URL da série à qual esta edição pertence.
      * - `seriesTitle` → Título da série, para exibição no card de contexto.
      *
-     * Quando `seriesUrl` e `seriesTitle` estão presentes, a [DetailsScreen]
+     * Quando `seriesUrl` e `seriesTitle` estão presentes, a tela de detalhe
      * exibe o card "Pertence ao título X" com link para a lista de capas.
      * Quando ausentes, a tela é exibida sem esse card.
      *

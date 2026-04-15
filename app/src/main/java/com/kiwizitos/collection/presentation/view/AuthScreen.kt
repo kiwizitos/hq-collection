@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -32,10 +30,10 @@ import com.kiwizitos.collection.presentation.viewmodel.UiState
 import com.kiwizitos.siege.components.foundation.SiegeButton
 import com.kiwizitos.siege.components.foundation.SiegeButtonStyle
 import com.kiwizitos.siege.components.foundation.SiegeText
+import com.kiwizitos.siege.components.foundation.SiegeTextField
 import com.kiwizitos.siege.components.foundation.SiegeTextStyle
 import com.kiwizitos.siege.theme.SiegeTheme
 import com.kiwizitos.siege.tokens.SiegeColors
-import com.kiwizitos.siege.tokens.SiegeShapes
 import com.kiwizitos.siege.tokens.SiegeSpacing
 
 /**
@@ -97,55 +95,23 @@ fun AuthScreen(
             Spacer(Modifier.height(SiegeSpacing.Large))
 
             // ── Campo e-mail ──────────────────────────────────────────────────
-            OutlinedTextField(
+            SiegeTextField(
                 value = email,
                 onValueChange = { email = it },
-                label = {
-                    SiegeText(
-                        text = "E-mail",
-                        style = SiegeTextStyle.Label,
-                        color = colors.textTertiary
-                    )
-                },
-                singleLine = true,
+                label = "E-mail",
                 enabled = !isLoading,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                shape = SiegeShapes.Medium,
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = SiegeColors.AccentCyan,
-                    unfocusedBorderColor = colors.outline,
-                    focusedLabelColor = SiegeColors.AccentCyan,
-                    cursorColor = SiegeColors.AccentCyan,
-                    focusedTextColor = colors.textPrimary,
-                    unfocusedTextColor = colors.textPrimary
-                ),
                 modifier = Modifier.fillMaxWidth()
             )
 
             // ── Campo senha ───────────────────────────────────────────────────
-            OutlinedTextField(
+            SiegeTextField(
                 value = password,
                 onValueChange = { password = it },
-                label = {
-                    SiegeText(
-                        text = "Senha",
-                        style = SiegeTextStyle.Label,
-                        color = colors.textTertiary
-                    )
-                },
-                singleLine = true,
+                label = "Senha",
                 enabled = !isLoading,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                shape = SiegeShapes.Medium,
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = SiegeColors.AccentCyan,
-                    unfocusedBorderColor = colors.outline,
-                    focusedLabelColor = SiegeColors.AccentCyan,
-                    cursorColor = SiegeColors.AccentCyan,
-                    focusedTextColor = colors.textPrimary,
-                    unfocusedTextColor = colors.textPrimary
-                ),
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -201,4 +167,3 @@ private fun AuthScreenPreview() {
         // Preview estático sem ViewModel real
     }
 }
-

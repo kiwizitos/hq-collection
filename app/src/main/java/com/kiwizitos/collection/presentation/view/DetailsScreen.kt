@@ -22,9 +22,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import com.kiwizitos.siege.components.card.SiegeCard
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -406,23 +406,12 @@ private fun GalleryPanel(
         }
     }
 
-    Surface(
-        modifier = modifier,
-        shape = SiegeShapes.Medium,
-        color = SiegeTheme.colors.surfaceVariant
+    SiegeCard(
+        style = SiegeCardStyle.Filled,
+        title = "MINHA GALERIA",
+        titleColor = SiegeColors.AccentPink,
+        modifier = modifier
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(SiegeSpacing.Regular),
-            verticalArrangement = Arrangement.spacedBy(SiegeSpacing.Small)
-        ) {
-            SiegeText(
-                text = "MINHA GALERIA",
-                style = SiegeTextStyle.Label,
-                color = SiegeColors.AccentPink
-            )
-            Spacer(Modifier.height(SiegeSpacing.XXSmall))
 
             // ── Grupo POSSE ───────────────────────────────────────────────────
             SiegeText(
@@ -477,7 +466,6 @@ private fun GalleryPanel(
                     modifier = Modifier.fillMaxWidth()
                 )
             }
-        }
     }
 }
 
@@ -527,21 +515,12 @@ private fun InfoCard(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
-    Surface(
-        modifier = modifier,
-        shape = SiegeShapes.Medium,
-        color = SiegeTheme.colors.surfaceVariant
+    SiegeCard(
+        style = SiegeCardStyle.Filled,
+        title = title,
+        modifier = modifier
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(SiegeSpacing.Regular),
-            verticalArrangement = Arrangement.spacedBy(SiegeSpacing.Small)
-        ) {
-            SiegeText(text = title, style = SiegeTextStyle.Label, color = SiegeColors.AccentPink)
-            Spacer(Modifier.height(SiegeSpacing.XXSmall))
-            content()
-        }
+        content()
     }
 }
 

@@ -92,39 +92,6 @@ class SupabaseGalleryRepository @Inject constructor(
         }
     }
 
-    override suspend fun updateStatus(guiaUrl: String, status: ItemStatus): Result<Unit> {
-        return try {
-            val userId = client.auth.currentUserOrNull()?.id
-                ?: return Result.failure(IllegalStateException("Usuário não autenticado"))
-
-            client
-                .from(TABLE_EDITIONS)
-                .update({
-                    set("ownership", status.ownership?.name)
-                    set("read_status", status.readStatus?.name)
-                }) {
-                    filter {
-                        eq("guia_url", guiaUrl)
-                        eq("user_id", userId)
-                    }
-                }
-
-            _editionsCache.value = _editionsCache.value + (guiaUrl to status)
-            // Atualiza o item completo preservando os campos de metadados
-            _editionsFull.value = _editionsFull.value[guiaUrl]?.let { existing ->
-                _editionsFull.value + (guiaUrl to existing.copy(
-                    ownership = status.ownership,
-                    readStatus = status.readStatus
-                ))
-            } ?: _editionsFull.value
-            Log.d(TAG, "updateStatus: $guiaUrl → $status")
-            Result.success(Unit)
-        } catch (e: Exception) {
-            Log.e(TAG, "updateStatus: erro", e)
-            Result.failure(e)
-        }
-    }
-
     override suspend fun removeItem(guiaUrl: String): Result<Unit> {
         return try {
             val userId = client.auth.currentUserOrNull()?.id
