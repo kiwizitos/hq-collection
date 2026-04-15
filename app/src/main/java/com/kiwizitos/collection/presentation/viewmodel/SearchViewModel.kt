@@ -121,7 +121,21 @@ class SearchViewModel @Inject constructor(
     private val _coversState = MutableStateFlow<UiState<PaginatedCoversResult>>(UiState.Idle)
     val coversState: StateFlow<UiState<PaginatedCoversResult>> = _coversState.asStateFlow()
 
-    private var currentSeriesUrl: String = ""
+    /** URL da série cujas capas estão atualmente carregadas. Usado pelo NavHost
+     *  para evitar re-fetch desnecessário ao voltar de DetailsScreen. */
+    var currentSeriesUrl: String = ""
+        private set
+
+    /** Posição de scroll da grade de capas — persistida para restaurar ao voltar. */
+    var savedCoversGridIndex: Int = 0
+        private set
+    var savedCoversGridOffset: Int = 0
+        private set
+
+    fun saveCoversGridState(index: Int, offset: Int) {
+        savedCoversGridIndex = index
+        savedCoversGridOffset = offset
+    }
 
     /**
      * Guarda se uma carga de próxima página de capas já está em curso.
@@ -331,6 +345,8 @@ class SearchViewModel @Inject constructor(
     fun resetCoversState() {
         _coversState.value = UiState.Idle
         currentSeriesUrl = ""
+        savedCoversGridIndex = 0
+        savedCoversGridOffset = 0
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────

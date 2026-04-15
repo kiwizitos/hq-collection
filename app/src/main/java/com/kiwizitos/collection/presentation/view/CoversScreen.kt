@@ -26,6 +26,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -79,6 +80,30 @@ fun CoversScreen(
     val seriesMap by galleryViewModel.seriesMap.collectAsState()
     val gridState = rememberLazyGridState()
 
+    // Restore scroll position saved before the last navigation away from this screen
+    LaunchedEffect(gridState) {
+        if (viewModel.savedCoversGridIndex > 0) {
+            gridState.scrollToItem(
+                index = viewModel.savedCoversGridIndex,
+                scrollOffset = viewModel.savedCoversGridOffset
+            )
+        }
+    }
+
+    // Helper: save current position then navigate to an edition detail
+    val navigateToEdition: (String, String) -> Unit = { editionUrl, editionTitle ->
+        viewModel.saveCoversGridState(
+            index = gridState.firstVisibleItemIndex,
+            offset = gridState.firstVisibleItemScrollOffset
+        )
+        navController.navigate(
+            AppRoute.EditionDetail.createRoute(
+                editionUrl = navEncode(editionUrl),
+                editionTitle = navEncode(editionTitle)
+            )
+        )
+    }
+
     // Note: getSeriesCovers is called by the NavHost before this screen is shown.
     // All standalone redirect logic lives in AppNavHost — not here.
 
@@ -103,6 +128,10 @@ fun CoversScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = {
+                        viewModel.saveCoversGridState(
+                            index = gridState.firstVisibleItemIndex,
+                            offset = gridState.firstVisibleItemScrollOffset
+                        )
                         viewModel.resetCoversState()
                         navController.popBackStack()
                     }) {
@@ -211,12 +240,7 @@ fun CoversScreen(
                     gridState = gridState,
                     onLoadMore = { viewModel.loadNextCoversPage() },
                     onCoverClick = { cover ->
-                        navController.navigate(
-                            AppRoute.EditionDetail.createRoute(
-                                editionUrl = navEncode(cover.relativeLink),
-                                editionTitle = navEncode(cover.title)
-                            )
-                        )
+                        navigateToEdition(cover.relativeLink, cover.title)
                     }
                 )
 
@@ -227,12 +251,7 @@ fun CoversScreen(
                     gridState = gridState,
                     onLoadMore = {},
                     onCoverClick = { cover ->
-                        navController.navigate(
-                            AppRoute.EditionDetail.createRoute(
-                                editionUrl = navEncode(cover.relativeLink),
-                                editionTitle = navEncode(cover.title)
-                            )
-                        )
+                        navigateToEdition(cover.relativeLink, cover.title)
                     }
                 )
             }

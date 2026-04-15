@@ -145,8 +145,13 @@ fun AppNavHost(
                 val searchViewModel: SearchViewModel = hiltViewModel()
                 val coversState by searchViewModel.coversState.collectAsState()
 
+                // Only fetch when the state is Idle (first open) or when the URL
+                // changed to a different series. Returning from DetailsScreen leaves
+                // the state as Success — skip the fetch so pages and scroll are kept.
                 LaunchedEffect(seriesUrl) {
-                    searchViewModel.getSeriesCovers(seriesUrl, seriesTitle)
+                    if (coversState is UiState.Idle || searchViewModel.currentSeriesUrl != seriesUrl) {
+                        searchViewModel.getSeriesCovers(seriesUrl, seriesTitle)
+                    }
                 }
 
                 // ── Standalone: replace this entry before any screen is shown ─
