@@ -87,18 +87,48 @@ object GuiaQuadrinhosParser {
 
     /**
      * Parseia a lista de capas de uma série + paginação.
+     *
+     * Detecta automaticamente "edição única" quando:
+     * - O HTML contém o texto "Edição única" (case-insensitive), ou
+     * - Existe apenas um link `href` contendo "/edicao/"
+     *
+     * Nesses casos, [CoversSearchResult.isStandalone] = true e
+     * [CoversSearchResult.singleEditionUrl] aponta direto para a edição.
      */
     fun parseCoverListWithPagination(html: String, seriesTitle: String): CoversSearchResult {
         val covers = parseCoverList(html)
         val pagination = extractPaginationInfo(html)
+
+        // ── Detecção de edição única ──────────────────────────────────────────
+        val doc = Jsoup.parse(html)
+        val hasStandaloneText = doc.body().text()
+            .contains("edição única", ignoreCase = true)
+
+        val editionLinks = doc.select("a[href*='/edicao/']")
+        val hasSingleEditionLink = editionLinks.size == 1
+
+        val isStandalone = hasStandaloneText || hasSingleEditionLink
+        val singleEditionUrl: String? = if (isStandalone) {
+            // Prefer the link found in the cover list; fall back to any /edicao/ link
+            covers.firstOrNull()?.relativeLink
+                ?: editionLinks.firstOrNull()?.attr("href")
+                    ?.removePrefix("../../")
+                    ?.removePrefix("../")
+                    ?.trim()
+                    ?.ifBlank { null }
+        } else null
+
         Log.d(
             TAG,
-            "parseCoverList: ${covers.size} capas, pg ${pagination.currentPage}, hasNext=${pagination.hasNextPage}"
+            "parseCoverList: ${covers.size} capas, pg ${pagination.currentPage}, " +
+                "hasNext=${pagination.hasNextPage}, isStandalone=$isStandalone"
         )
         return CoversSearchResult(
             seriesTitle = seriesTitle,
             covers = covers,
-            paginationInfo = pagination
+            paginationInfo = pagination,
+            isStandalone = isStandalone,
+            singleEditionUrl = singleEditionUrl
         )
     }
 

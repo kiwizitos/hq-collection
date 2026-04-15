@@ -19,7 +19,8 @@ data class UserItem(
     @SerialName("series_url") val seriesUrl: String? = null,
     @SerialName("series_title") val seriesTitle: String? = null,
     @SerialName("ownership") val ownership: Ownership? = null,
-    @SerialName("read_status") val readStatus: ReadStatus? = null
+    @SerialName("read_status") val readStatus: ReadStatus? = null,
+    @SerialName("is_standalone") val isStandalone: Boolean = false
 ) {
     fun toItemStatus(): ItemStatus = ItemStatus(ownership, readStatus)
 }

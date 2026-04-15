@@ -3,13 +3,18 @@ package com.kiwizitos.collection.data.model
 /**
  * Resultado de uma busca de capas de uma série específica.
  *
- * @param seriesTitle    Título da série para exibição no cabeçalho.
- * @param covers         Lista de capas retornadas na página atual.
- * @param paginationInfo Estado de paginação para navegar para próximas páginas.
+ * @param seriesTitle       Título da série para exibição no cabeçalho.
+ * @param covers            Lista de capas retornadas na página atual.
+ * @param paginationInfo    Estado de paginação para navegar para próximas páginas.
+ * @param isStandalone      True se a página de capas contém apenas uma edição única.
+ *                          Quando true, [singleEditionUrl] aponta direto para essa edição.
+ * @param singleEditionUrl  URL relativa da edição única; não-nulo apenas quando [isStandalone] = true.
  */
 data class CoversSearchResult(
     val seriesTitle: String,
     val covers: List<CoverItem>,
-    val paginationInfo: PaginationInfo
+    val paginationInfo: PaginationInfo,
+    val isStandalone: Boolean = false,
+    val singleEditionUrl: String? = null
 )
 

@@ -72,8 +72,8 @@ private const val GUIA_BASE = "http://www.guiadosquadrinhos.com"
  * Tela de detalhe de uma edição.
  *
  * O card "Pertence ao título X" é exibido automaticamente quando a edição
- * carregada contém o link "Galeria de capas" no HTML.
- * O painel de galeria permite salvar, alterar status ou remover o item.
+ * contém o link "Galeria de capas" no HTML (details.seriesUrl != null).
+ * Edições sem esse link são salvas automaticamente com isStandalone = true.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -171,26 +171,31 @@ fun DetailsScreen(
                     is UiState.LoadingMore -> s.currentData
                     else -> return@Scaffold
                 }
-                val resolvedSeriesUrl = if (showSeriesCard)
-                    details.seriesUrl ?: encodedSeriesUrl?.let { navDecode(it) }
-                else null
-                val resolvedSeriesTitle = if (showSeriesCard)
+
+                // isStandalone is determined by the scraped HTML:
+                // details.seriesUrl is parsed from "div.boxnumeros a[href*='capas/']".
+                // When that link is absent the edition has no parent series → standalone.
+                val isStandalone = details.seriesUrl == null
+
+                val resolvedSeriesUrl = if (showSeriesCard) details.seriesUrl else null
+                val resolvedSeriesTitle = if (showSeriesCard && details.seriesUrl != null)
                     details.seriesTitle ?: encodedSeriesTitle?.let { navDecode(it) }
                 else null
 
                 val currentStatus = galleryMap[editionUrl]
+                val currentItem = galleryViewModel.editionsFull.collectAsState().value[editionUrl]
 
                 EditionContent(
                     details = details,
                     seriesTitle = resolvedSeriesTitle,
                     itemStatus = currentStatus,
+                    isStandalone = isStandalone,
                     onSeriesClick = if (resolvedSeriesUrl != null && resolvedSeriesTitle != null) {
                         {
                             navController.navigate(
                                 AppRoute.SeriesCovers.createRoute(
-                                    navEncode(
-                                        resolvedSeriesUrl
-                                    ), navEncode(resolvedSeriesTitle)
+                                    navEncode(resolvedSeriesUrl),
+                                    navEncode(resolvedSeriesTitle)
                                 )
                             )
                         }
@@ -204,13 +209,29 @@ fun DetailsScreen(
                                 seriesUrl = resolvedSeriesUrl,
                                 seriesTitle = resolvedSeriesTitle,
                                 ownership = status.ownership,
-                                readStatus = status.readStatus
+                                readStatus = status.readStatus,
+                                isStandalone = isStandalone
                             )
                         )
                     },
                     onUpdateStatus = { status ->
-                        if (status.isNotEmpty()) galleryViewModel.updateStatus(editionUrl, status)
-                        else galleryViewModel.removeItem(editionUrl)
+                        if (status.isNotEmpty()) {
+                            galleryViewModel.saveItem(
+                                UserItem(
+                                    id = currentItem?.id ?: "",
+                                    guiaUrl = editionUrl,
+                                    title = details.title,
+                                    coverUrl = details.coverUrl,
+                                    seriesUrl = resolvedSeriesUrl,
+                                    seriesTitle = resolvedSeriesTitle,
+                                    ownership = status.ownership,
+                                    readStatus = status.readStatus,
+                                    isStandalone = isStandalone
+                                )
+                            )
+                        } else {
+                            galleryViewModel.removeItem(editionUrl)
+                        }
                     },
                     onRemoveItem = { galleryViewModel.removeItem(editionUrl) },
                     onOpenWeb = {
@@ -232,6 +253,7 @@ private fun EditionContent(
     details: ComicDetails,
     seriesTitle: String?,
     itemStatus: ItemStatus?,
+    isStandalone: Boolean,
     onSeriesClick: (() -> Unit)?,
     onSaveItem: (ItemStatus) -> Unit,
     onUpdateStatus: (ItemStatus) -> Unit,
@@ -243,8 +265,8 @@ private fun EditionContent(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(SiegeSpacing.None)
     ) {
-        // ── Card "Pertence ao título" ──────────────────────────────────────────
-        if (seriesTitle != null && onSeriesClick != null) {
+        // ── Card "Pertence ao título" — hidden for standalone editions ────────
+        if (!isStandalone && seriesTitle != null && onSeriesClick != null) {
             item {
                 SeriesBelongsToCard(
                     seriesTitle = seriesTitle,
@@ -321,7 +343,7 @@ private fun EditionContent(
             }
         }
 
-        // ── Painel de galeria — edição ─────────────────────────────────────
+        // ── Painel de galeria — edição ────────────────────────────────────────
         item { Spacer(Modifier.height(SiegeSpacing.Regular)) }
         item {
             GalleryPanel(
@@ -361,10 +383,8 @@ private fun EditionContent(
  * - **LEITURA**: Lido / Lendo (mutuamente exclusivos)
  *
  * Dentro de cada grupo, clicar no chip ativo o deseleciona (toggle).
- * Os grupos são totalmente independentes: é válido ter TENHO + LIDO,
- * QUERO + LENDO, só TENHO, só LIDO, etc.
- *
- * Quando ambos os grupos são desmarcados, o item é removido da galeria.
+ * isStandalone é definido automaticamente pela presença do link "Galeria de capas"
+ * no HTML — não há switch de controle manual.
  */
 @Composable
 private fun GalleryPanel(
@@ -377,7 +397,6 @@ private fun GalleryPanel(
     val currentOwnership = itemStatus?.ownership
     val currentReadStatus = itemStatus?.readStatus
 
-    // Resolve qual ação executar ao mudar o status
     fun applyStatus(newOwnership: Ownership?, newRead: ReadStatus?) {
         val newStatus = ItemStatus(newOwnership, newRead)
         when {

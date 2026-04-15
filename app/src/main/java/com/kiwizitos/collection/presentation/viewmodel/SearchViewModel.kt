@@ -63,14 +63,18 @@ data class PaginatedSearchResult(
 /**
  * Resultado paginado de capas de uma série, pronto para a UI.
  *
- * @param seriesTitle    Título da série para exibição.
- * @param covers         Lista acumulada de capas (todas as páginas carregadas até agora).
- * @param paginationInfo Estado atual de paginação.
+ * @param seriesTitle       Título da série para exibição.
+ * @param covers            Lista acumulada de capas (todas as páginas carregadas até agora).
+ * @param paginationInfo    Estado atual de paginação.
+ * @param isStandalone      True se a série tem apenas uma edição única.
+ * @param singleEditionUrl  URL relativa da edição única; não-nulo apenas quando [isStandalone] = true.
  */
 data class PaginatedCoversResult(
     val seriesTitle: String,
     val covers: List<CoverItem>,
-    val paginationInfo: PaginationInfo
+    val paginationInfo: PaginationInfo,
+    val isStandalone: Boolean = false,
+    val singleEditionUrl: String? = null
 )
 
 // ── ViewModel ─────────────────────────────────────────────────────────────────
@@ -247,14 +251,16 @@ class SearchViewModel @Inject constructor(
 
             _coversState.value = result.fold(
                 onSuccess = { coversResult ->
-                    if (coversResult.covers.isEmpty()) {
+                    if (coversResult.covers.isEmpty() && !coversResult.isStandalone) {
                         UiState.Empty
                     } else {
                         UiState.Success(
                             PaginatedCoversResult(
                                 seriesTitle = coversResult.seriesTitle,
                                 covers = coversResult.covers,
-                                paginationInfo = coversResult.paginationInfo
+                                paginationInfo = coversResult.paginationInfo,
+                                isStandalone = coversResult.isStandalone,
+                                singleEditionUrl = coversResult.singleEditionUrl
                             )
                         )
                     }

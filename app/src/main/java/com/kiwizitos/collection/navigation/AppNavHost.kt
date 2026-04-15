@@ -6,10 +6,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -25,6 +27,8 @@ import com.kiwizitos.collection.presentation.view.ProfileScreen
 import com.kiwizitos.collection.presentation.view.SearchScreen
 import com.kiwizitos.collection.presentation.viewmodel.AuthViewModel
 import com.kiwizitos.collection.presentation.viewmodel.GalleryViewModel
+import com.kiwizitos.collection.presentation.viewmodel.SearchViewModel
+import com.kiwizitos.collection.presentation.viewmodel.UiState
 
 /** Rotas de nível raiz que exibem a bottom bar. */
 private val topLevelRoutes = setOf(
@@ -134,11 +138,54 @@ fun AppNavHost(
                     backStackEntry.arguments?.getString("seriesUrl") ?: return@composable
                 val encodedTitle =
                     backStackEntry.arguments?.getString("seriesTitle") ?: return@composable
+
+                val seriesUrl = navDecode(encodedUrl)
+                val seriesTitle = navDecode(encodedTitle)
+
+                val searchViewModel: SearchViewModel = hiltViewModel()
+                val coversState by searchViewModel.coversState.collectAsState()
+
+                LaunchedEffect(seriesUrl) {
+                    searchViewModel.getSeriesCovers(seriesUrl, seriesTitle)
+                }
+
+                // ── Standalone: replace this entry before any screen is shown ─
+                // popUpTo uses the route PATTERN so it reliably removes the
+                // SeriesCovers entry. Back from DetailsScreen goes to the caller.
+                val standaloneUrl = (coversState as? UiState.Success)
+                    ?.data?.takeIf { it.isStandalone }?.singleEditionUrl
+                LaunchedEffect(standaloneUrl) {
+                    val editionUrl = standaloneUrl ?: return@LaunchedEffect
+                    searchViewModel.resetCoversState()
+                    navController.navigate(
+                        AppRoute.EditionDetail.createRoute(
+                            editionUrl = navEncode(editionUrl),
+                            editionTitle = navEncode(seriesTitle)
+                        )
+                    ) {
+                        popUpTo(AppRoute.SeriesCovers.route) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                }
+
+                // ── Spinner while loading or about to redirect ────────────────
+                val isResolved = coversState is UiState.Success
+                    || coversState is UiState.Error
+                    || coversState is UiState.Empty
+                if (!isResolved || standaloneUrl != null) {
+                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator()
+                    }
+                    return@composable
+                }
+
+                // ── Non-standalone: render the full covers screen ─────────────
                 CoversScreen(
                     navController = navController,
                     encodedSeriesUrl = encodedUrl,
                     encodedSeriesTitle = encodedTitle,
-                    galleryViewModel = galleryViewModel
+                    galleryViewModel = galleryViewModel,
+                    viewModel = searchViewModel
                 )
             }
 
@@ -177,4 +224,3 @@ fun AppNavHost(
         }
     }
 }
-

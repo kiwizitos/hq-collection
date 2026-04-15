@@ -26,7 +26,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -80,7 +79,9 @@ fun CoversScreen(
     val seriesMap by galleryViewModel.seriesMap.collectAsState()
     val gridState = rememberLazyGridState()
 
-    // URL da capa do 1º volume — disponível assim que a primeira página carrega
+    // Note: getSeriesCovers is called by the NavHost before this screen is shown.
+    // All standalone redirect logic lives in AppNavHost — not here.
+
     val firstCoverUrl: String? = when (val s = coversState) {
         is UiState.Success -> s.data.covers.firstOrNull()?.coverUrl
         is UiState.LoadingMore -> s.currentData.covers.firstOrNull()?.coverUrl
@@ -88,9 +89,6 @@ fun CoversScreen(
     }
     val isSaved = seriesMap.containsKey(seriesUrl)
 
-    LaunchedEffect(seriesUrl) {
-        viewModel.getSeriesCovers(seriesUrl = seriesUrl, seriesTitle = seriesTitle)
-    }
 
     Scaffold(
         topBar = {
