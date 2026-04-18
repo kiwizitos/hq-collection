@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,7 +23,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import com.kiwizitos.siege.components.card.SiegeCard
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -32,6 +30,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
@@ -59,10 +58,12 @@ import com.kiwizitos.siege.components.card.SiegeCard
 import com.kiwizitos.siege.components.card.SiegeCardStyle
 import com.kiwizitos.siege.components.foundation.SiegeButton
 import com.kiwizitos.siege.components.foundation.SiegeButtonStyle
+import com.kiwizitos.siege.components.foundation.SiegeIcon
 import com.kiwizitos.siege.components.foundation.SiegeText
 import com.kiwizitos.siege.components.foundation.SiegeTextStyle
 import com.kiwizitos.siege.theme.SiegeTheme
 import com.kiwizitos.siege.tokens.SiegeColors
+import com.kiwizitos.siege.tokens.SiegeIcons
 import com.kiwizitos.siege.tokens.SiegeShapes
 import com.kiwizitos.siege.tokens.SiegeSpacing
 
@@ -109,8 +110,8 @@ fun DetailsScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        SiegeIcon(
+                            icon = SiegeIcons.ic_arrow_solid,
                             contentDescription = "Voltar",
                             tint = SiegeTheme.colors.textPrimary
                         )
@@ -413,59 +414,61 @@ private fun GalleryPanel(
         modifier = modifier
     ) {
 
-            // ── Grupo POSSE ───────────────────────────────────────────────────
-            SiegeText(
-                text = "POSSE",
-                style = SiegeTextStyle.Label,
-                color = SiegeTheme.colors.textTertiary
-            )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(SiegeSpacing.XSmall)
-            ) {
-                Ownership.entries.forEach { own ->
-                    val isSelected = own == currentOwnership
+        // ── Grupo POSSE ───────────────────────────────────────────────────
+        SiegeText(
+            text = "POSSE",
+            style = SiegeTextStyle.Label,
+            color = SiegeTheme.colors.textTertiary
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(SiegeSpacing.XSmall)
+        ) {
+            Ownership.entries.forEach { own ->
+                val isSelected = own == currentOwnership
                     SiegeButton(
                         text = own.displayLabel,
                         style = if (isSelected) SiegeButtonStyle.Primary else SiegeButtonStyle.Outlined,
-                        onClick = { applyStatus(if (isSelected) null else own, currentReadStatus) },
-                        modifier = Modifier.weight(1f)
-                    )
-                }
+                        iconRes = own.iconFor(isSelected),
+                    onClick = { applyStatus(if (isSelected) null else own, currentReadStatus) },
+                    modifier = Modifier.weight(1f)
+                )
             }
+        }
 
-            // ── Grupo LEITURA ─────────────────────────────────────────────────
-            Spacer(Modifier.height(SiegeSpacing.XXSmall))
-            SiegeText(
-                text = "LEITURA",
-                style = SiegeTextStyle.Label,
-                color = SiegeTheme.colors.textTertiary
-            )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(SiegeSpacing.XSmall)
-            ) {
-                ReadStatus.entries.forEach { read ->
-                    val isSelected = read == currentReadStatus
+        // ── Grupo LEITURA ─────────────────────────────────────────────────
+        Spacer(Modifier.height(SiegeSpacing.XXSmall))
+        SiegeText(
+            text = "LEITURA",
+            style = SiegeTextStyle.Label,
+            color = SiegeTheme.colors.textTertiary
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(SiegeSpacing.XSmall)
+        ) {
+            ReadStatus.entries.forEach { read ->
+                val isSelected = read == currentReadStatus
                     SiegeButton(
                         text = read.displayLabel,
                         style = if (isSelected) SiegeButtonStyle.Primary else SiegeButtonStyle.Outlined,
-                        onClick = { applyStatus(currentOwnership, if (isSelected) null else read) },
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-            }
-
-            // Botão remover — só visível quando já está na galeria
-            if (itemStatus != null) {
-                Spacer(Modifier.height(SiegeSpacing.XXSmall))
-                SiegeButton(
-                    text = "Remover da galeria",
-                    style = SiegeButtonStyle.Ghost,
-                    onClick = onRemoveItem,
-                    modifier = Modifier.fillMaxWidth()
+                        iconRes = read.iconFor(isSelected),
+                    onClick = { applyStatus(currentOwnership, if (isSelected) null else read) },
+                    modifier = Modifier.weight(1f)
                 )
             }
+        }
+
+        // Botão remover — só visível quando já está na galeria
+        if (itemStatus != null) {
+            Spacer(Modifier.height(SiegeSpacing.XXSmall))
+            SiegeButton(
+                text = "Remover da galeria",
+                style = SiegeButtonStyle.Ghost,
+                onClick = onRemoveItem,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
     }
 }
 
@@ -497,11 +500,13 @@ private fun SeriesBelongsToCard(
                     overflow = TextOverflow.Ellipsis
                 )
             }
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+            SiegeIcon(
+                icon = SiegeIcons.ic_arrow_alt_solid,
                 contentDescription = null,
                 tint = SiegeTheme.colors.textTertiary,
-                modifier = Modifier.size(20.dp)
+                modifier = Modifier
+                    .size(20.dp)
+                    .graphicsLayer(scaleX = -1f)
             )
         }
     }

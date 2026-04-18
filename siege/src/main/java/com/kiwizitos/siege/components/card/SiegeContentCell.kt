@@ -1,5 +1,6 @@
 package com.kiwizitos.siege.components.card
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,16 +14,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.LibraryBooks
-import androidx.compose.material.icons.filled.Book
-import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.Verified
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Surface
@@ -36,10 +29,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.kiwizitos.siege.components.foundation.SiegeIcon
 import com.kiwizitos.siege.components.foundation.SiegeText
 import com.kiwizitos.siege.components.foundation.SiegeTextStyle
 import com.kiwizitos.siege.theme.SiegeTheme
 import com.kiwizitos.siege.tokens.SiegeColors
+import com.kiwizitos.siege.tokens.SiegeIcons
 import com.kiwizitos.siege.tokens.SiegeShapes
 import com.kiwizitos.siege.tokens.SiegeSpacing
 
@@ -144,7 +139,7 @@ fun SiegeContentCell(
             modifier = modifier,
             contentType = contentType,
             subtitle = subtitle,
-            badge = badges.firstOrNull(),
+            badges = badges,
             progress = progress,
             progressText = progressText,
             onClick = onClick
@@ -203,7 +198,7 @@ private fun CoverContentCard(
                             .padding(SiegeSpacing.XSmall),
                         horizontalArrangement = Arrangement.spacedBy(SiegeSpacing.XXSmall)
                     ) {
-                        badges.take(2).forEach { StatusBadge(text = it.text, color = it.color) }
+                        badges.take(2).forEach { StatusBadge(badge = it) }
                     }
                 }
             }
@@ -311,7 +306,7 @@ private fun GridContentCard(
                             .padding(SiegeSpacing.XSmall),
                         horizontalArrangement = Arrangement.spacedBy(SiegeSpacing.XXSmall)
                     ) {
-                        badges.take(2).forEach { StatusBadge(text = it.text, color = it.color) }
+                        badges.take(2).forEach { StatusBadge(badge = it) }
                     }
                 }
             }
@@ -362,7 +357,7 @@ private fun RowContentCard(
     modifier: Modifier,
     contentType: ContentType,
     subtitle: String?,
-    badge: BadgeData?,
+    badges: List<BadgeData>,
     progress: Float?,
     progressText: String?,
     onClick: (() -> Unit)?
@@ -425,8 +420,10 @@ private fun RowContentCard(
                         overflow = TextOverflow.Ellipsis
                     )
                 }
-                badge?.let {
-                    StatusBadge(text = it.text, color = it.color)
+                if (badges.isNotEmpty()) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(SiegeSpacing.XXSmall)) {
+                        badges.take(2).forEach { StatusBadge(badge = it) }
+                    }
                 }
                 if (progress != null) {
                     Column(
@@ -477,16 +474,16 @@ private fun ContentTypeIndicator(
     modifier: Modifier = Modifier
 ) {
     val (icon, label) = when (contentType) {
-        ContentType.Series -> Pair(Icons.AutoMirrored.Filled.LibraryBooks, "Série")
-        ContentType.Volume -> Pair(Icons.Filled.Book, "Volume único")
+        ContentType.Series -> SiegeIcons.ic_folder to "Série"
+        ContentType.Volume -> SiegeIcons.ic_file   to "Volume único"
     }
     Surface(
         modifier = modifier,
         shape = SiegeShapes.Small,
         color = SiegeColors.BackgroundDark.copy(alpha = 0.75f)
     ) {
-        Icon(
-            imageVector = icon,
+        SiegeIcon(
+            icon = icon,
             contentDescription = label,
             tint = SiegeColors.TextTertiary,
             modifier = Modifier
@@ -497,23 +494,22 @@ private fun ContentTypeIndicator(
 }
 
 @Composable
-private fun StatusBadge(text: String, color: Color, modifier: Modifier = Modifier) {
-    // Mapeia textos conhecidos para ícones semânticos
-    val icon = when (text.uppercase()) {
-        "POSSUÍDA", "POSSUIDO" -> Icons.Filled.Bookmark
-        "LIDA", "LIDO"         -> Icons.Filled.CheckCircle
-        "RARO", "RARA"         -> Icons.Filled.Star
-        "NOVA", "NOVO"         -> Icons.Filled.Verified
-        else                   -> Icons.Filled.Bookmark
+private fun StatusBadge(badge: BadgeData, modifier: Modifier = Modifier) {
+    val icon = badge.iconRes ?: when (badge.text.uppercase()) {
+        "TENHO", "POSSUÍDA", "POSSUIDO" -> SiegeIcons.ic_bookmarks_solid
+        "QUERO"                         -> SiegeIcons.ic_flag
+        "LIDO",  "LIDA"                 -> SiegeIcons.ic_book_solid
+        "LENDO"                         -> SiegeIcons.ic_glasses
+        else                            -> SiegeIcons.ic_bookmarks_solid
     }
     Surface(
         modifier = modifier,
         shape = SiegeShapes.Small,
-        color = color.copy(alpha = 0.92f)
+        color = badge.color.copy(alpha = 0.92f)
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = text,
+        SiegeIcon(
+            icon = icon,
+            contentDescription = badge.text,
             tint = Color.Black,
             modifier = Modifier
                 .padding(SiegeSpacing.XXSmall)
@@ -525,10 +521,15 @@ private fun StatusBadge(text: String, color: Color, modifier: Modifier = Modifie
 /**
  * Dados de um badge de status sobreposto à capa.
  *
- * @param text  Texto do badge (ex: "RARO", "POSSUÍDA").
- * @param color Cor de fundo do badge.
+ * @param text    Rótulo semântico (ex: "TENHO", "LIDO") — usado como fallback de ícone e acessibilidade.
+ * @param color   Cor de fundo do badge.
+ * @param iconRes Ícone drawable opcional. Quando fornecido, tem prioridade sobre o mapeamento por texto.
  */
-data class BadgeData(val text: String, val color: Color)
+data class BadgeData(
+    val text: String,
+    val color: Color,
+    @DrawableRes val iconRes: Int? = null
+)
 
 // ── Previews ──────────────────────────────────────────────────────────────────
 

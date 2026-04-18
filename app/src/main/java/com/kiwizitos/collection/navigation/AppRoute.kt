@@ -1,12 +1,8 @@
 package com.kiwizitos.collection.navigation
 
 import android.net.Uri
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.annotation.DrawableRes
+import com.kiwizitos.siege.tokens.SiegeIcons
 
 /**
  * Encoding seguro para segmentos de rota e query params do Navigation Compose.
@@ -86,29 +82,34 @@ sealed class AppRoute(val route: String) {
 data class BottomNavItem(
     val route: String,
     val label: String,
-    val icon: ImageVector
+    @DrawableRes val icon: Int,
+    @DrawableRes val iconSelected: Int,
 )
 
 val bottomNavItems = listOf(
     BottomNavItem(
         route = AppRoute.Home.route,
         label = "Home",
-        icon = Icons.Filled.Home
+        icon = SiegeIcons.ic_home,
+        iconSelected = SiegeIcons.ic_home_solid,
     ),
     BottomNavItem(
         route = AppRoute.Search.route,
-        label = "Adicionar",
-        icon = Icons.Filled.AddCircle
+        label = "Explorar",
+        icon = SiegeIcons.ic_explore,
+        iconSelected = SiegeIcons.ic_explore_solid,
     ),
     BottomNavItem(
         route = AppRoute.Library.route,
-        label = "Biblioteca",
-        icon = Icons.AutoMirrored.Filled.List
+        label = "Feed",
+        icon = SiegeIcons.ic_feed,
+        iconSelected = SiegeIcons.ic_feed_solid,
     ),
     BottomNavItem(
         route = AppRoute.Profile.route,
         label = "Perfil",
-        icon = Icons.Filled.AccountCircle
-    )
+        icon = SiegeIcons.ic_user,
+        iconSelected = SiegeIcons.ic_user_solid,
+    ),
 )
 

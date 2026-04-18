@@ -11,19 +11,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.filled.Apps
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
@@ -49,23 +44,33 @@ import com.kiwizitos.collection.data.model.UserItem
 import com.kiwizitos.collection.data.model.UserSeries
 import com.kiwizitos.collection.navigation.AppRoute
 import com.kiwizitos.collection.navigation.navEncode
+import com.kiwizitos.collection.presentation.view.VolumeFilter.AVULSOS
+import com.kiwizitos.collection.presentation.view.VolumeFilter.TODOS
 import com.kiwizitos.collection.presentation.viewmodel.GalleryViewModel
 import com.kiwizitos.collection.util.NaturalOrderComparator
 import com.kiwizitos.siege.components.card.BadgeData
 import com.kiwizitos.siege.components.card.ContentCardStyle
 import com.kiwizitos.siege.components.card.ContentType
 import com.kiwizitos.siege.components.card.SiegeContentCell
+import com.kiwizitos.siege.components.foundation.SiegeIcon
 import com.kiwizitos.siege.components.foundation.SiegeText
 import com.kiwizitos.siege.components.foundation.SiegeTextStyle
 import com.kiwizitos.siege.theme.SiegeTheme
 import com.kiwizitos.siege.tokens.SiegeColors
+import com.kiwizitos.siege.tokens.SiegeIcons
 import com.kiwizitos.siege.tokens.SiegeSpacing
 
 // ── Tabs ──────────────────────────────────────────────────────────────────────
 
-private enum class LibraryTab(val label: String) {
-    SERIES("Séries"),
-    VOLUMES("Volumes")
+private enum class LibraryTab(
+    val label: String,
+    val icon: Int,
+    val iconSolid: Int
+) {
+    SERIES("Séries", SiegeIcons.ic_folder, SiegeIcons.ic_folder_solid),
+    VOLUMES("Volumes", SiegeIcons.ic_file, SiegeIcons.ic_file_solid);
+
+    fun iconFor(selected: Boolean) = if (selected) iconSolid else icon
 }
 
 // ── Volume filter ─────────────────────────────────────────────────────────────
@@ -79,13 +84,20 @@ private enum class LibraryTab(val label: String) {
  * Os demais filtros operam sobre volumes *agrupados* (não-avulsos) e correspondem
  * aos valores de [Ownership] e [ReadStatus]. [TODOS] mostra todos os agrupados.
  */
-private enum class VolumeFilter(val label: String, val color: Color) {
-    AVULSOS("Avulsos", Color.Unspecified),
-    TODOS("Todos", Color.Unspecified),
-    TENHO("Tenho", Ownership.TENHO.badgeColor),
-    QUERO("Quero", Ownership.QUERO.badgeColor),
-    LIDO("Lido", ReadStatus.LIDO.badgeColor),
-    LENDO("Lendo", ReadStatus.LENDO.badgeColor);
+private enum class VolumeFilter(
+    val label: String,
+    val color: Color,
+    val icon: Int,
+    val iconSolid: Int
+) {
+    AVULSOS("Avulsos", Color.Unspecified, SiegeIcons.ic_file, SiegeIcons.ic_file_solid),
+    TODOS("Todos", Color.Unspecified, SiegeIcons.ic_filter, SiegeIcons.ic_filter_solid),
+    QUERO("Quero", Color.Unspecified, SiegeIcons.ic_flag, SiegeIcons.ic_flag_solid),
+    TENHO("Tenho", Color.Unspecified, SiegeIcons.ic_bookmarks, SiegeIcons.ic_bookmarks_solid),
+    LENDO("Lendo", Color.Unspecified, SiegeIcons.ic_glasses, SiegeIcons.ic_glasses_solid),
+    LIDO("Lido", Color.Unspecified, SiegeIcons.ic_book, SiegeIcons.ic_book_solid);
+
+    fun iconFor(selected: Boolean) = if (selected) iconSolid else icon
 
     val isAvulsos get() = this == AVULSOS
 
@@ -150,11 +162,8 @@ fun LibraryScreen(
                     selected = selected,
                     onClick = { selectedTab = tab },
                     icon = {
-                        Icon(
-                            imageVector = if (tab == LibraryTab.SERIES)
-                                Icons.Filled.Apps
-                            else
-                                Icons.AutoMirrored.Filled.List,
+                        SiegeIcon(
+                            icon = tab.iconFor(selected),
                             contentDescription = tab.label,
                             tint = if (selected) SiegeColors.AccentPink
                             else SiegeTheme.colors.textTertiary
@@ -264,8 +273,10 @@ private fun VolumesTab(
                 when {
                     editions.isEmpty() ->
                         "Nenhum volume salvo ainda.\nAbra uma série e salve edições para vê-las aqui."
+
                     activeFilter.isAvulsos ->
                         "Nenhum volume avulso salvo.\nMarque um volume como avulso nos detalhes da edição."
+
                     else ->
                         "Nenhum volume com o filtro \"${activeFilter.label}\"."
                 }
@@ -307,8 +318,8 @@ private fun FilterChipRow(
         VolumeFilter.entries.forEach { filter ->
             val selected = filter == active
             val accentColor = when (filter) {
-                VolumeFilter.AVULSOS -> SiegeColors.AccentCyan
-                VolumeFilter.TODOS -> SiegeColors.AccentPink
+                AVULSOS -> SiegeColors.AccentCyan
+                TODOS -> SiegeColors.AccentPink
                 else -> filter.color
             }
 
@@ -323,13 +334,13 @@ private fun FilterChipRow(
                         else SiegeTheme.colors.textSecondary
                     )
                 },
-                leadingIcon = if (selected) ({
-                    Icon(
-                        imageVector = Icons.Filled.Check,
+                leadingIcon = {
+                    SiegeIcon(
+                        icon = filter.iconFor(selected),
                         contentDescription = null,
-                        tint = SiegeTheme.colors.background
+                        tint = if (selected) SiegeTheme.colors.background else accentColor
                     )
-                }) else null,
+                },
                 colors = FilterChipDefaults.filterChipColors(
                     selectedContainerColor = accentColor,
                     selectedLabelColor = SiegeTheme.colors.background,
@@ -359,8 +370,8 @@ private fun VolumeRow(edition: UserItem, navController: NavController) {
         painterResource(ic_menu_gallery)
 
     val badges = buildList {
-        edition.ownership?.let { add(BadgeData(it.displayLabel.uppercase(), it.badgeColor)) }
-        edition.readStatus?.let { add(BadgeData(it.displayLabel.uppercase(), it.badgeColor)) }
+        edition.ownership?.let { add(BadgeData(it.displayLabel.uppercase(), it.badgeColor, it.badgeIcon)) }
+        edition.readStatus?.let { add(BadgeData(it.displayLabel.uppercase(), it.badgeColor, it.badgeIcon)) }
     }
 
     SiegeContentCell(

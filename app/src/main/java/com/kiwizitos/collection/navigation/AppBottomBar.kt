@@ -1,12 +1,12 @@
 package com.kiwizitos.collection.navigation
 
-import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.kiwizitos.siege.components.foundation.SiegeIcon
 import com.kiwizitos.siege.components.foundation.SiegeText
 import com.kiwizitos.siege.components.foundation.SiegeTextStyle
 
@@ -29,8 +29,8 @@ fun AppBottomBar(navController: NavController) {
                     }
                 },
                 icon = {
-                    Icon(
-                        imageVector = item.icon,
+                    SiegeIcon(
+                        icon = if (currentRoute == item.route) item.iconSelected else item.icon,
                         contentDescription = item.label
                     )
                 },

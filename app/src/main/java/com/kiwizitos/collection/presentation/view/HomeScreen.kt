@@ -103,20 +103,10 @@ fun HomeScreen(
 
                     val badges = buildList {
                         edition.ownership?.let {
-                            add(
-                                BadgeData(
-                                    it.displayLabel.uppercase(),
-                                    it.badgeColor
-                                )
-                            )
+                            add(BadgeData(it.displayLabel.uppercase(), it.badgeColor, it.badgeIcon))
                         }
                         edition.readStatus?.let {
-                            add(
-                                BadgeData(
-                                    it.displayLabel.uppercase(),
-                                    it.badgeColor
-                                )
-                            )
+                            add(BadgeData(it.displayLabel.uppercase(), it.badgeColor, it.badgeIcon))
                         }
                     }
 

@@ -13,14 +13,9 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
@@ -57,10 +52,12 @@ import com.kiwizitos.siege.components.card.SiegeCard
 import com.kiwizitos.siege.components.card.SiegeCardStyle
 import com.kiwizitos.siege.components.foundation.SiegeButton
 import com.kiwizitos.siege.components.foundation.SiegeButtonStyle
+import com.kiwizitos.siege.components.foundation.SiegeIcon
 import com.kiwizitos.siege.components.foundation.SiegeText
 import com.kiwizitos.siege.components.foundation.SiegeTextStyle
 import com.kiwizitos.siege.theme.SiegeTheme
 import com.kiwizitos.siege.tokens.SiegeColors
+import com.kiwizitos.siege.tokens.SiegeIcons
 import com.kiwizitos.siege.tokens.SiegeShapes
 import com.kiwizitos.siege.tokens.SiegeSpacing
 
@@ -135,8 +132,8 @@ fun CoversScreen(
                         viewModel.resetCoversState()
                         navController.popBackStack()
                     }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        SiegeIcon(
+                            icon = SiegeIcons.ic_arrow_solid,
                             contentDescription = "Voltar",
                             tint = SiegeTheme.colors.textPrimary
                         )
@@ -158,8 +155,8 @@ fun CoversScreen(
                             }
                         }
                     ) {
-                        Icon(
-                            imageVector = if (isSaved) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        SiegeIcon(
+                            icon = if (isSaved) SiegeIcons.ic_like_solid else SiegeIcons.ic_like,
                             contentDescription = if (isSaved) "Remover da biblioteca" else "Salvar na biblioteca",
                             tint = if (isSaved) SiegeColors.AccentPink else SiegeTheme.colors.textTertiary
                         )

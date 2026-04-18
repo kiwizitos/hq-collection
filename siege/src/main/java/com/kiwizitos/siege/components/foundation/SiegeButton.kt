@@ -1,5 +1,6 @@
 package com.kiwizitos.siege.components.foundation
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kiwizitos.siege.theme.SiegeTheme
@@ -91,7 +93,8 @@ data class ButtonStyle(
  * @param onClick       Ação ao clicar.
  * @param style         Visual do botão — use [SiegeButtonStyle.Primary], [SiegeButtonStyle.Outlined], [SiegeButtonStyle.Accent] ou [SiegeButtonStyle.Ghost].
  * @param modifier      Modificador opcional.
- * @param icon          Ícone opcional exibido **antes** do texto.
+ * @param icon          Ícone opcional exibido **antes** do texto (ImageVector).
+ * @param iconRes       Ícone opcional exibido **antes** do texto (@DrawableRes). Tem prioridade sobre [icon] se ambos fornecidos.
  * @param trailingIcon  Ícone opcional exibido **depois** do texto.
  * @param enabled       Se o botão está habilitado.
  */
@@ -102,6 +105,7 @@ fun SiegeButton(
     style: ButtonStyle = SiegeButtonStyle.Primary,
     modifier: Modifier = Modifier,
     icon: ImageVector? = null,
+    @DrawableRes iconRes: Int? = null,
     trailingIcon: ImageVector? = null,
     enabled: Boolean = true
 ) {
@@ -146,7 +150,7 @@ fun SiegeButton(
             ),
             contentPadding = padding
         ) {
-            ButtonContent(text = text, icon = icon, trailingIcon = trailingIcon, tint = resolvedStyle.borderColor!!)
+            ButtonContent(text = text, icon = icon, iconRes = iconRes, trailingIcon = trailingIcon, tint = resolvedStyle.borderColor!!)
         }
     } else if (resolvedStyle.containerColor == Color.Transparent) {
         // Ghost — TextButton: sem sombra, sem fundo, sem borda
@@ -161,7 +165,7 @@ fun SiegeButton(
             ),
             contentPadding = padding
         ) {
-            ButtonContent(text = text, icon = icon, trailingIcon = trailingIcon, tint = resolvedStyle.contentColor)
+            ButtonContent(text = text, icon = icon, iconRes = iconRes, trailingIcon = trailingIcon, tint = resolvedStyle.contentColor)
         }
     } else {
         Button(
@@ -176,16 +180,25 @@ fun SiegeButton(
                 pressedElevation = 8.dp
             )
         ) {
-            ButtonContent(text = text, icon = icon, trailingIcon = trailingIcon, tint = resolvedStyle.contentColor)
+            ButtonContent(text = text, icon = icon, iconRes = iconRes, trailingIcon = trailingIcon, tint = resolvedStyle.contentColor)
         }
     }
 }
 
 @Composable
-private fun ButtonContent(text: String, icon: ImageVector?, trailingIcon: ImageVector?, tint: Color) {
-    icon?.let {
+private fun ButtonContent(text: String, icon: ImageVector?, @DrawableRes iconRes: Int?, trailingIcon: ImageVector?, tint: Color) {
+    val painter = iconRes?.let { painterResource(it) }
+    if (icon != null) {
         Icon(
-            imageVector = it,
+            imageVector = icon,
+            contentDescription = null,
+            modifier = Modifier.size(20.dp),
+            tint = tint
+        )
+        Spacer(modifier = Modifier.width(SiegeSpacing.Small))
+    } else if (painter != null) {
+        Icon(
+            painter = painter,
             contentDescription = null,
             modifier = Modifier.size(20.dp),
             tint = tint

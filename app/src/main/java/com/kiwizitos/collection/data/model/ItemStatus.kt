@@ -1,7 +1,9 @@
 package com.kiwizitos.collection.data.model
 
+import androidx.annotation.DrawableRes
 import androidx.compose.ui.graphics.Color
 import com.kiwizitos.siege.tokens.SiegeColors
+import com.kiwizitos.siege.tokens.SiegeIcons
 import kotlinx.serialization.Serializable
 
 /**
@@ -25,6 +27,19 @@ enum class Ownership {
             TENHO -> SiegeColors.AccentCyan
             QUERO -> SiegeColors.AccentPink
         }
+
+    @get:DrawableRes
+    val badgeIcon: Int
+        get() = when (this) {
+            TENHO -> SiegeIcons.ic_bookmarks_solid
+            QUERO -> SiegeIcons.ic_flag_solid
+        }
+
+    @DrawableRes
+    fun iconFor(selected: Boolean): Int = when (this) {
+        TENHO -> if (selected) SiegeIcons.ic_bookmarks_solid else SiegeIcons.ic_bookmarks
+        QUERO -> if (selected) SiegeIcons.ic_flag_solid      else SiegeIcons.ic_flag
+    }
 }
 
 /**
@@ -48,6 +63,19 @@ enum class ReadStatus {
             LIDO -> SiegeColors.AccentPink
             LENDO -> SiegeColors.AccentCyan
         }
+
+    @get:DrawableRes
+    val badgeIcon: Int
+        get() = when (this) {
+            LIDO  -> SiegeIcons.ic_book_solid
+            LENDO -> SiegeIcons.ic_glasses_solid
+        }
+
+    @DrawableRes
+    fun iconFor(selected: Boolean): Int = when (this) {
+        LIDO  -> if (selected) SiegeIcons.ic_book_solid    else SiegeIcons.ic_book
+        LENDO -> if (selected) SiegeIcons.ic_glasses_solid else SiegeIcons.ic_glasses
+    }
 }
 
 /**
