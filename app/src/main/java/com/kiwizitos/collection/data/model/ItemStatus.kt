@@ -25,7 +25,7 @@ enum class Ownership {
     val badgeColor: Color
         get() = when (this) {
             TENHO -> SiegeColors.AccentCyan
-            QUERO -> SiegeColors.AccentPink
+            QUERO -> SiegeColors.AccentAmber
         }
 
     @get:DrawableRes
@@ -60,8 +60,8 @@ enum class ReadStatus {
 
     val badgeColor: Color
         get() = when (this) {
-            LIDO -> SiegeColors.AccentPink
-            LENDO -> SiegeColors.AccentCyan
+            LIDO  -> SiegeColors.AccentGreen
+            LENDO -> SiegeColors.AccentPink
         }
 
     @get:DrawableRes

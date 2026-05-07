@@ -32,6 +32,7 @@ import com.kiwizitos.collection.data.model.ItemStatus
 import com.kiwizitos.collection.data.model.SerieResult
 import com.kiwizitos.collection.navigation.AppRoute
 import com.kiwizitos.collection.navigation.navEncode
+import com.kiwizitos.collection.presentation.view.components.CategoryBadge
 import com.kiwizitos.collection.presentation.viewmodel.GalleryViewModel
 import com.kiwizitos.collection.presentation.viewmodel.PaginatedSearchResult
 import com.kiwizitos.collection.presentation.viewmodel.SearchViewModel

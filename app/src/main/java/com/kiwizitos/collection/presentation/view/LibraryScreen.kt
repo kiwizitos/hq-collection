@@ -90,12 +90,12 @@ private enum class VolumeFilter(
     val icon: Int,
     val iconSolid: Int
 ) {
-    AVULSOS("Avulsos", Color.Unspecified, SiegeIcons.ic_file, SiegeIcons.ic_file_solid),
-    TODOS("Todos", Color.Unspecified, SiegeIcons.ic_filter, SiegeIcons.ic_filter_solid),
-    QUERO("Quero", Color.Unspecified, SiegeIcons.ic_flag, SiegeIcons.ic_flag_solid),
-    TENHO("Tenho", Color.Unspecified, SiegeIcons.ic_bookmarks, SiegeIcons.ic_bookmarks_solid),
-    LENDO("Lendo", Color.Unspecified, SiegeIcons.ic_glasses, SiegeIcons.ic_glasses_solid),
-    LIDO("Lido", Color.Unspecified, SiegeIcons.ic_book, SiegeIcons.ic_book_solid);
+    AVULSOS("Avulsos",  SiegeColors.AccentCyan,  SiegeIcons.ic_file,      SiegeIcons.ic_file_solid),
+    TODOS("Todos",      SiegeColors.AccentPink,  SiegeIcons.ic_filter,    SiegeIcons.ic_filter_solid),
+    QUERO("Quero",      SiegeColors.AccentAmber, SiegeIcons.ic_flag,      SiegeIcons.ic_flag_solid),
+    TENHO("Tenho",      SiegeColors.AccentCyan,  SiegeIcons.ic_bookmarks, SiegeIcons.ic_bookmarks_solid),
+    LENDO("Lendo",      SiegeColors.AccentPink,  SiegeIcons.ic_glasses,   SiegeIcons.ic_glasses_solid),
+    LIDO("Lido",        SiegeColors.AccentGreen, SiegeIcons.ic_book,      SiegeIcons.ic_book_solid);
 
     fun iconFor(selected: Boolean) = if (selected) iconSolid else icon
 
@@ -317,11 +317,7 @@ private fun FilterChipRow(
     ) {
         VolumeFilter.entries.forEach { filter ->
             val selected = filter == active
-            val accentColor = when (filter) {
-                AVULSOS -> SiegeColors.AccentCyan
-                TODOS -> SiegeColors.AccentPink
-                else -> filter.color
-            }
+            val accentColor = filter.color
 
             FilterChip(
                 selected = selected,

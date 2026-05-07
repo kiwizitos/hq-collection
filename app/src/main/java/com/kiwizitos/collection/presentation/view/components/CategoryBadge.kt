@@ -1,4 +1,4 @@
-package com.kiwizitos.collection.presentation.view
+package com.kiwizitos.collection.presentation.view.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
@@ -23,7 +23,7 @@ import com.kiwizitos.siege.tokens.SiegeSpacing
  * Pode mostrar até dois badges lado a lado: um de posse (Tenho/Quero)
  * e um de leitura (Lido/Lendo), refletindo o [ItemStatus] do item.
  *
- * Reutilizado em [SearchScreen], [CoversScreen] e [DetailsScreen].
+ * Reutilizado em [com.kiwizitos.collection.presentation.view.SearchScreen], [com.kiwizitos.collection.presentation.view.CoversScreen] e [com.kiwizitos.collection.presentation.view.DetailsScreen].
  * Usa tokens do Design System Siege para cores, formas e espaçamento.
  */
 @Composable

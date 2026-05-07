@@ -24,6 +24,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,10 +43,15 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.kiwizitos.collection.data.model.CoverItem
 import com.kiwizitos.collection.data.model.ItemStatus
+import com.kiwizitos.collection.data.model.Ownership
+import com.kiwizitos.collection.data.model.ReadStatus
 import com.kiwizitos.collection.data.model.UserSeries
 import com.kiwizitos.collection.navigation.AppRoute
 import com.kiwizitos.collection.navigation.navDecode
 import com.kiwizitos.collection.navigation.navEncode
+import com.kiwizitos.collection.presentation.view.components.CategoryBadge
+import com.kiwizitos.collection.presentation.view.components.CoversFilterState
+import com.kiwizitos.collection.presentation.view.components.FilterBottomSheet
 import com.kiwizitos.collection.presentation.viewmodel.GalleryViewModel
 import com.kiwizitos.collection.presentation.viewmodel.PaginatedCoversResult
 import com.kiwizitos.collection.presentation.viewmodel.SearchViewModel
@@ -101,8 +109,7 @@ fun CoversScreen(
         )
     }
 
-    // Note: getSeriesCovers is called by the NavHost before this screen is shown.
-    // All standalone redirect logic lives in AppNavHost — not here.
+// ── Contador ─────────────────────────────────────────────────────────────────
 
     val firstCoverUrl: String? = when (val s = coversState) {
         is UiState.Success -> s.data.covers.firstOrNull()?.coverUrl
@@ -111,6 +118,33 @@ fun CoversScreen(
     }
     val isSaved = seriesMap.containsKey(seriesUrl)
 
+    // ── Filter state ──────────────────────────────────────────────────────────
+    var showFilterSheet by remember { mutableStateOf(false) }
+    var filterState by remember { mutableStateOf(CoversFilterState()) }
+
+    val allCovers = remember(coversState) {
+        when (val s = coversState) {
+            is UiState.Success -> s.data.covers
+            is UiState.LoadingMore -> s.currentData.covers
+            else -> emptyList()
+        }
+    }
+
+    val countNoStatus = remember(allCovers, galleryMap) {
+        allCovers.count { galleryMap[it.relativeLink] == null }
+    }
+    val countTenho = remember(allCovers, galleryMap) {
+        allCovers.count { galleryMap[it.relativeLink]?.ownership == Ownership.TENHO }
+    }
+    val countQuero = remember(allCovers, galleryMap) {
+        allCovers.count { galleryMap[it.relativeLink]?.ownership == Ownership.QUERO }
+    }
+    val countLido = remember(allCovers, galleryMap) {
+        allCovers.count { galleryMap[it.relativeLink]?.readStatus == ReadStatus.LIDO }
+    }
+    val countLendo = remember(allCovers, galleryMap) {
+        allCovers.count { galleryMap[it.relativeLink]?.readStatus == ReadStatus.LENDO }
+    }
 
     Scaffold(
         topBar = {
@@ -159,6 +193,18 @@ fun CoversScreen(
                             icon = if (isSaved) SiegeIcons.ic_like_solid else SiegeIcons.ic_like,
                             contentDescription = if (isSaved) "Remover da biblioteca" else "Salvar na biblioteca",
                             tint = if (isSaved) SiegeColors.AccentPink else SiegeTheme.colors.textTertiary
+                        )
+                    }
+                    
+                    // Componente de filtro - bottomsheet
+
+                    IconButton(
+                        onClick = { showFilterSheet = true }
+                    ) {
+                        SiegeIcon(
+                            icon = if (filterState.isDefault) SiegeIcons.ic_filter else SiegeIcons.ic_filter_solid,
+                            contentDescription = "Filtro",
+                            tint = if (filterState.isDefault) SiegeTheme.colors.textTertiary else SiegeColors.AccentPink
                         )
                     }
                 },
@@ -234,6 +280,7 @@ fun CoversScreen(
                     data = s.data,
                     isLoadingMore = false,
                     galleryMap = galleryMap,
+                    filterState = filterState,
                     gridState = gridState,
                     onLoadMore = { viewModel.loadNextCoversPage() },
                     onCoverClick = { cover ->
@@ -245,6 +292,7 @@ fun CoversScreen(
                     data = s.currentData,
                     isLoadingMore = true,
                     galleryMap = galleryMap,
+                    filterState = filterState,
                     gridState = gridState,
                     onLoadMore = {},
                     onCoverClick = { cover ->
@@ -253,6 +301,21 @@ fun CoversScreen(
                 )
             }
         }
+    }
+
+    // ── Filter Bottom Sheet ───────────────────────────────────────────────────
+    if (showFilterSheet) {
+        FilterBottomSheet(
+            onDismiss = { showFilterSheet = false },
+            filterState = filterState,
+            onFilterChange = { filterState = it },
+            totalCovers = allCovers.size,
+            countNoStatus = countNoStatus,
+            countTenho = countTenho,
+            countQuero = countQuero,
+            countLido = countLido,
+            countLendo = countLendo
+        )
     }
 }
 
@@ -282,10 +345,16 @@ private fun CoversGrid(
     data: PaginatedCoversResult,
     isLoadingMore: Boolean,
     galleryMap: Map<String, ItemStatus>,
+    filterState: CoversFilterState,
     gridState: androidx.compose.foundation.lazy.grid.LazyGridState,
     onLoadMore: () -> Unit,
     onCoverClick: (CoverItem) -> Unit
 ) {
+    val filteredCovers = remember(data.covers, galleryMap, filterState) {
+        if (filterState.isDefault) data.covers
+        else data.covers.filter { cover -> filterState.matches(galleryMap[cover.relativeLink]) }
+    }
+
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
         state = gridState,
@@ -294,7 +363,7 @@ private fun CoversGrid(
         verticalArrangement = Arrangement.spacedBy(SiegeSpacing.Small),
         horizontalArrangement = Arrangement.spacedBy(SiegeSpacing.Small)
     ) {
-        items(items = data.covers, key = { it.relativeLink }) { cover ->
+        items(items = filteredCovers, key = { it.relativeLink }) { cover ->
             CoverCell(
                 cover = cover,
                 category = galleryMap[cover.relativeLink],

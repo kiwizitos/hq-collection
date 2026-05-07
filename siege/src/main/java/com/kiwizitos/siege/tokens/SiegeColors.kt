@@ -4,22 +4,41 @@ import androidx.compose.ui.graphics.Color
 
 /**
  * Paleta de cores do Design System Siege.
- * Baseado em dark mode premium com accents vibrantes (Pink/Magenta e Cyan).
+ * Dark mode premium com 4 accent colours vibrantes.
+ *
+ * Uso semântico dos accents:
+ *  - [AccentPink]  → UI primária (botões, bordas, destaques) · status **Lendo**
+ *  - [AccentCyan]  → UI secundária (campos, ações)          · status **Tenho**
+ *  - [AccentGreen] → Conclusão / conquista                  · status **Lido**
+ *  - [AccentAmber] → Desejo / em fila                       · status **Quero**
  */
 object SiegeColors {
 
     // ====== ACCENT COLORS (Principais do Design) ======
-    /** Accent Pink/Magenta - Usado em botões primários, destaques e borders */
+
+    /** Accent Pink/Magenta — botões primários, destaques, borders · Lendo */
     val AccentPink = Color(0xFFFF6B9D)
-    
-    /** Accent Cyan - Usado em botões secundários de ação */
+
+    /** Accent Cyan — botões secundários, campos, actions · Tenho */
     val AccentCyan = Color(0xFF00E5FF)
-    
-    /** Variant mais suave do Pink para containers */
+
+    /** Accent Green — conclusão, conquista · Lido */
+    val AccentGreen = Color(0xFF69F0AE)
+
+    /** Accent Amber — desejo, wishlist · Quero */
+    val AccentAmber = Color(0xFFFFAB40)
+
+    /** Variant mais escura do Pink para containers */
     val AccentPinkContainer = Color(0xFFFF4081)
-    
-    /** Variant mais suave do Cyan para containers */
+
+    /** Variant mais escura do Cyan para containers */
     val AccentCyanContainer = Color(0xFF00B8D4)
+
+    /** Variant mais escura do Green para containers */
+    val AccentGreenContainer = Color(0xFF00C853)
+
+    /** Variant mais escura do Amber para containers */
+    val AccentAmberContainer = Color(0xFFFF8F00)
 
     // ====== BACKGROUNDS & SURFACES (Dark Mode Premium) ======
     /** Background principal - Preto profundo */
