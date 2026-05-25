@@ -23,6 +23,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -215,35 +216,35 @@ fun CoversScreen(
             )
         }
     ) { innerPadding ->
+        // ── Dados estáveis para não alternar entre branches do when ─────────────
+        val currentData: PaginatedCoversResult? = when (val s = coversState) {
+            is UiState.Success -> s.data
+            is UiState.LoadingMore -> s.currentData
+            else -> null
+        }
+        val isLoadingMore = coversState is UiState.LoadingMore
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
             // ── Contador fixo ─────────────────────────────────────────────────
-            when (val s = coversState) {
-                is UiState.Success -> CoversCounter(
-                    s.data.covers.size,
-                    s.data.paginationInfo.totalResults
+            if (currentData != null) {
+                CoversCounter(
+                    loaded = currentData.covers.size,
+                    total = currentData.paginationInfo.totalResults
                 )
-
-                is UiState.LoadingMore -> CoversCounter(
-                    s.currentData.covers.size,
-                    s.currentData.paginationInfo.totalResults
-                )
-
-                else -> Unit
             }
 
             // ── Conteúdo principal ────────────────────────────────────────────
-            when (val s = coversState) {
-
-                is UiState.Idle, is UiState.Loading -> Box(
+            when {
+                coversState is UiState.Idle || coversState is UiState.Loading -> Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) { CircularProgressIndicator(color = SiegeColors.AccentPink) }
 
-                is UiState.Empty -> Box(
+                coversState is UiState.Empty -> Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
@@ -254,7 +255,7 @@ fun CoversScreen(
                     )
                 }
 
-                is UiState.Error -> Column(
+                coversState is UiState.Error -> Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(SiegeSpacing.Regular),
@@ -262,7 +263,7 @@ fun CoversScreen(
                     verticalArrangement = Arrangement.Center
                 ) {
                     SiegeText(
-                        text = s.message,
+                        text = (coversState as UiState.Error).message,
                         style = SiegeTextStyle.Body,
                         color = SiegeColors.Error,
                         textAlign = TextAlign.Center
@@ -276,25 +277,15 @@ fun CoversScreen(
                     }
                 }
 
-                is UiState.Success -> CoversGrid(
-                    data = s.data,
-                    isLoadingMore = false,
+                // Success ou LoadingMore — sempre a mesma chamada ao CoversGrid
+                // para que o Compose não descarte o estado da LazyVerticalGrid
+                currentData != null -> CoversGrid(
+                    data = currentData,
+                    isLoadingMore = isLoadingMore,
                     galleryMap = galleryMap,
                     filterState = filterState,
                     gridState = gridState,
                     onLoadMore = { viewModel.loadNextCoversPage() },
-                    onCoverClick = { cover ->
-                        navigateToEdition(cover.relativeLink, cover.title)
-                    }
-                )
-
-                is UiState.LoadingMore -> CoversGrid(
-                    data = s.currentData,
-                    isLoadingMore = true,
-                    galleryMap = galleryMap,
-                    filterState = filterState,
-                    gridState = gridState,
-                    onLoadMore = {},
                     onCoverClick = { cover ->
                         navigateToEdition(cover.relativeLink, cover.title)
                     }
@@ -355,6 +346,19 @@ private fun CoversGrid(
         else data.covers.filter { cover -> filterState.matches(galleryMap[cover.relativeLink]) }
     }
 
+    // ── Auto-load when approaching the bottom of the grid ────────────────────
+    val shouldLoadMore by remember(data.paginationInfo.hasNextPage, isLoadingMore) {
+        derivedStateOf {
+            if (!data.paginationInfo.hasNextPage || isLoadingMore) return@derivedStateOf false
+            val lastVisible = gridState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+            val total = gridState.layoutInfo.totalItemsCount
+            total > 0 && lastVisible >= total - 6      // ~2 rows ahead in a 3-col grid
+        }
+    }
+    LaunchedEffect(shouldLoadMore) {
+        if (shouldLoadMore) onLoadMore()
+    }
+
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
         state = gridState,
@@ -370,7 +374,8 @@ private fun CoversGrid(
                 onClick = { onCoverClick(cover) }
             )
         }
-        if (data.paginationInfo.hasNextPage) {
+        // Spinner-only footer — button is replaced by auto-scroll
+        if (data.paginationInfo.hasNextPage && isLoadingMore) {
             item(key = "load_more_footer", span = { GridItemSpan(maxLineSpan) }) {
                 Box(
                     modifier = Modifier
@@ -378,14 +383,9 @@ private fun CoversGrid(
                         .padding(vertical = SiegeSpacing.Medium),
                     contentAlignment = Alignment.Center
                 ) {
-                    if (isLoadingMore) CircularProgressIndicator(
+                    CircularProgressIndicator(
                         color = SiegeColors.AccentPink,
                         modifier = Modifier.size(28.dp)
-                    )
-                    else SiegeButton(
-                        text = "Carregar mais",
-                        style = SiegeButtonStyle.Ghost,
-                        onClick = onLoadMore
                     )
                 }
             }

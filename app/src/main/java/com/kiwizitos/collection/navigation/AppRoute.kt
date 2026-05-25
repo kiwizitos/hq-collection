@@ -69,6 +69,8 @@ sealed class AppRoute(val route: String) {
      *
      * Os parâmetros devem ser codificados com [navEncode] antes de criar a rota.
      */
+    data object CurrentlyReading : AppRoute("currently_reading")
+
     data object SeriesCovers : AppRoute("covers/{seriesUrl}/{seriesTitle}") {
         fun createRoute(encodedSeriesUrl: String, encodedSeriesTitle: String) =
             "covers/$encodedSeriesUrl/$encodedSeriesTitle"

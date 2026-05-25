@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -90,10 +91,25 @@ fun HomeScreen(
         if (lendoEditions.isNotEmpty()) {
             item {
                 SiegeList(
-                    items = lendoEditions,
+                    items = lendoEditions.take(4),
                     style = SiegeListStyle.Horizontal,
                     header = {
-                        SiegeText(text = "Continue lendo", style = SiegeTextStyle.Body)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            SiegeText(text = "Continue lendo", style = SiegeTextStyle.Body)
+                            TextButton(onClick = {
+                                navController.navigate(AppRoute.CurrentlyReading.route)
+                            }) {
+                                SiegeText(
+                                    text = "Ver todas",
+                                    style = SiegeTextStyle.Label,
+                                    color = SiegeColors.AccentCyan
+                                )
+                            }
+                        }
                     }
                 ) { edition ->
                     val coverPainter = if (!edition.coverUrl.isNullOrBlank())
@@ -136,7 +152,7 @@ fun HomeScreen(
         if (savedSeries.isNotEmpty()) {
             item {
                 SiegeList(
-                    items = savedSeries,
+                    items = savedSeries.takeLast(4),
                     style = SiegeListStyle.Grid(2),
                     header = {
                         Row(
@@ -145,6 +161,19 @@ fun HomeScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             SiegeText(text = "Minhas séries", style = SiegeTextStyle.Body)
+                            TextButton(onClick = {
+                                navController.navigate(AppRoute.Library.route) {
+                                    popUpTo(AppRoute.Home.route) { saveState = true }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                            }) {
+                                SiegeText(
+                                    text = "Ver séries",
+                                    style = SiegeTextStyle.Label,
+                                    color = SiegeColors.AccentCyan
+                                )
+                            }
                         }
                     }
                 ) { series: UserSeries ->

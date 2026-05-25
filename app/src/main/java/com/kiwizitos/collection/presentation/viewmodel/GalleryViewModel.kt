@@ -59,5 +59,17 @@ class GalleryViewModel @Inject constructor(
     fun removeSeries(seriesUrl: String) {
         viewModelScope.launch { removeSeriesUseCase(seriesUrl) }
     }
+
+    // ── Scroll state — Volumes tab ────────────────────────────────────────────
+
+    var savedVolumesListIndex: Int = 0
+        private set
+    var savedVolumesListOffset: Int = 0
+        private set
+
+    fun saveVolumesListState(index: Int, offset: Int) {
+        savedVolumesListIndex = index
+        savedVolumesListOffset = offset
+    }
 }
 

@@ -20,6 +20,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import com.kiwizitos.collection.presentation.view.AuthScreen
 import com.kiwizitos.collection.presentation.view.CoversScreen
+import com.kiwizitos.collection.presentation.view.CurrentlyReadingScreen
 import com.kiwizitos.collection.presentation.view.DetailsScreen
 import com.kiwizitos.collection.presentation.view.HomeScreen
 import com.kiwizitos.collection.presentation.view.LibraryScreen
@@ -127,6 +128,13 @@ fun AppNavHost(
             }
 
             // ── Telas de detalhe: têm Scaffold próprio, ignoram innerPadding ──
+            composable(AppRoute.CurrentlyReading.route) {
+                CurrentlyReadingScreen(
+                    navController = navController,
+                    galleryViewModel = galleryViewModel
+                )
+            }
+
             composable(
                 route = AppRoute.SeriesCovers.route,
                 arguments = listOf(
@@ -174,7 +182,10 @@ fun AppNavHost(
                 }
 
                 // ── Spinner while loading or about to redirect ────────────────
+                // LoadingMore is also "resolved" — CoversScreen handles the
+                // bottom spinner itself; we must NOT replace it with a full-screen one.
                 val isResolved = coversState is UiState.Success
+                    || coversState is UiState.LoadingMore
                     || coversState is UiState.Error
                     || coversState is UiState.Empty
                 if (!isResolved || standaloneUrl != null) {

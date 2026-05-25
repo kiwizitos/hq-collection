@@ -14,9 +14,12 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -164,6 +167,19 @@ private fun SearchResultsList(
     onLoadMore: () -> Unit,
     onSeriesClick: (SerieResult) -> Unit
 ) {
+    // ── Auto-load when approaching the bottom ─────────────────────────────────
+    val shouldLoadMore by remember(data.paginationInfo.hasNextPage, isLoadingMore) {
+        derivedStateOf {
+            if (!data.paginationInfo.hasNextPage || isLoadingMore) return@derivedStateOf false
+            val lastVisible = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+            val total = listState.layoutInfo.totalItemsCount
+            total > 0 && lastVisible >= total - 3
+        }
+    }
+    LaunchedEffect(shouldLoadMore) {
+        if (shouldLoadMore) onLoadMore()
+    }
+
     LazyColumn(
         state = listState,
         verticalArrangement = Arrangement.spacedBy(SiegeSpacing.Small),
@@ -177,33 +193,22 @@ private fun SearchResultsList(
                 onClick = { onSeriesClick(serie) }
             )
         }
-        if (data.paginationInfo.hasNextPage) {
+        // Spinner-only footer — the button is replaced by auto-scroll
+        if (data.paginationInfo.hasNextPage && isLoadingMore) {
             item(key = "load_more_footer") {
-                LoadMoreFooter(isLoading = isLoadingMore, onLoadMore = onLoadMore)
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = SiegeSpacing.Medium),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(
+                        color = SiegeColors.AccentPink,
+                        modifier = Modifier.size(28.dp)
+                    )
+                }
             }
         }
-    }
-}
-
-// ── Rodapé ────────────────────────────────────────────────────────────────────
-
-@Composable
-private fun LoadMoreFooter(isLoading: Boolean, onLoadMore: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = SiegeSpacing.Medium),
-        contentAlignment = Alignment.Center
-    ) {
-        if (isLoading) CircularProgressIndicator(
-            color = SiegeColors.AccentPink,
-            modifier = Modifier.size(28.dp)
-        )
-        else SiegeButton(
-            text = "Carregar mais",
-            style = SiegeButtonStyle.Ghost,
-            onClick = onLoadMore
-        )
     }
 }
 

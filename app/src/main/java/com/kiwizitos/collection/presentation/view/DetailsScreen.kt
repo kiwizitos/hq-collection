@@ -14,11 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
@@ -30,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -56,6 +54,7 @@ import com.kiwizitos.collection.presentation.viewmodel.GalleryViewModel
 import com.kiwizitos.collection.presentation.viewmodel.UiState
 import com.kiwizitos.siege.components.card.SiegeCard
 import com.kiwizitos.siege.components.card.SiegeCardStyle
+import com.kiwizitos.siege.components.foundation.ButtonStyle
 import com.kiwizitos.siege.components.foundation.SiegeButton
 import com.kiwizitos.siege.components.foundation.SiegeButtonStyle
 import com.kiwizitos.siege.components.foundation.SiegeIcon
@@ -426,10 +425,22 @@ private fun GalleryPanel(
         ) {
             Ownership.entries.forEach { own ->
                 val isSelected = own == currentOwnership
-                    SiegeButton(
-                        text = own.displayLabel,
-                        style = if (isSelected) SiegeButtonStyle.Primary else SiegeButtonStyle.Outlined,
-                        iconRes = own.iconFor(isSelected),
+                val statusColor = own.badgeColor
+                SiegeButton(
+                    text = own.displayLabel,
+                    style = if (isSelected)
+                        ButtonStyle(
+                            containerColor = statusColor,
+                            contentColor = Color.Black,
+                            borderColor = null
+                        )
+                    else
+                        ButtonStyle(
+                            containerColor = Color.Transparent,
+                            contentColor = Color.Unspecified,
+                            borderColor = statusColor
+                        ),
+                    iconRes = own.iconFor(isSelected),
                     onClick = { applyStatus(if (isSelected) null else own, currentReadStatus) },
                     modifier = Modifier.weight(1f)
                 )
@@ -449,10 +460,22 @@ private fun GalleryPanel(
         ) {
             ReadStatus.entries.forEach { read ->
                 val isSelected = read == currentReadStatus
-                    SiegeButton(
-                        text = read.displayLabel,
-                        style = if (isSelected) SiegeButtonStyle.Primary else SiegeButtonStyle.Outlined,
-                        iconRes = read.iconFor(isSelected),
+                val statusColor = read.badgeColor
+                SiegeButton(
+                    text = read.displayLabel,
+                    style = if (isSelected)
+                        ButtonStyle(
+                            containerColor = statusColor,
+                            contentColor = if (statusColor == SiegeColors.AccentPink) Color.White else Color.Black,
+                            borderColor = null
+                        )
+                    else
+                        ButtonStyle(
+                            containerColor = Color.Transparent,
+                            contentColor = Color.Unspecified,
+                            borderColor = statusColor
+                        ),
+                    iconRes = read.iconFor(isSelected),
                     onClick = { applyStatus(currentOwnership, if (isSelected) null else read) },
                     modifier = Modifier.weight(1f)
                 )

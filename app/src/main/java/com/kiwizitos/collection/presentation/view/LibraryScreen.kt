@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -24,6 +25,7 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -192,7 +194,8 @@ fun LibraryScreen(
 
             LibraryTab.VOLUMES -> VolumesTab(
                 editions = editionsFull.values.toList(),
-                navController = navController
+                navController = navController,
+                galleryViewModel = galleryViewModel
             )
         }
     }
@@ -250,9 +253,10 @@ private fun SeriesTab(
 @Composable
 private fun VolumesTab(
     editions: List<UserItem>,
-    navController: NavController
+    navController: NavController,
+    galleryViewModel: GalleryViewModel
 ) {
-    var activeFilter by rememberSaveable { mutableStateOf(VolumeFilter.TODOS) }
+    var activeFilter by rememberSaveable { mutableStateOf(TODOS) }
 
     // Aplica filtro antes de agrupar — grupos sem itens desaparecem automaticamente
     val filtered = editions.filter { activeFilter.matches(it) }
@@ -286,12 +290,34 @@ private fun VolumesTab(
 
         // ── Lista plana: avulsos sem agrupamento ──────────────────────────
         val sorted = filtered.sortedWith(compareBy(NaturalOrderComparator) { it.title })
+        val listState = rememberLazyListState()
+
+        // Restaura posição de scroll salva antes da última navegação
+        LaunchedEffect(listState) {
+            if (galleryViewModel.savedVolumesListIndex > 0) {
+                listState.scrollToItem(
+                    index = galleryViewModel.savedVolumesListIndex,
+                    scrollOffset = galleryViewModel.savedVolumesListOffset
+                )
+            }
+        }
+
         LazyColumn(
+            state = listState,
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(bottom = SiegeSpacing.Regular)
         ) {
             items(sorted, key = { it.guiaUrl }) { edition ->
-                VolumeRow(edition = edition, navController = navController)
+                VolumeRow(
+                    edition = edition,
+                    onBeforeNavigate = {
+                        galleryViewModel.saveVolumesListState(
+                            index = listState.firstVisibleItemIndex,
+                            offset = listState.firstVisibleItemScrollOffset
+                        )
+                    },
+                    navController = navController
+                )
                 HorizontalDivider(
                     color = SiegeTheme.colors.surface,
                     thickness = androidx.compose.ui.unit.Dp.Hairline
@@ -359,7 +385,11 @@ private fun FilterChipRow(
 // ── Single volume row ─────────────────────────────────────────────────────────
 
 @Composable
-private fun VolumeRow(edition: UserItem, navController: NavController) {
+private fun VolumeRow(
+    edition: UserItem,
+    onBeforeNavigate: () -> Unit,
+    navController: NavController
+) {
     val painter = if (!edition.coverUrl.isNullOrBlank())
         rememberAsyncImagePainter(edition.coverUrl)
     else
@@ -382,6 +412,7 @@ private fun VolumeRow(edition: UserItem, navController: NavController) {
             vertical = SiegeSpacing.XSmall
         ),
         onClick = {
+            onBeforeNavigate()
             navController.navigate(
                 AppRoute.EditionDetail.createRoute(
                     editionUrl = navEncode(edition.guiaUrl),

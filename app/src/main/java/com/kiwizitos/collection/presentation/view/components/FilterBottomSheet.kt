@@ -472,7 +472,7 @@ private fun CategoryProgressRow(
                 .height(4.dp)
                 .clip(SiegeShapes.Full),
             color = color,
-            trackColor = SiegeTheme.colors.surfaceVariant
+            trackColor = color.copy(alpha = 0.18f)
         )
         SiegeText(
             text = "$count  (${(fraction * 100).roundToInt()}%)",
