@@ -1,6 +1,5 @@
 package com.kiwizitos.collection.presentation.view
 
-import android.R.drawable.ic_menu_gallery
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,12 +33,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import coil.compose.rememberAsyncImagePainter
+import com.kiwizitos.collection.presentation.view.components.rememberCoverPainter
 import com.kiwizitos.collection.data.model.Ownership
 import com.kiwizitos.collection.data.model.ReadStatus
 import com.kiwizitos.collection.data.model.UserItem
@@ -224,10 +222,7 @@ private fun SeriesTab(
     ) {
         val sorted = series.sortedWith(compareBy(NaturalOrderComparator) { it.seriesTitle })
         items(sorted, key = { it.seriesUrl }) { s ->
-            val painter = if (!s.coverUrl.isNullOrBlank())
-                rememberAsyncImagePainter(s.coverUrl)
-            else
-                painterResource(ic_menu_gallery)
+            val painter = rememberCoverPainter(s.coverUrl)
 
             SiegeContentCell(
                 coverImage = painter,
@@ -390,10 +385,7 @@ private fun VolumeRow(
     onBeforeNavigate: () -> Unit,
     navController: NavController
 ) {
-    val painter = if (!edition.coverUrl.isNullOrBlank())
-        rememberAsyncImagePainter(edition.coverUrl)
-    else
-        painterResource(ic_menu_gallery)
+    val painter = rememberCoverPainter(edition.coverUrl)
 
     val badges = buildList {
         edition.ownership?.let { add(BadgeData(it.displayLabel.uppercase(), it.badgeColor, it.badgeIcon)) }

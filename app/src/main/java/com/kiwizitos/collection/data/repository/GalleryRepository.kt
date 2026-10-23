@@ -30,9 +30,15 @@ interface GalleryRepository {
     suspend fun saveItem(item: UserItem): Result<UserItem>
     suspend fun removeItem(guiaUrl: String): Result<Unit>
 
+    /** Renova somente a capa de uma edição já salva; URL inválida/ausente é ignorada. */
+    suspend fun refreshItemCover(guiaUrl: String, coverUrl: String?): Result<Unit>
+
     // ── Séries ────────────────────────────────────────────────────────────────
     suspend fun saveSeries(series: UserSeries): Result<UserSeries>
     suspend fun removeSeries(seriesUrl: String): Result<Unit>
+
+    /** Renova somente a capa de uma série já salva, usando a primeira capa da página inicial. */
+    suspend fun refreshSeriesCover(seriesUrl: String, coverUrl: String?): Result<Unit>
 
     fun clearCache()
 }

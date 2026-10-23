@@ -9,6 +9,7 @@ package com.kiwizitos.collection.data.model
  * @param viewState       Valor do campo oculto `__VIEWSTATE` usado no POST de navegação.
  * @param eventValidation Valor do campo oculto `__EVENTVALIDATION`.
  * @param eventTarget     Alvo do evento `__doPostBack` extraído do botão "próxima página".
+ * @param viewStateGenerator Valor de `__VIEWSTATEGENERATOR` extraído da página atual.
  */
 data class PaginationInfo(
     val currentPage: Int = 1,
@@ -16,6 +17,6 @@ data class PaginationInfo(
     val hasNextPage: Boolean = false,
     val viewState: String? = null,
     val eventValidation: String? = null,
-    val eventTarget: String? = null
+    val eventTarget: String? = null,
+    val viewStateGenerator: String? = null
 )
-

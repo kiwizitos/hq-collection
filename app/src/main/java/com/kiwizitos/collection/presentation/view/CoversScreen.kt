@@ -32,7 +32,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,12 +40,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
-import coil.request.ImageRequest
+import com.kiwizitos.collection.presentation.view.components.rememberCoverRequest
 import com.kiwizitos.collection.data.model.CoverItem
 import com.kiwizitos.collection.data.model.ItemStatus
 import com.kiwizitos.collection.data.model.Ownership
 import com.kiwizitos.collection.data.model.ReadStatus
 import com.kiwizitos.collection.data.model.UserSeries
+import com.kiwizitos.collection.data.remote.GuiaFailureMessages
 import com.kiwizitos.collection.navigation.AppRoute
 import com.kiwizitos.collection.navigation.navDecode
 import com.kiwizitos.collection.navigation.navEncode
@@ -85,6 +85,13 @@ fun CoversScreen(
     val galleryMap by galleryViewModel.galleryMap.collectAsState()
     val seriesMap by galleryViewModel.seriesMap.collectAsState()
     val gridState = rememberLazyGridState()
+    var seriesCoverError by remember(seriesUrl) { mutableStateOf<String?>(null) }
+    var scrapedSeriesCover by remember(seriesUrl) { mutableStateOf<String?>(null) }
+    val currentData: PaginatedCoversResult? = when (val s = coversState) {
+        is UiState.Success -> s.data
+        is UiState.LoadingMore -> s.currentData
+        else -> null
+    }
 
     // Restore scroll position saved before the last navigation away from this screen
     LaunchedEffect(gridState) {
@@ -118,6 +125,23 @@ fun CoversScreen(
         else -> null
     }
     val isSaved = seriesMap.containsKey(seriesUrl)
+    val savedSeries = seriesMap[seriesUrl]
+    val firstPageLoaded = currentData != null &&
+        currentData.paginationInfo.currentPage == 1 &&
+        !currentData.isStandalone && viewModel.currentSeriesUrl == seriesUrl
+
+    LaunchedEffect(firstPageLoaded, firstCoverUrl) {
+        if (firstPageLoaded) scrapedSeriesCover = firstCoverUrl
+    }
+    LaunchedEffect(seriesUrl, scrapedSeriesCover, savedSeries?.userId, savedSeries?.id) {
+        seriesCoverError = null
+        if (scrapedSeriesCover != null && savedSeries != null) {
+            seriesCoverError = galleryViewModel.refreshSeriesCover(seriesUrl, scrapedSeriesCover)
+                .exceptionOrNull()?.let {
+                    "Não foi possível atualizar a capa salva. ${GuiaFailureMessages.message(it)}"
+                }
+        }
+    }
 
     // ── Filter state ──────────────────────────────────────────────────────────
     var showFilterSheet by remember { mutableStateOf(false) }
@@ -217,11 +241,6 @@ fun CoversScreen(
         }
     ) { innerPadding ->
         // ── Dados estáveis para não alternar entre branches do when ─────────────
-        val currentData: PaginatedCoversResult? = when (val s = coversState) {
-            is UiState.Success -> s.data
-            is UiState.LoadingMore -> s.currentData
-            else -> null
-        }
         val isLoadingMore = coversState is UiState.LoadingMore
 
         Column(
@@ -229,6 +248,14 @@ fun CoversScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
+            seriesCoverError?.let { message ->
+                SiegeText(
+                    text = message,
+                    style = SiegeTextStyle.Body,
+                    color = SiegeColors.Error,
+                    modifier = Modifier.padding(SiegeSpacing.Regular)
+                )
+            }
             // ── Contador fixo ─────────────────────────────────────────────────
             if (currentData != null) {
                 CoversCounter(
@@ -347,9 +374,13 @@ private fun CoversGrid(
     }
 
     // ── Auto-load when approaching the bottom of the grid ────────────────────
-    val shouldLoadMore by remember(data.paginationInfo.hasNextPage, isLoadingMore) {
+    val shouldLoadMore by remember(
+        data.paginationInfo.hasNextPage, isLoadingMore, data.paginationError
+    ) {
         derivedStateOf {
-            if (!data.paginationInfo.hasNextPage || isLoadingMore) return@derivedStateOf false
+            if (!data.paginationInfo.hasNextPage || isLoadingMore || data.paginationError != null) {
+                return@derivedStateOf false
+            }
             val lastVisible = gridState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
             val total = gridState.layoutInfo.totalItemsCount
             total > 0 && lastVisible >= total - 6      // ~2 rows ahead in a 3-col grid
@@ -374,19 +405,35 @@ private fun CoversGrid(
                 onClick = { onCoverClick(cover) }
             )
         }
-        // Spinner-only footer — button is replaced by auto-scroll
-        if (data.paginationInfo.hasNextPage && isLoadingMore) {
+        if (isLoadingMore || data.paginationError != null) {
             item(key = "load_more_footer", span = { GridItemSpan(maxLineSpan) }) {
-                Box(
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = SiegeSpacing.Medium),
-                    contentAlignment = Alignment.Center
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(SiegeSpacing.Small)
                 ) {
-                    CircularProgressIndicator(
-                        color = SiegeColors.AccentPink,
-                        modifier = Modifier.size(28.dp)
-                    )
+                    if (isLoadingMore) {
+                        CircularProgressIndicator(
+                            color = SiegeColors.AccentPink,
+                            modifier = Modifier.size(28.dp)
+                        )
+                    } else {
+                        data.paginationError?.let { message ->
+                            SiegeText(
+                                text = message,
+                                style = SiegeTextStyle.Body,
+                                color = SiegeColors.Error,
+                                textAlign = TextAlign.Center
+                            )
+                            SiegeButton(
+                                text = "Tentar novamente",
+                                style = SiegeButtonStyle.Primary,
+                                onClick = onLoadMore
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -397,18 +444,34 @@ private fun CoversGrid(
 
 @Composable
 private fun CoverCell(cover: CoverItem, category: ItemStatus?, onClick: () -> Unit) {
+    var imageFailed by remember(cover.coverUrl) { mutableStateOf(false) }
     Box {
         SiegeCard(style = SiegeCardStyle.Elevated, onClick = onClick) {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current).data(cover.coverUrl)
-                    .crossfade(true).build(),
-                contentDescription = cover.title,
-                contentScale = ContentScale.Crop,
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(2f / 3f)
-                    .clip(SiegeShapes.Small)
-            )
+                    .clip(SiegeShapes.Small),
+                contentAlignment = Alignment.Center
+            ) {
+                AsyncImage(
+                    model = rememberCoverRequest(cover.coverUrl),
+                    contentDescription = cover.title,
+                    contentScale = ContentScale.Crop,
+                    onError = { imageFailed = true },
+                    onSuccess = { imageFailed = false },
+                    modifier = Modifier.fillMaxSize()
+                )
+                if (imageFailed || cover.coverUrl.isNullOrBlank()) {
+                    SiegeText(
+                        text = "Capa indisponível",
+                        style = SiegeTextStyle.Label,
+                        color = SiegeTheme.colors.textTertiary,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(SiegeSpacing.Small)
+                    )
+                }
+            }
             SiegeText(
                 text = cover.title,
                 style = SiegeTextStyle.Label,
@@ -441,4 +504,3 @@ private fun CoversScreenPreview() {
         )
     }
 }
-

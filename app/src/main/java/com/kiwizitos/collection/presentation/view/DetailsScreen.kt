@@ -24,13 +24,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -40,12 +42,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
-import coil.request.ImageRequest
+import com.kiwizitos.collection.presentation.view.components.rememberCoverRequest
 import com.kiwizitos.collection.data.model.ComicDetails
 import com.kiwizitos.collection.data.model.ItemStatus
 import com.kiwizitos.collection.data.model.Ownership
 import com.kiwizitos.collection.data.model.ReadStatus
 import com.kiwizitos.collection.data.model.UserItem
+import com.kiwizitos.collection.data.remote.GuiaFailureMessages
+import com.kiwizitos.collection.data.remote.GuiaUrls
 import com.kiwizitos.collection.navigation.AppRoute
 import com.kiwizitos.collection.navigation.navDecode
 import com.kiwizitos.collection.navigation.navEncode
@@ -65,8 +69,6 @@ import com.kiwizitos.siege.tokens.SiegeColors
 import com.kiwizitos.siege.tokens.SiegeIcons
 import com.kiwizitos.siege.tokens.SiegeShapes
 import com.kiwizitos.siege.tokens.SiegeSpacing
-
-private const val GUIA_BASE = "http://www.guiadosquadrinhos.com"
 
 /**
  * Tela de detalhe de uma edição.
@@ -92,9 +94,29 @@ fun DetailsScreen(
     val editionTitle = navDecode(encodedEditionTitle)
     val state by viewModel.state.collectAsState()
     val galleryMap by galleryViewModel.galleryMap.collectAsState()
+    val editions by galleryViewModel.editionsFull.collectAsState()
+    val currentItem = editions[editionUrl]
     val uriHandler = LocalUriHandler.current
+    var coverRefreshError by remember(editionUrl) { mutableStateOf<String?>(null) }
+    var requestedDetails by remember(editionUrl) { mutableStateOf(false) }
+    val scrapedDetails = if (requestedDetails) (state as? UiState.Success)?.data else null
 
-    LaunchedEffect(editionUrl) { viewModel.load(editionUrl) }
+    LaunchedEffect(editionUrl) {
+        viewModel.load(editionUrl)
+        requestedDetails = true
+    }
+    LaunchedEffect(
+        editionUrl, scrapedDetails?.coverUrl, scrapedDetails != null,
+        currentItem?.userId, currentItem?.id
+    ) {
+        coverRefreshError = null
+        if (scrapedDetails != null && currentItem != null) {
+            coverRefreshError = galleryViewModel.refreshItemCover(editionUrl, scrapedDetails.coverUrl)
+                .exceptionOrNull()?.let {
+                    "Não foi possível atualizar a capa salva. ${GuiaFailureMessages.message(it)}"
+                }
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -131,7 +153,26 @@ fun DetailsScreen(
                 contentAlignment = Alignment.Center
             ) { CircularProgressIndicator(color = SiegeColors.AccentPink) }
 
-            is UiState.Error -> Column(
+            is UiState.Error -> if (currentItem != null) {
+                SavedEditionContent(
+                    item = currentItem,
+                    message = s.message,
+                    onRetry = { viewModel.load(editionUrl) },
+                    onUpdateStatus = { status ->
+                        if (status.isNotEmpty()) {
+                            galleryViewModel.saveItem(currentItem.copy(
+                                ownership = status.ownership,
+                                readStatus = status.readStatus
+                            ))
+                        } else {
+                            galleryViewModel.removeItem(editionUrl)
+                        }
+                    },
+                    onRemoveItem = { galleryViewModel.removeItem(editionUrl) },
+                    onOpenWeb = { uriHandler.openUri(GuiaUrls.pageUrl(editionUrl)) },
+                    modifier = Modifier.padding(innerPadding)
+                )
+            } else Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
@@ -150,6 +191,11 @@ fun DetailsScreen(
                     text = "Tentar novamente",
                     style = SiegeButtonStyle.Primary,
                     onClick = { viewModel.load(editionUrl) })
+                SiegeButton(
+                    text = "Abrir no navegador",
+                    style = SiegeButtonStyle.Ghost,
+                    onClick = { uriHandler.openUri(GuiaUrls.pageUrl(editionUrl)) }
+                )
             }
 
             is UiState.Empty -> Box(
@@ -183,13 +229,12 @@ fun DetailsScreen(
                 else null
 
                 val currentStatus = galleryMap[editionUrl]
-                val currentItem = galleryViewModel.editionsFull.collectAsState().value[editionUrl]
-
                 EditionContent(
                     details = details,
                     seriesTitle = resolvedSeriesTitle,
                     itemStatus = currentStatus,
                     isStandalone = isStandalone,
+                    coverRefreshError = coverRefreshError,
                     onSeriesClick = if (resolvedSeriesUrl != null && resolvedSeriesTitle != null) {
                         {
                             navController.navigate(
@@ -235,14 +280,56 @@ fun DetailsScreen(
                     },
                     onRemoveItem = { galleryViewModel.removeItem(editionUrl) },
                     onOpenWeb = {
-                        val fullUrl =
-                            if (editionUrl.startsWith("http")) editionUrl else "$GUIA_BASE/$editionUrl"
+                        val fullUrl = GuiaUrls.pageUrl(editionUrl)
                         uriHandler.openUri(fullUrl)
                     },
                     modifier = Modifier.padding(innerPadding)
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun SavedEditionContent(
+    item: UserItem,
+    message: String,
+    onRetry: () -> Unit,
+    onUpdateStatus: (ItemStatus) -> Unit,
+    onRemoveItem: () -> Unit,
+    onOpenWeb: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier.fillMaxSize()) {
+        SiegeText(
+            text = "$message Exibindo somente os dados já salvos; detalhes externos indisponíveis.",
+            style = SiegeTextStyle.Body,
+            color = SiegeColors.Error,
+            modifier = Modifier.padding(SiegeSpacing.Regular)
+        )
+        SiegeButton(
+            text = "Tentar novamente",
+            style = SiegeButtonStyle.Primary,
+            onClick = onRetry,
+            modifier = Modifier.padding(horizontal = SiegeSpacing.Regular)
+        )
+        EditionContent(
+            details = ComicDetails(
+                title = item.title,
+                coverUrl = item.coverUrl?.let { GuiaUrls.imageUrl(it) ?: it },
+                seriesUrl = item.seriesUrl,
+                seriesTitle = item.seriesTitle
+            ),
+            seriesTitle = item.seriesTitle,
+            itemStatus = item.toItemStatus(),
+            isStandalone = item.isStandalone,
+            onSeriesClick = null,
+            onSaveItem = onUpdateStatus,
+            onUpdateStatus = onUpdateStatus,
+            onRemoveItem = onRemoveItem,
+            onOpenWeb = onOpenWeb,
+            modifier = Modifier.weight(1f)
+        )
     }
 }
 
@@ -259,12 +346,24 @@ private fun EditionContent(
     onUpdateStatus: (ItemStatus) -> Unit,
     onRemoveItem: () -> Unit,
     onOpenWeb: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    coverRefreshError: String? = null
 ) {
+    var imageFailed by remember(details.coverUrl) { mutableStateOf(false) }
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(SiegeSpacing.None)
     ) {
+        if (coverRefreshError != null) {
+            item {
+                SiegeText(
+                    text = coverRefreshError,
+                    style = SiegeTextStyle.Body,
+                    color = SiegeColors.Error,
+                    modifier = Modifier.padding(SiegeSpacing.Regular)
+                )
+            }
+        }
         // ── Card "Pertence ao título" — hidden for standalone editions ────────
         if (!isStandalone && seriesTitle != null && onSeriesClick != null) {
             item {
@@ -287,16 +386,24 @@ private fun EditionContent(
                 contentAlignment = Alignment.Center
             ) {
                 AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current).data(details.coverUrl)
-                        .crossfade(true).build(),
+                    model = rememberCoverRequest(details.coverUrl),
                     contentDescription = details.title,
                     contentScale = ContentScale.Fit,
+                    onError = { imageFailed = true },
+                    onSuccess = { imageFailed = false },
                     modifier = Modifier
                         .width(200.dp)
                         .aspectRatio(2f / 3f)
                         .clip(SiegeShapes.Medium)
                         .background(SiegeTheme.colors.surfaceElevated)
                 )
+                if (imageFailed || details.coverUrl.isNullOrBlank()) {
+                    SiegeText(
+                        text = "Capa indisponível",
+                        style = SiegeTextStyle.Label,
+                        color = SiegeTheme.colors.textTertiary
+                    )
+                }
             }
         }
 

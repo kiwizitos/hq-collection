@@ -1,6 +1,5 @@
 package com.kiwizitos.collection.data.remote
 
-import android.util.Log
 import com.kiwizitos.collection.data.model.ComicDetails
 import com.kiwizitos.collection.data.model.CoverItem
 import com.kiwizitos.collection.data.model.CoversSearchResult
@@ -8,338 +7,145 @@ import com.kiwizitos.collection.data.model.PaginationInfo
 import com.kiwizitos.collection.data.model.SerieResult
 import com.kiwizitos.collection.data.model.SeriesSearchResult
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import org.jsoup.nodes.Element
 
-private const val TAG = "GuiaParser"
-private const val BASE_URL = "http://www.guiadosquadrinhos.com"
-
-/**
- * Parser de HTML para o Guia dos Quadrinhos usando Jsoup.
- *
- * Baseado na estrutura real do site (HTML analisado em abril/2026):
- * - Resultados em `table#tlbProfile tr`
- * - Paginação em `span#dataPagerNumeric` / `span#dataPagerNumeric2`
- * - Contador em `span#dataPageDisplayNumberOfPages`
- */
 object GuiaQuadrinhosParser {
-
-    // ── Séries ────────────────────────────────────────────────────────────────
-
-    /**
-     * Parseia a página de resultados de séries e retorna séries + paginação.
-     */
     fun parseSeriesTableWithPagination(html: String): SeriesSearchResult {
-        val series = parseSeriesTable(html)
-        val pagination = extractPaginationInfo(html)
-        Log.d(
-            TAG,
-            "parseSeriesTable: ${series.size} séries, pg ${pagination.currentPage}, total ${pagination.totalResults}, hasNext=${pagination.hasNextPage}"
-        )
-        return SeriesSearchResult(series = series, paginationInfo = pagination)
-    }
-
-    private fun parseSeriesTable(html: String): List<SerieResult> {
-        val results = mutableListOf<SerieResult>()
-        return try {
-            val doc = Jsoup.parse(html)
-
-            // Seletor exato baseado no HTML real: table#tlbProfile tr
-            val rows = doc.select("table#tlbProfile tr")
-
-            for (row in rows) {
-                try {
-                    val cells = row.select("td")
-                    if (cells.size < 5) continue
-
-                    // O link está sempre no primeiro td, tag <a>
-                    val linkEl = cells[0].selectFirst("a") ?: continue
-                    val title = linkEl.text().trim()
-                    if (title.isBlank()) continue
-
-                    // href vem como '../capas/titulo/codigo' — remove o '../'
-                    val relativeLink = linkEl.attr("href")
-                        .removePrefix("../")
-                        .trim()
-
-                    results.add(
-                        SerieResult(
-                            title = title,
-                            relativeLink = relativeLink,
-                            publisher = cells[1].text().trim(),
-                            originalPublisher = cells[2].text().trim(),
-                            year = cells[3].text().trim(),
-                            issueCount = cells[4].text().trim()
-                        )
-                    )
-                } catch (e: Exception) {
-                    Log.w(TAG, "Erro ao parsear linha: ${e.message}")
-                }
-            }
-
-            Log.d(TAG, "parseSeriesTable: ${results.size} séries encontradas")
-            results
-        } catch (e: Exception) {
-            Log.e(TAG, "Erro ao parsear tabela de séries", e)
-            results
+        val doc = GuiaHtml.document(html)
+        val explicitlyEmpty = doc.selectFirst("div#UpdatePanel1")?.text()
+            ?.contains("não encontrou nenhuma referência.", ignoreCase = true) == true
+        if (doc.selectFirst("table#tlbProfile, span#dataPageDisplayNumberOfPages, " +
+                "span#dataPageDisplayNumberOfPages2") == null && !explicitlyEmpty) {
+            throw GuiaUnexpectedPageException()
         }
+        val series = doc.select("table#tlbProfile tr").mapNotNull { row ->
+            val cells = row.select("td")
+            if (cells.size < 5) return@mapNotNull null
+            val link = cells[0].selectFirst("a") ?: throw GuiaUnexpectedPageException()
+            if (link.text().isBlank() || link.attr("href").isBlank()) {
+                throw GuiaUnexpectedPageException()
+            }
+            SerieResult(
+                title = link.text().trim(),
+                relativeLink = GuiaUrls.relativePath(link.attr("href")),
+                publisher = cells[1].text().trim(),
+                originalPublisher = cells[2].text().trim(),
+                year = cells[3].text().trim(),
+                issueCount = cells[4].text().trim()
+            )
+        }
+        val pagination = pagination(doc)
+        if (series.isEmpty() && pagination.totalResults > 0) throw GuiaUnexpectedPageException()
+        return SeriesSearchResult(series, pagination)
     }
 
-    // ── Capas ─────────────────────────────────────────────────────────────────
-
-    /**
-     * Parseia a lista de capas de uma série + paginação.
-     *
-     * Detecta automaticamente "edição única" quando:
-     * - O HTML contém o texto "Edição única" (case-insensitive), ou
-     * - Existe apenas um link `href` contendo "/edicao/"
-     *
-     * Nesses casos, [CoversSearchResult.isStandalone] = true e
-     * [CoversSearchResult.singleEditionUrl] aponta direto para a edição.
-     */
     fun parseCoverListWithPagination(html: String, seriesTitle: String): CoversSearchResult {
-        val covers = parseCoverList(html)
-        val pagination = extractPaginationInfo(html)
-
-        // ── Detecção de edição única ──────────────────────────────────────────
-        val doc = Jsoup.parse(html)
-        val hasStandaloneText = doc.body().text()
-            .contains("edição única", ignoreCase = true)
-
-        val editionLinks = doc.select("a[href*='/edicao/']")
-        val hasSingleEditionLink = editionLinks.size == 1
-
-        val isStandalone = hasStandaloneText || hasSingleEditionLink
-        val singleEditionUrl: String? = if (isStandalone) {
-            // Prefer the link found in the cover list; fall back to any /edicao/ link
-            covers.firstOrNull()?.relativeLink
-                ?: editionLinks.firstOrNull()?.attr("href")
-                    ?.removePrefix("../../")
-                    ?.removePrefix("../")
-                    ?.trim()
-                    ?.ifBlank { null }
-        } else null
-
-        Log.d(
-            TAG,
-            "parseCoverList: ${covers.size} capas, pg ${pagination.currentPage}, " +
-                "hasNext=${pagination.hasNextPage}, isStandalone=$isStandalone"
-        )
+        val doc = GuiaHtml.document(html)
+        if (doc.selectFirst("div.Lista_album_imagem_colecao, " +
+                "span#MainContent_lstProfileView_dataPageDisplayNumberOfPages, " +
+                "span#MainContent_lstProfileView_dataPageDisplayNumberOfPages2") == null) {
+            throw GuiaUnexpectedPageException()
+        }
+        val covers = doc.select("div.Lista_album_imagem_colecao li").map { item ->
+            val links = item.select("a")
+            val link = links.firstOrNull() ?: throw GuiaUnexpectedPageException()
+            val image = link.selectFirst("img") ?: throw GuiaUnexpectedPageException()
+            if (link.attr("href").isBlank()) throw GuiaUnexpectedPageException()
+            CoverItem(
+                title = image.attr("alt").trim()
+                    .ifBlank { link.attr("title").trim() }.ifBlank { "Edição" },
+                relativeLink = GuiaUrls.relativePath(link.attr("href")),
+                coverUrl = GuiaUrls.imageUrl(image.attr("src")).orEmpty(),
+                year = Regex("(\\d{4})").find(links.getOrNull(1)?.text().orEmpty())?.value
+            )
+        }
+        val pagination = pagination(doc)
+        if (covers.isEmpty() && pagination.totalResults > 0) throw GuiaUnexpectedPageException()
+        val hasStandaloneText = doc.body().text().contains("edição única", ignoreCase = true)
+        val editionLinks = covers.map { it.relativeLink }.distinct()
+        val isStandalone = !pagination.hasNextPage && pagination.totalResults <= 1 &&
+            (hasStandaloneText || editionLinks.size == 1)
         return CoversSearchResult(
             seriesTitle = seriesTitle,
             covers = covers,
             paginationInfo = pagination,
             isStandalone = isStandalone,
-            singleEditionUrl = singleEditionUrl
+            singleEditionUrl = if (isStandalone) editionLinks.firstOrNull() else null
         )
     }
 
-    private fun parseCoverList(html: String): List<CoverItem> {
-        val results = mutableListOf<CoverItem>()
-        return try {
-            val doc = Jsoup.parse(html)
-
-            // Seletor exato do HTML real:
-            // <div class="Lista_album_imagem_colecao"><li>...<a href="../../edicao/..."><img src="http://..."/></a>
-            val items = doc.select("div.Lista_album_imagem_colecao li")
-
-            for (item in items) {
-                try {
-                    // Primeiro link tem a imagem; segundo link (após <br/>) tem o número
-                    val links = item.select("a")
-                    if (links.isEmpty()) continue
-
-                    val imgLink = links[0]  // link com a imagem e href para a edição
-                    val imgEl = imgLink.selectFirst("img") ?: continue
-
-                    // href: "../../edicao/titulo/codigo/id" → remove "../../"
-                    val relativeLink = imgLink.attr("href")
-                        .removePrefix("../../")
-                        .trim()
-
-                    // Título vem do atributo alt da imagem: "Fabulosos X-Men, Os n° 1 - Abril"
-                    val titleText = imgEl.attr("alt").trim()
-                        .ifBlank { imgLink.attr("title").trim() }
-                        .ifBlank { "Edição" }
-
-                    // URL da capa já é absoluta: "http://www.guiadosquadrinhos.com//capasthumbs/..."
-                    val coverUrl = imgEl.attr("src").trim()
-
-                    val year = Regex("(\\d{4})").find(
-                        // Tenta pegar o ano do texto do segundo link (ex: "janeiro de 1996")
-                        links.getOrNull(1)?.text() ?: ""
-                    )?.value
-
-                    results.add(
-                        CoverItem(
-                            title = titleText,
-                            relativeLink = relativeLink,
-                            coverUrl = coverUrl,
-                            year = year
-                        )
-                    )
-                } catch (e: Exception) {
-                    Log.w(TAG, "Erro ao parsear capa: ${e.message}")
-                }
-            }
-
-            Log.d(TAG, "parseCoverList: ${results.size} capas encontradas")
-            results
-        } catch (e: Exception) {
-            Log.e(TAG, "Erro ao parsear capas", e)
-            results
-        }
+    fun parseDetails(html: String, url: String): ComicDetails {
+        val doc = GuiaHtml.document(html)
+        val title = doc.selectFirst("span#nome_titulo_lb")?.text()?.trim()
+            ?.takeIf { it.isNotBlank() } ?: throw GuiaUnexpectedPageException()
+        fun text(selector: String) = doc.selectFirst(selector)?.text()?.trim()?.ifBlank { null }
+        val galleryLink = doc.selectFirst("div.boxnumeros a[href*='capas/']")
+            ?.attr("href")?.takeIf { it.isNotBlank() }
+        return ComicDetails(
+            title = title,
+            publishedIn = text("span#data_publi"),
+            publisher = text("a#editora_link"),
+            licensor = text("span#licenciador"),
+            category = text("span#categoria"),
+            genre = text("span#genero"),
+            status = text("span#status"),
+            pages = text("span#paginas"),
+            format = text("span#formato"),
+            coverPrice = text("span#preco"),
+            coverUrl = doc.selectFirst("div#cover img")?.attr("src")
+                ?.let { GuiaUrls.imageUrl(it, GuiaUrls.pageUrl(url)) },
+            coverArtist = doc.selectFirst("div#texto_pag_detalhe")?.let { extractCoverArtist(it.html()) },
+            seriesUrl = galleryLink?.let(GuiaUrls::relativePath),
+            seriesTitle = doc.selectFirst("span#nome_titulo_lb")?.textNodes()
+                ?.firstOrNull()?.text()?.trim()?.ifBlank { null }
+        )
     }
 
-    // ── Detalhes ──────────────────────────────────────────────────────────────
-
-    fun parseDetails(html: String, url: String): ComicDetails? {
-        return try {
-            val doc = Jsoup.parse(html)
-
-            val title = doc.selectFirst("span#nome_titulo_lb")
-                ?.text()?.trim() ?: return null
-
-            val coverUrl = doc.selectFirst("div#cover img")?.attr("src")?.trim()?.ifBlank { null }
-            val publishedIn = doc.selectFirst("span#data_publi")?.text()?.trim()?.ifBlank { null }
-            val publisher = doc.selectFirst("a#editora_link")?.text()?.trim()?.ifBlank { null }
-            val licensor = doc.selectFirst("span#licenciador")?.text()?.trim()?.ifBlank { null }
-            val category = doc.selectFirst("span#categoria")?.text()?.trim()?.ifBlank { null }
-            val genre = doc.selectFirst("span#genero")?.text()?.trim()?.ifBlank { null }
-            val status = doc.selectFirst("span#status")?.text()?.trim()?.ifBlank { null }
-            val pages = doc.selectFirst("span#paginas")?.text()?.trim()?.ifBlank { null }
-            val format = doc.selectFirst("span#formato")?.text()?.trim()?.ifBlank { null }
-            val coverPrice = doc.selectFirst("span#preco")?.text()?.trim()?.ifBlank { null }
-            val coverArtist = doc.selectFirst("div#texto_pag_detalhe")
-                ?.let { extractCoverArtist(it.html()) }
-
-            // "Galeria de capas" → <a href='../../../capas/slug/codigo'>
-            // Remove "../../../" para obter a URL relativa: "capas/slug/codigo"
-            val galeriaLink = doc.selectFirst("div.boxnumeros a[href*='capas/']")
-            val seriesUrl = galeriaLink?.attr("href")
-                ?.removePrefix("../../../")
-                ?.trim()
-                ?.ifBlank { null }
-            // Título da série vem do <h1> ou do span#nome_titulo_lb sem o número
-            val seriesTitle = doc.selectFirst("span#nome_titulo_lb")
-                ?.textNodes()
-                ?.firstOrNull()
-                ?.text()
-                ?.trim()
-                ?.ifBlank { null }
-
-            ComicDetails(
-                title = title,
-                publishedIn = publishedIn,
-                publisher = publisher,
-                licensor = licensor,
-                category = category,
-                genre = genre,
-                status = status,
-                pages = pages,
-                format = format,
-                coverPrice = coverPrice,
-                coverUrl = coverUrl,
-                coverArtist = coverArtist,
-                seriesUrl = seriesUrl,
-                seriesTitle = seriesTitle
-            )
-        } catch (e: Exception) {
-            Log.e(TAG, "Erro ao parsear detalhes: $url", e)
-            null
-        }
-    }
-
-    /** Extrai apenas o crédito de Arte da capa, antes das histórias. */
     private fun extractCoverArtist(html: String): String? {
-        return try {
-            val doc = Jsoup.parseBodyFragment(html)
-            val strong = doc.select("strong").firstOrNull {
-                it.text().trim().equals("Arte:", ignoreCase = true)
-            } ?: return null
-            val result = StringBuilder()
-            var node = strong.nextSibling()
-            while (node != null) {
-                val s = node.toString()
-                if (s.contains("<br") || s.contains("<strong") || s.contains("<div")) break
-                if (node is org.jsoup.nodes.Element) result.append(node.text())
-                else result.append(s.trim())
-                node = node.nextSibling()
-            }
-            result.toString().trim().replace(Regex("\\s+"), " ").ifBlank { null }
-        } catch (e: Exception) {
-            null
+        val doc = Jsoup.parseBodyFragment(html)
+        val strong = doc.select("strong").firstOrNull {
+            it.text().trim().equals("Arte:", ignoreCase = true)
+        } ?: return null
+        val result = StringBuilder()
+        var node = strong.nextSibling()
+        while (node != null) {
+            val value = node.toString()
+            if (value.contains("<br") || value.contains("<strong") || value.contains("<div")) break
+            if (node is Element) result.append(node.text()) else result.append(value.trim())
+            node = node.nextSibling()
         }
+        return result.toString().trim().replace(Regex("\\s+"), " ").ifBlank { null }
     }
 
-    // ── Paginação ─────────────────────────────────────────────────────────────
+    fun extractPaginationInfo(html: String): PaginationInfo = pagination(GuiaHtml.document(html))
 
-    /**
-     * Extrai informações de paginação ASP.NET do HTML real do site.
-     *
-     * Estrutura real (confirmada no HTML):
-     * - ViewState: `input#__VIEWSTATE`
-     * - EventValidation: `input#__EVENTVALIDATION`
-     * - Próxima página: `a.next_last` com `>` OU `a.next_button` com `...`
-     *   — contêm `javascript:__doPostBack('ctl00$...$ctl02$ctl00','')` no href
-     * - Página atual: `span.current_page`
-     * - Contador: `span#dataPageDisplayNumberOfPages` → "Itens: 1 - 30 de 208"
-     */
-    fun extractPaginationInfo(html: String): PaginationInfo {
-        return try {
-            val doc = Jsoup.parse(html)
-
-            val viewState = doc.selectFirst("input#__VIEWSTATE")?.attr("value")
-            val eventValidation = doc.selectFirst("input#__EVENTVALIDATION")?.attr("value")
-
-            // Suporta tanto a página de títulos quanto a de capas.
-            // Títulos:  span#dataPagerNumeric / span#dataPagerNumeric2
-            // Capas:    span#MainContent_lstProfileView_dataPagerNumeric2
-            val pagerSpan = doc.selectFirst(
-                "span#dataPagerNumeric, " +
-                        "span#dataPagerNumeric2, " +
-                        "span#MainContent_lstProfileView_dataPagerNumeric, " +
-                        "span#MainContent_lstProfileView_dataPagerNumeric2"
-            )
-
-            // Botão ">" — a.next_last cujo texto é exatamente ">"
-            val nextLink = pagerSpan?.select("a.next_last")
-                ?.firstOrNull { it.text().trim() == ">" }
-
-            val hasNextPage = nextLink != null
-
-            val eventTarget = nextLink?.attr("href")?.let { href ->
-                Regex("""__doPostBack\('([^']+)'""").find(href)?.groupValues?.get(1)
-            }
-
-            val currentPage = pagerSpan?.selectFirst("span.current_page")
-                ?.text()?.trim()?.toIntOrNull() ?: 1
-
-            // Suporta ambos os IDs do contador de resultados
-            val pageInfoText = doc.selectFirst(
-                "span#dataPageDisplayNumberOfPages, " +
-                        "span#dataPageDisplayNumberOfPages2, " +
-                        "span#MainContent_lstProfileView_dataPageDisplayNumberOfPages, " +
-                        "span#MainContent_lstProfileView_dataPageDisplayNumberOfPages2"
-            )?.text() ?: ""
-
-            val totalResults = Regex("""de\s+(\d+)""")
-                .find(pageInfoText)?.groupValues?.get(1)?.toIntOrNull() ?: 0
-
-            Log.d(
-                TAG,
-                "Paginação: pg=$currentPage, total=$totalResults, hasNext=$hasNextPage, target=$eventTarget"
-            )
-
-            PaginationInfo(
-                currentPage = currentPage,
-                totalResults = totalResults,
-                hasNextPage = hasNextPage,
-                viewState = viewState,
-                eventValidation = eventValidation,
-                eventTarget = eventTarget
-            )
-        } catch (e: Exception) {
-            Log.e(TAG, "Erro ao extrair paginação", e)
-            PaginationInfo()
+    private fun pagination(doc: Document): PaginationInfo {
+        val pager = doc.selectFirst(
+            "span#dataPagerNumeric, span#dataPagerNumeric2, " +
+                "span#MainContent_lstProfileView_dataPagerNumeric, " +
+                "span#MainContent_lstProfileView_dataPagerNumeric2"
+        )
+        val next = pager?.select("a.next_last")?.firstOrNull {
+            it.text().trim() == ">" && it.hasAttr("href")
         }
+        val eventTarget = next?.attr("href")?.let {
+            Regex("""__doPostBack\('([^']+)'""").find(it)?.groupValues?.get(1)
+        }
+        val countText = doc.selectFirst(
+            "span#dataPageDisplayNumberOfPages, span#dataPageDisplayNumberOfPages2, " +
+                "span#MainContent_lstProfileView_dataPageDisplayNumberOfPages, " +
+                "span#MainContent_lstProfileView_dataPageDisplayNumberOfPages2"
+        )?.text().orEmpty()
+        return PaginationInfo(
+            currentPage = pager?.selectFirst("span.current_page")?.text()?.trim()?.toIntOrNull() ?: 1,
+            totalResults = Regex("""de\s+([\d.]+)""").find(countText)
+                ?.groupValues?.get(1)?.replace(".", "")?.toIntOrNull() ?: 0,
+            hasNextPage = next != null,
+            viewState = doc.selectFirst("input#__VIEWSTATE")?.attr("value"),
+            eventValidation = doc.selectFirst("input#__EVENTVALIDATION")?.attr("value"),
+            eventTarget = eventTarget,
+            viewStateGenerator = doc.selectFirst("input#__VIEWSTATEGENERATOR")?.attr("value")
+        )
     }
 }

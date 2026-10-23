@@ -7,6 +7,7 @@ import com.kiwizitos.collection.data.model.UserItem
 import com.kiwizitos.collection.data.model.UserSeries
 import com.kiwizitos.collection.data.repository.GalleryRepository
 import com.kiwizitos.collection.domain.usecase.GetGalleryUseCase
+import com.kiwizitos.collection.domain.usecase.RefreshGalleryCoverUseCase
 import com.kiwizitos.collection.domain.usecase.RemoveItemUseCase
 import com.kiwizitos.collection.domain.usecase.RemoveSeriesUseCase
 import com.kiwizitos.collection.domain.usecase.SaveItemUseCase
@@ -23,6 +24,7 @@ class GalleryViewModel @Inject constructor(
     private val removeItemUseCase: RemoveItemUseCase,
     private val saveSeriesUseCase: SaveSeriesUseCase,
     private val removeSeriesUseCase: RemoveSeriesUseCase,
+    private val refreshGalleryCoverUseCase: RefreshGalleryCoverUseCase,
     galleryRepository: GalleryRepository
 ) : ViewModel() {
 
@@ -38,6 +40,12 @@ class GalleryViewModel @Inject constructor(
     fun loadGallery(userId: String) {
         viewModelScope.launch { getGalleryUseCase(userId) }
     }
+
+    suspend fun refreshItemCover(guiaUrl: String, coverUrl: String?): Result<Unit> =
+        refreshGalleryCoverUseCase.edition(guiaUrl, coverUrl)
+
+    suspend fun refreshSeriesCover(seriesUrl: String, coverUrl: String?): Result<Unit> =
+        refreshGalleryCoverUseCase.series(seriesUrl, coverUrl)
 
     // ── Edições (com status) ──────────────────────────────────────────────────
 
@@ -72,4 +80,3 @@ class GalleryViewModel @Inject constructor(
         savedVolumesListOffset = offset
     }
 }
-

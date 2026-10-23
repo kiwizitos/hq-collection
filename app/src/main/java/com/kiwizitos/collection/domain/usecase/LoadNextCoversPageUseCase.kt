@@ -12,13 +12,15 @@ import javax.inject.Inject
  * @param viewState       `__VIEWSTATE` extraído da página anterior.
  * @param eventValidation `__EVENTVALIDATION` extraído da página anterior.
  * @param eventTarget     `__EVENTTARGET` do botão "próxima página".
+ * @param viewStateGenerator `__VIEWSTATEGENERATOR` extraído da página anterior.
  */
 data class LoadNextCoversPageParams(
     val seriesUrl: String,
     val seriesTitle: String,
     val viewState: String,
     val eventValidation: String,
-    val eventTarget: String
+    val eventTarget: String,
+    val viewStateGenerator: String
 )
 
 /**
@@ -39,13 +41,18 @@ class LoadNextCoversPageUseCase @Inject constructor(
         if (params.seriesUrl.isBlank()) {
             return Result.failure(IllegalArgumentException("URL da série inválida para paginação de capas"))
         }
+        if (listOf(params.viewState, params.eventValidation, params.eventTarget, params.viewStateGenerator)
+                .any { it.isBlank() }
+        ) {
+            return Result.failure(IllegalArgumentException("Tokens de paginação ausentes. Reabra a série."))
+        }
         return dataSource.getSeriesCoversNextPage(
             seriesUrl = params.seriesUrl,
             seriesTitle = params.seriesTitle,
             viewState = params.viewState,
             eventValidation = params.eventValidation,
-            eventTarget = params.eventTarget
+            eventTarget = params.eventTarget,
+            viewStateGenerator = params.viewStateGenerator
         )
     }
 }
-

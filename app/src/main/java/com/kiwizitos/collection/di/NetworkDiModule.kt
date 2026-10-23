@@ -1,6 +1,8 @@
 package com.kiwizitos.collection.di
 
 import com.kiwizitos.collection.data.remote.GuiaQuadrinhosService
+import com.kiwizitos.collection.data.remote.GuiaAccessInterceptor
+import com.kiwizitos.collection.data.remote.GuiaUrls
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,6 +26,7 @@ object NetworkDiModule {
         }
         return OkHttpClient.Builder()
             .addInterceptor(logging)
+            .addInterceptor(GuiaAccessInterceptor())
             .addInterceptor { chain ->
                 val request = chain.request().newBuilder()
                     .addHeader("User-Agent", "Collection-App/1.0 (Android; quadrinhos-scraper)")
@@ -41,7 +44,7 @@ object NetworkDiModule {
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit =
         Retrofit.Builder()
-            .baseUrl("http://www.guiadosquadrinhos.com/")
+            .baseUrl(GuiaUrls.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
@@ -51,4 +54,3 @@ object NetworkDiModule {
     fun provideGuiaQuadrinhosService(retrofit: Retrofit): GuiaQuadrinhosService =
         retrofit.create(GuiaQuadrinhosService::class.java)
 }
-

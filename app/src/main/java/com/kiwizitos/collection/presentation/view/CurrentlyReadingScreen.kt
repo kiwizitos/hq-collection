@@ -1,6 +1,5 @@
 package com.kiwizitos.collection.presentation.view
 
-import android.R.drawable.ic_menu_gallery
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,11 +17,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import coil.compose.rememberAsyncImagePainter
+import com.kiwizitos.collection.presentation.view.components.rememberCoverPainter
 import com.kiwizitos.collection.data.model.ReadStatus
 import com.kiwizitos.collection.data.model.UserItem
 import com.kiwizitos.collection.navigation.AppRoute
@@ -117,10 +115,7 @@ private fun ReadingEditionRow(
     edition: UserItem,
     onNavigate: (url: String, title: String, seriesUrl: String?, seriesTitle: String?) -> Unit
 ) {
-    val painter = if (!edition.coverUrl.isNullOrBlank())
-        rememberAsyncImagePainter(edition.coverUrl)
-    else
-        painterResource(ic_menu_gallery)
+    val painter = rememberCoverPainter(edition.coverUrl)
 
     val badges = buildList {
         edition.ownership?.let {

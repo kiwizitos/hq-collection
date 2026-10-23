@@ -20,7 +20,8 @@ interface ComicDataSource {
         query: String,
         viewState: String,
         eventValidation: String,
-        eventTarget: String
+        eventTarget: String,
+        viewStateGenerator: String
     ): Result<SeriesSearchResult>
 
     /** Carrega a lista de capas de uma série (primeira página). */
@@ -35,10 +36,10 @@ interface ComicDataSource {
         seriesTitle: String,
         viewState: String,
         eventValidation: String,
-        eventTarget: String
+        eventTarget: String,
+        viewStateGenerator: String
     ): Result<CoversSearchResult>
 
     /** Carrega os detalhes de uma edição específica. */
     suspend fun getComicDetails(url: String): Result<ComicDetails>
 }
-

@@ -28,11 +28,10 @@ interface GuiaQuadrinhosService {
     suspend fun postPageNavigation(
         @Url url: String,
         @Field("__VIEWSTATE") viewState: String,
-        @Field("__VIEWSTATEGENERATOR") viewStateGenerator: String = "EEB05935",
         @Field("__VIEWSTATEENCRYPTED") viewStateEncrypted: String = "",
         @Field("__EVENTVALIDATION") eventValidation: String,
         @Field("__EVENTTARGET") eventTarget: String,
-        @Field("__EVENTARGUMENT") eventArgument: String = ""
+        @Field("__EVENTARGUMENT") eventArgument: String = "",
+        @Field("__VIEWSTATEGENERATOR") viewStateGenerator: String
     ): String
 }
-

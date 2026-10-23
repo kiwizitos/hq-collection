@@ -1,6 +1,5 @@
 package com.kiwizitos.collection.presentation.view
 
-import android.R.drawable.ic_menu_gallery
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.SpaceBetween
 import androidx.compose.foundation.layout.Row
@@ -14,12 +13,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import coil.compose.rememberAsyncImagePainter
+import com.kiwizitos.collection.presentation.view.components.rememberCoverPainter
 import com.kiwizitos.collection.data.model.ReadStatus
 import com.kiwizitos.collection.data.model.UserSeries
 import com.kiwizitos.collection.navigation.AppRoute
@@ -112,10 +110,7 @@ fun HomeScreen(
                         }
                     }
                 ) { edition ->
-                    val coverPainter = if (!edition.coverUrl.isNullOrBlank())
-                        rememberAsyncImagePainter(edition.coverUrl)
-                    else
-                        painterResource(ic_menu_gallery)
+                    val coverPainter = rememberCoverPainter(edition.coverUrl)
 
                     val badges = buildList {
                         edition.ownership?.let {
@@ -177,10 +172,7 @@ fun HomeScreen(
                         }
                     }
                 ) { series: UserSeries ->
-                    val coverPainter = if (!series.coverUrl.isNullOrBlank())
-                        rememberAsyncImagePainter(series.coverUrl)
-                    else
-                        painterResource(ic_menu_gallery)
+                    val coverPainter = rememberCoverPainter(series.coverUrl)
 
                     SiegeContentCell(
                         coverImage = coverPainter,

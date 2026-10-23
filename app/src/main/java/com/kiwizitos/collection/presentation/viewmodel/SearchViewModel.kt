@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.kiwizitos.collection.data.model.CoverItem
 import com.kiwizitos.collection.data.model.PaginationInfo
 import com.kiwizitos.collection.data.model.SerieResult
+import com.kiwizitos.collection.data.remote.GuiaFailureMessages
 import com.kiwizitos.collection.domain.usecase.GetSeriesCoversParams
 import com.kiwizitos.collection.domain.usecase.GetSeriesCoversUseCase
 import com.kiwizitos.collection.domain.usecase.LoadNextCoversPageParams
@@ -14,14 +15,13 @@ import com.kiwizitos.collection.domain.usecase.LoadNextPageUseCase
 import com.kiwizitos.collection.domain.usecase.SearchComicsParams
 import com.kiwizitos.collection.domain.usecase.SearchComicsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.io.IOException
-import java.net.SocketTimeoutException
-import java.net.UnknownHostException
 import javax.inject.Inject
 
 // ── UiState ───────────────────────────────────────────────────────────────────
@@ -54,10 +54,12 @@ sealed class UiState<out T> {
  *
  * @param series         Lista acumulada de séries (todas as páginas carregadas até agora).
  * @param paginationInfo Estado atual de paginação.
+ * @param paginationError Falha da próxima página; preserva os resultados e exige retry manual.
  */
 data class PaginatedSearchResult(
     val series: List<SerieResult>,
-    val paginationInfo: PaginationInfo
+    val paginationInfo: PaginationInfo,
+    val paginationError: String? = null
 )
 
 /**
@@ -68,13 +70,15 @@ data class PaginatedSearchResult(
  * @param paginationInfo    Estado atual de paginação.
  * @param isStandalone      True se a série tem apenas uma edição única.
  * @param singleEditionUrl  URL relativa da edição única; não-nulo apenas quando [isStandalone] = true.
+ * @param paginationError   Falha da próxima página; preserva as capas e exige retry manual.
  */
 data class PaginatedCoversResult(
     val seriesTitle: String,
     val covers: List<CoverItem>,
     val paginationInfo: PaginationInfo,
     val isStandalone: Boolean = false,
-    val singleEditionUrl: String? = null
+    val singleEditionUrl: String? = null,
+    val paginationError: String? = null
 )
 
 // ── ViewModel ─────────────────────────────────────────────────────────────────
@@ -86,7 +90,7 @@ data class PaginatedCoversResult(
  * - [searchState] → resultados de busca de séries com paginação.
  * - [coversState] → capas de uma série selecionada com paginação.
  *
- * Aplica **debounce de 500ms** na busca para evitar requisições excessivas.
+ * A busca é explícita, sem debounce, e cancela a operação anterior.
  * Preserva a **posição de scroll** entre recomposições.
  *
  * @param searchComicsUseCase     Caso de uso de busca inicial de séries.
@@ -110,12 +114,6 @@ class SearchViewModel @Inject constructor(
     private var currentSearchQuery: String = ""
     private var searchJob: Job? = null
 
-    /**
-     * Guarda se uma carga de próxima página já está em curso.
-     * Impede double-tap no botão "Carregar mais" enquanto a resposta não chegou.
-     */
-    private var isLoadingNextSearchPage: Boolean = false
-
     // ── Covers State ──────────────────────────────────────────────────────────
 
     private val _coversState = MutableStateFlow<UiState<PaginatedCoversResult>>(UiState.Idle)
@@ -137,16 +135,12 @@ class SearchViewModel @Inject constructor(
         savedCoversGridOffset = offset
     }
 
-    /**
-     * Guarda se uma carga de próxima página de capas já está em curso.
-     * Mesmo propósito que [isLoadingNextSearchPage], mas para a tela de capas.
-     */
-    private var isLoadingNextCoversPage: Boolean = false
+    private var coversJob: Job? = null
 
     // ── Busca de Séries ───────────────────────────────────────────────────────
 
     /**
-     * Inicia uma nova busca de séries com debounce de 500ms.
+     * Inicia imediatamente uma nova busca explícita de séries.
      *
      * Cancela buscas anteriores em andamento automaticamente.
      *
@@ -154,12 +148,11 @@ class SearchViewModel @Inject constructor(
      */
     fun searchSeries(query: String) {
         searchJob?.cancel()
-        isLoadingNextSearchPage = false
+        currentSearchQuery = query
+        _searchState.value = UiState.Loading
         searchJob = viewModelScope.launch {
-            _searchState.value = UiState.Loading
-            currentSearchQuery = query
-
             val result = searchComicsUseCase(SearchComicsParams(query))
+            coroutineContext.ensureActive()
 
             _searchState.value = result.fold(
                 onSuccess = { searchResult ->
@@ -175,7 +168,8 @@ class SearchViewModel @Inject constructor(
                     }
                 },
                 onFailure = { error ->
-                    UiState.Error(friendlyErrorMessage(error), error)
+                    if (error is CancellationException) throw error
+                    UiState.Error(GuiaFailureMessages.message(error), error)
                 }
             )
         }
@@ -183,59 +177,61 @@ class SearchViewModel @Inject constructor(
 
     /**
      * Carrega a próxima página de resultados da busca atual.
-     * Ignorado se não há mais páginas, se já está carregando, ou se uma
-     * carga já foi disparada e ainda não concluiu ([isLoadingNextSearchPage]).
+     * Ignorado sem próxima página ou durante uma carga. Uma chamada manual
+     * limpa o erro anterior; a UI não deve chamar automaticamente após falhas.
      */
     fun loadNextSearchPage() {
-        if (isLoadingNextSearchPage) return          // ← guard contra loop
-
         val currentState = _searchState.value
         if (currentState !is UiState.Success) return
 
         val pagination = currentState.data.paginationInfo
         if (!pagination.hasNextPage) return
-        if (pagination.viewState.isNullOrBlank()) return
-        if (pagination.eventValidation.isNullOrBlank()) return
-        if (pagination.eventTarget.isNullOrBlank()) return
+        if (pagination.viewState.isNullOrBlank() ||
+            pagination.eventValidation.isNullOrBlank() ||
+            pagination.eventTarget.isNullOrBlank() ||
+            pagination.viewStateGenerator.isNullOrBlank()
+        ) {
+            _searchState.value = UiState.Success(currentState.data.copy(
+                paginationError = "Tokens de paginação ausentes. Faça uma nova busca."
+            ))
+            return
+        }
 
-        isLoadingNextSearchPage = true
-        viewModelScope.launch {
-            _searchState.value = UiState.LoadingMore(currentState.data)
-
+        _searchState.value = UiState.LoadingMore(currentState.data.copy(paginationError = null))
+        searchJob = viewModelScope.launch {
             val result = loadNextPageUseCase(
                 LoadNextPageParams(
                     query = currentSearchQuery,
                     viewState = pagination.viewState,
                     eventValidation = pagination.eventValidation,
-                    eventTarget = pagination.eventTarget
+                    eventTarget = pagination.eventTarget,
+                    viewStateGenerator = pagination.viewStateGenerator
                 )
             )
 
-            isLoadingNextSearchPage = false
+            coroutineContext.ensureActive()
 
             _searchState.value = result.fold(
                 onSuccess = { newPage ->
+                    val series = (currentState.data.series + newPage.series).distinctBy { it.relativeLink }
+                    if (series.size == currentState.data.series.size) {
+                        return@fold UiState.Success(currentState.data.copy(
+                            paginationError = "A próxima página não trouxe novos resultados. Tente novamente."
+                        ))
+                    }
                     UiState.Success(
-                        PaginatedSearchResult(
-                            series = currentState.data.series + newPage.series,
-                            paginationInfo = newPage.paginationInfo
+                        currentState.data.copy(
+                            series = series,
+                            paginationInfo = newPage.paginationInfo,
+                            paginationError = null
                         )
                     )
                 },
                 onFailure = { error ->
-                    // Restaura Success para o botão "Carregar mais" reaparecer
-                    UiState.Success(
-                        currentState.data.copy(
-                            paginationInfo = currentState.data.paginationInfo
-                        )
-                    ).also {
-                        // Log do erro sem bloquear a UI
-                        android.util.Log.e(
-                            "SearchViewModel",
-                            "loadNextSearchPage error: ${error.message}",
-                            error
-                        )
-                    }
+                    if (error is CancellationException) throw error
+                    UiState.Success(currentState.data.copy(
+                        paginationError = GuiaFailureMessages.message(error)
+                    ))
                 }
             )
         }
@@ -250,18 +246,18 @@ class SearchViewModel @Inject constructor(
      * @param seriesTitle Título da série para exibição no cabeçalho.
      */
     fun getSeriesCovers(seriesUrl: String, seriesTitle: String) {
+        coversJob?.cancel()
         currentSeriesUrl = seriesUrl
-        isLoadingNextCoversPage = false  // reset ao abrir nova série
+        _coversState.value = UiState.Loading
 
-        viewModelScope.launch {
-            _coversState.value = UiState.Loading
-
+        coversJob = viewModelScope.launch {
             val result = getSeriesCoversUseCase(
                 GetSeriesCoversParams(
                     seriesUrl = seriesUrl,
                     seriesTitle = seriesTitle
                 )
             )
+            coroutineContext.ensureActive()
 
             _coversState.value = result.fold(
                 onSuccess = { coversResult ->
@@ -280,7 +276,8 @@ class SearchViewModel @Inject constructor(
                     }
                 },
                 onFailure = { error ->
-                    UiState.Error(friendlyErrorMessage(error), error)
+                    if (error is CancellationException) throw error
+                    UiState.Error(GuiaFailureMessages.message(error), error)
                 }
             )
         }
@@ -288,54 +285,62 @@ class SearchViewModel @Inject constructor(
 
     /**
      * Carrega a próxima página de capas da série atual.
-     * Ignorado se não há mais páginas, se já está carregando, ou se uma
-     * carga já foi disparada e ainda não concluiu ([isLoadingNextCoversPage]).
+     * Ignorado sem próxima página ou durante uma carga. Uma chamada manual
+     * limpa o erro anterior; a UI não deve chamar automaticamente após falhas.
      */
     fun loadNextCoversPage() {
-        if (isLoadingNextCoversPage) return          // ← guard contra loop
-
         val currentState = _coversState.value
         if (currentState !is UiState.Success) return
 
         val pagination = currentState.data.paginationInfo
         if (!pagination.hasNextPage) return
-        if (pagination.viewState.isNullOrBlank()) return
-        if (pagination.eventValidation.isNullOrBlank()) return
-        if (pagination.eventTarget.isNullOrBlank()) return
+        if (pagination.viewState.isNullOrBlank() ||
+            pagination.eventValidation.isNullOrBlank() ||
+            pagination.eventTarget.isNullOrBlank() ||
+            pagination.viewStateGenerator.isNullOrBlank()
+        ) {
+            _coversState.value = UiState.Success(currentState.data.copy(
+                paginationError = "Tokens de paginação ausentes. Reabra a série."
+            ))
+            return
+        }
 
-        isLoadingNextCoversPage = true
-        viewModelScope.launch {
-            _coversState.value = UiState.LoadingMore(currentState.data)
-
+        _coversState.value = UiState.LoadingMore(currentState.data.copy(paginationError = null))
+        coversJob = viewModelScope.launch {
             val result = loadNextCoversPageUseCase(
                 LoadNextCoversPageParams(
                     seriesUrl = currentSeriesUrl,
                     seriesTitle = currentState.data.seriesTitle,
                     viewState = pagination.viewState,
                     eventValidation = pagination.eventValidation,
-                    eventTarget = pagination.eventTarget
+                    eventTarget = pagination.eventTarget,
+                    viewStateGenerator = pagination.viewStateGenerator
                 )
             )
 
-            isLoadingNextCoversPage = false
+            coroutineContext.ensureActive()
 
             _coversState.value = result.fold(
                 onSuccess = { newPage ->
+                    val covers = (currentState.data.covers + newPage.covers).distinctBy { it.relativeLink }
+                    if (covers.size == currentState.data.covers.size) {
+                        return@fold UiState.Success(currentState.data.copy(
+                            paginationError = "A próxima página não trouxe novas capas. Tente novamente."
+                        ))
+                    }
                     UiState.Success(
-                        PaginatedCoversResult(
-                            seriesTitle = currentState.data.seriesTitle,
-                            covers = currentState.data.covers + newPage.covers,
-                            paginationInfo = newPage.paginationInfo
+                        currentState.data.copy(
+                            covers = covers,
+                            paginationInfo = newPage.paginationInfo,
+                            paginationError = null
                         )
                     )
                 },
                 onFailure = { error ->
-                    android.util.Log.e(
-                        "SearchViewModel",
-                        "loadNextCoversPage error: ${error.message}",
-                        error
-                    )
-                    UiState.Success(currentState.data)
+                    if (error is CancellationException) throw error
+                    UiState.Success(currentState.data.copy(
+                        paginationError = GuiaFailureMessages.message(error)
+                    ))
                 }
             )
         }
@@ -343,21 +348,12 @@ class SearchViewModel @Inject constructor(
 
     /** Reseta o estado de capas ao navegar para fora da tela de capas. */
     fun resetCoversState() {
+        coversJob?.cancel()
+        coversJob = null
         _coversState.value = UiState.Idle
         currentSeriesUrl = ""
         savedCoversGridIndex = 0
         savedCoversGridOffset = 0
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
-
-    /** Converte uma exceção em mensagem amigável para o usuário. */
-    private fun friendlyErrorMessage(throwable: Throwable): String = when (throwable) {
-        is UnknownHostException -> "Sem conexão com a internet"
-        is SocketTimeoutException -> "Tempo de conexão esgotado. Tente novamente."
-        is IOException -> "Erro de conexão. Verifique sua internet."
-        is IllegalArgumentException -> throwable.message ?: "Parâmetros inválidos"
-        else -> throwable.message ?: "Erro desconhecido. Tente novamente."
-    }
 }
-

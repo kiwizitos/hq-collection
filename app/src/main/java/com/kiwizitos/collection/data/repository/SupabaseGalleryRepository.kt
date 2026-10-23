@@ -4,14 +4,17 @@ import android.util.Log
 import com.kiwizitos.collection.data.model.ItemStatus
 import com.kiwizitos.collection.data.model.UserItem
 import com.kiwizitos.collection.data.model.UserSeries
+import com.kiwizitos.collection.data.remote.GuiaUrls
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.async
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 private const val TAG = "GalleryRepo"
@@ -111,6 +114,44 @@ class SupabaseGalleryRepository @Inject constructor(
         }
     }
 
+    override suspend fun refreshItemCover(guiaUrl: String, coverUrl: String?): Result<Unit> {
+        val validCover = coverUrl?.let { GuiaUrls.imageUrl(it) } ?: return Result.success(Unit)
+        val saved = _editionsFull.value[guiaUrl] ?: return Result.success(Unit)
+        if (saved.coverUrl == validCover) return Result.success(Unit)
+        return try {
+            val userId = client.auth.currentUserOrNull()?.id
+                ?: throw IllegalStateException("Usuário não autenticado")
+            check(saved.userId == userId) { "Cache da galeria pertence a outro usuário" }
+
+            val updated = client.from(TABLE_EDITIONS)
+                .update({ set("cover_url", validCover) }) {
+                    filter {
+                        eq("user_id", userId)
+                        eq("guia_url", saved.guiaUrl)
+                        if (saved.id.isNotBlank()) eq("id", saved.id)
+                        saved.coverUrl?.let { eq("cover_url", it) } ?: exact("cover_url", null)
+                    }
+                    select()
+                }.decodeList<UserItem>()
+            check(updated.isNotEmpty()) { "A edição não está mais na galeria ou a capa mudou" }
+            // Never restore a removed item or overwrite a concurrent status/metadata edit.
+            if (client.auth.currentUserOrNull()?.id == userId) {
+                _editionsFull.update { cache ->
+                    val current = cache[guiaUrl]
+                    if (current != null && current.userId == userId && current.id == saved.id &&
+                        current.coverUrl == saved.coverUrl
+                    ) cache + (guiaUrl to current.copy(coverUrl = validCover)) else cache
+                }
+            }
+            Result.success(Unit)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            Log.e(TAG, "refreshItemCover: erro", e)
+            Result.failure(e)
+        }
+    }
+
     // ── Séries ────────────────────────────────────────────────────────────────
 
     override suspend fun saveSeries(series: UserSeries): Result<UserSeries> {
@@ -146,6 +187,43 @@ class SupabaseGalleryRepository @Inject constructor(
             Result.success(Unit)
         } catch (e: Exception) {
             Log.e(TAG, "removeSeries: erro", e)
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun refreshSeriesCover(seriesUrl: String, coverUrl: String?): Result<Unit> {
+        val validCover = coverUrl?.let { GuiaUrls.imageUrl(it) } ?: return Result.success(Unit)
+        val saved = _seriesCache.value[seriesUrl] ?: return Result.success(Unit)
+        if (saved.coverUrl == validCover) return Result.success(Unit)
+        return try {
+            val userId = client.auth.currentUserOrNull()?.id
+                ?: throw IllegalStateException("Usuário não autenticado")
+            check(saved.userId == userId) { "Cache da biblioteca pertence a outro usuário" }
+
+            val updated = client.from(TABLE_SERIES)
+                .update({ set("cover_url", validCover) }) {
+                    filter {
+                        eq("user_id", userId)
+                        eq("series_url", saved.seriesUrl)
+                        if (saved.id.isNotBlank()) eq("id", saved.id)
+                        saved.coverUrl?.let { eq("cover_url", it) } ?: exact("cover_url", null)
+                    }
+                    select()
+                }.decodeList<UserSeries>()
+            check(updated.isNotEmpty()) { "A série não está mais na biblioteca ou a capa mudou" }
+            if (client.auth.currentUserOrNull()?.id == userId) {
+                _seriesCache.update { cache ->
+                    val current = cache[seriesUrl]
+                    if (current != null && current.userId == userId && current.id == saved.id &&
+                        current.coverUrl == saved.coverUrl
+                    ) cache + (seriesUrl to current.copy(coverUrl = validCover)) else cache
+                }
+            }
+            Result.success(Unit)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            Log.e(TAG, "refreshSeriesCover: erro", e)
             Result.failure(e)
         }
     }

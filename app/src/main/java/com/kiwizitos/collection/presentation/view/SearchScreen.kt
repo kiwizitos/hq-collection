@@ -168,15 +168,19 @@ private fun SearchResultsList(
     onSeriesClick: (SerieResult) -> Unit
 ) {
     // ── Auto-load when approaching the bottom ─────────────────────────────────
-    val shouldLoadMore by remember(data.paginationInfo.hasNextPage, isLoadingMore) {
+    val shouldLoadMore by remember(
+        listState, data.paginationInfo.hasNextPage, data.paginationError, isLoadingMore
+    ) {
         derivedStateOf {
-            if (!data.paginationInfo.hasNextPage || isLoadingMore) return@derivedStateOf false
+            if (!data.paginationInfo.hasNextPage || data.paginationError != null || isLoadingMore) {
+                return@derivedStateOf false
+            }
             val lastVisible = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
             val total = listState.layoutInfo.totalItemsCount
             total > 0 && lastVisible >= total - 3
         }
     }
-    LaunchedEffect(shouldLoadMore) {
+    LaunchedEffect(shouldLoadMore, data.series.size) {
         if (shouldLoadMore) onLoadMore()
     }
 
@@ -193,8 +197,29 @@ private fun SearchResultsList(
                 onClick = { onSeriesClick(serie) }
             )
         }
-        // Spinner-only footer — the button is replaced by auto-scroll
-        if (data.paginationInfo.hasNextPage && isLoadingMore) {
+        if (data.paginationError != null && !isLoadingMore) {
+            item(key = "pagination_error_footer") {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = SiegeSpacing.Medium),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(SiegeSpacing.Small)
+                ) {
+                    SiegeText(
+                        text = data.paginationError,
+                        style = SiegeTextStyle.Body,
+                        color = SiegeColors.Error,
+                        textAlign = TextAlign.Center
+                    )
+                    SiegeButton(
+                        text = "Tentar novamente",
+                        style = SiegeButtonStyle.Primary,
+                        onClick = onLoadMore
+                    )
+                }
+            }
+        } else if (data.paginationInfo.hasNextPage && isLoadingMore) {
             item(key = "load_more_footer") {
                 Box(
                     modifier = Modifier
@@ -345,4 +370,3 @@ private fun SearchErrorState(message: String, onRetry: () -> Unit) {
 private fun SearchScreenPreview() {
     SiegeTheme { SearchScreen(navController = rememberNavController()) }
 }
-
